@@ -21,6 +21,9 @@ public class Product_categories {
     @Column(name = "name",length = 255)
     private String name ;
 
+    @Column(name = "slug",length = 100)
+    private String slug ;
+
     @Column(name = "description",length = 255)
     private String description;
 
@@ -41,10 +44,11 @@ public class Product_categories {
     private Boolean isActive;
 
     @ManyToMany(mappedBy = "ListProductCategories")
-    private Set<Product> courses = new HashSet<>();
+    private Set<Product> LiProducts = new HashSet<>();
 
-    public Product_categories(String name, String description) {
+    public Product_categories(String name, String slug, String description) {
         this.name = name;
+        this.slug = slug;
         this.description = description;
         this.createdAt=new Date();
     }
