@@ -96,5 +96,7 @@ public class Users {
     public void setActive(Boolean active) {
         isActive = active;
     }
-
+    public void addRoles(roles roles) {
+        this.listRoles.add(roles);
+    }
 }

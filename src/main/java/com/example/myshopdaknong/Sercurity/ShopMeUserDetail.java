@@ -2,23 +2,22 @@
     
     import com.example.myshopdaknong.Entity.Users;
     import com.example.myshopdaknong.Entity.roles;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
     import org.springframework.security.core.GrantedAuthority;
     import org.springframework.security.core.authority.SimpleGrantedAuthority;
     import org.springframework.security.core.userdetails.UserDetails;
-    
+
     import java.util.ArrayList;
     import java.util.Collection;
     import java.util.List;
-    
+    @Data
+    @AllArgsConstructor
     public class ShopMeUserDetail implements UserDetails {
         private Users users;
         private static final long serialVersionUID = 8434638013158790457L; // Cập nhật serialVersionUID
 
 
-        public ShopMeUserDetail(Users user) {
-                this.users=user;
-            }
-    
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             Collection<roles> roles=  users.getListRoles();
@@ -29,7 +28,10 @@
             }
             return authorities;
         }
-    
+        // Thêm method để truy cập ID của Users
+        public Integer getUserId() {
+            return this.users.getId();
+        }
         @Override
         public String getPassword() {
             return this.users.getPassword();

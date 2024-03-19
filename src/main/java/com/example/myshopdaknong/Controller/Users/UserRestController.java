@@ -14,6 +14,7 @@ public class UserRestController {
         @GetMapping("/users/check-username-unique")
         public String checkUserNameUni(@RequestParam("username") String userName)
         {
+            System.out.println("check " +this.userService.checkUserNameUni(userName));
             return this.userService.checkUserNameUni(userName);
         }
 }

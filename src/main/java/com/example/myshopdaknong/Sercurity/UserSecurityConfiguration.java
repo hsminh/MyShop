@@ -29,10 +29,10 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/users/**").permitAll() // Chỉnh sửa đây
-
-
-//                        .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
+                        .requestMatchers("/users/save").permitAll() // Chỉnh sửa đây
+                        .requestMatchers("/users/check-username-unique").permitAll() // Chỉnh sửa đây
+                         .requestMatchers("/users/register").permitAll()
+                        .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")
