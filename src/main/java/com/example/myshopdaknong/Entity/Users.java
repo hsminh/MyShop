@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity(name = "Users")
@@ -20,6 +22,7 @@ public class Users {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
+    @Getter
     @Column(name = "first_name", length = 255, nullable = false)
     private String firstName;
 
@@ -42,8 +45,15 @@ public class Users {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @ManyToMany(cascade = CascadeType.MERGE   ,fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles" ,
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    private Collection<roles> listRoles=new ArrayList<>();
+
     public Users() {
     }
+
 
     public Users(String userName, String password, String firstName, String lastName, Date deletedAt, Boolean isActive) {
         this.userName = userName;
@@ -62,4 +72,29 @@ public class Users {
         this.createdAt = new Date(); // Khởi tạo giá trị cho createdAt
 
     }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", isActive=" + isActive +
+                ", listRoles=" + listRoles +
+                '}';
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
 }

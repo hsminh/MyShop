@@ -33,4 +33,13 @@ public class UserTest {
         }
         Assertions.assertTrue(this.userRepository.saveAll(usersList).size()!=0);
     }
+
+    @Test
+    public void SetActive()
+    {
+        Users users=this.userRepository.findById(1).get();
+        users.setActive(true);
+        this.userRepository.save(users);
+//        Assertions.assertTrue(this.userRepository.saveAll(usersList).size()!=0);
+    }
 }
