@@ -34,7 +34,6 @@ public class UserSecurityConfiguration {
                          .requestMatchers("/users/register").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin","User")
-
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")

@@ -132,6 +132,11 @@
                     $('#AlerMessage').addClass('hidden');
                 }, 10000);
             }
+            // Close the alert when clicking on the "x" button
+            $('#closeBtn').click(function() {
+                $('#AlerMessage').addClass('hidden');
+            });
+
 
             $(document).ready(function() {
                 $('#registerForm').submit(function(event) {
@@ -155,10 +160,7 @@
                     }
                 });
 
-                // Close the alert when clicking on the "x" button
-                $('#closeBtn').click(function() {
-                    $('#AlerMessage').addClass('hidden');
-                });
+
 
                 $('#registerForm').submit(function(event) {
                     let id=$('#id').val();

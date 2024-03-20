@@ -18,13 +18,13 @@ public class Product_categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name",length = 255)
+    @Column(name = "name",length = 255,nullable = false,unique = true)
     private String name ;
 
-    @Column(name = "slug",length = 100)
+    @Column(name = "slug",length = 100,nullable = false,unique = true)
     private String slug ;
 
-    @Column(name = "description",length = 255)
+    @Column(name = "description",length = 255,nullable = false)
     private String description;
 
     @Column(name = "created_at", nullable = false)
@@ -56,4 +56,18 @@ public class Product_categories {
     public Product_categories() {
     }
 
+    @Override
+    public String toString() {
+        return "Product_categories{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", slug='" + slug + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", isActive=" + isActive +
+                ", LiProducts=" + LiProducts +
+                '}';
+    }
 }

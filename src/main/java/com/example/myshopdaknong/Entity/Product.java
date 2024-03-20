@@ -19,10 +19,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name",length = 11)
+    @Column(name = "name",length = 11,unique = true)
     private String name ;
 
-    @Column(name = "sku",length = 15)
+    @Column(name = "sku",length = 15,unique = true)
     private String Sku ;
 
     @Column(name = "content",length = 15)
@@ -57,7 +57,7 @@ public class Product {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "products_categories",
             joinColumns = { @JoinColumn(name = "product_categories_id") },
@@ -66,7 +66,7 @@ public class Product {
     private Set<Product_categories> ListProductCategories = new HashSet<>();
 
 
-    public Product(String name, String sku, String content, float price, float discount_price, float tax) {
+        public Product(String name, String sku, String content, float price, float discount_price, float tax) {
         this.name = name;
         Sku = sku;
         Content = content;
@@ -74,6 +74,10 @@ public class Product {
         this.discount_price = discount_price;
         this.tax = tax;
         this.createdAt=new Date();
+    }
+    public void addProductCate(Product_categories productCategories)
+    {
+        this.ListProductCategories.add(productCategories);
     }
 
     public Product() {
