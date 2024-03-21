@@ -51,7 +51,7 @@
     <th:block th:each="Product : ${ListProduct}">
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <img class="text-sm leading-5 text-gray-900" th:src="@{/images/img.png}" ></img>
+                <img class="text-sm leading-5 text-gray-900" th:src="@{${Product.loadImages}}" ></img>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900" th:text="${Product.name}"></span>
@@ -88,10 +88,10 @@
                 <span class="text-sm leading-5 text-gray-900" th:text="${Product.isActive}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <a th:href="@{/category/edit/{id}(id=${Product.id})}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+                <a th:href="@{/products/edit/{id}(id=${Product.id})}" class="text-indigo-600 hover:text-indigo-900 mr-2">
                     <i class="fas fa-edit"></i> <!-- Icon "edit" -->
                 </a>
-                <a th:href="@{/category/delete/{id}(id=${Product.id})}" class="text-red-600 hover:text-red-900">
+                <a th:href="@{/products/delete/{id}(id=${Product.id})}" class="text-red-600 hover:text-red-900">
                     <i class="fas fa-trash-alt"></i> <!-- Icon "delete" -->
                 </a>
             </td>

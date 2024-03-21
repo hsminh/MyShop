@@ -43,7 +43,7 @@ public class Product_categories {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany(mappedBy = "ListProductCategories")
+    @ManyToMany(mappedBy = "ListProductCategories" ,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Product> LiProducts = new HashSet<>();
 
     public Product_categories(String name, String slug, String description) {
@@ -67,7 +67,6 @@ public class Product_categories {
                 ", updatedAt=" + updatedAt +
                 ", deletedAt=" + deletedAt +
                 ", isActive=" + isActive +
-                ", LiProducts=" + LiProducts +
                 '}';
     }
 }

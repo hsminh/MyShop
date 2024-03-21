@@ -65,7 +65,16 @@ public class Product {
     )
     private Set<Product_categories> ListProductCategories = new HashSet<>();
 
-
+    public String loadImages()
+    {
+        if(this.image==null||this.image.isEmpty())
+        {
+            return "images/img.png";
+        }else
+        {
+            return "products-Photos/"+this.id+"/"+this.image;
+        }
+    }
     @Override
     public String toString() {
         return "Product{" +
@@ -81,7 +90,6 @@ public class Product {
                 ", updatedAt=" + updatedAt +
                 ", deletedAt=" + deletedAt +
                 ", isActive=" + isActive +
-                ", ListProductCategories=" + ListProductCategories +
                 '}';
     }
 

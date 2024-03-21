@@ -1,7 +1,7 @@
 package com.example.myshopdaknong.Controllers.productCategory;
 
 import com.example.myshopdaknong.Entity.Product_categories;
-import com.example.myshopdaknong.Exception.Product_categoriesNotFoundException;
+import com.example.myshopdaknong.Exception.Product_categoriesException;
 import com.example.myshopdaknong.Services.ProductCategoriesSerVice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +18,15 @@ public class ProductCategoryController {
     @Autowired
     private ProductCategoriesSerVice productCategoriesSerVice;
     @GetMapping("/category")
-    public String ListProduct(Model model) {
+    public String listProduct(Model model) {
         model.addAttribute("pageTitle","Category");
         model.addAttribute("ListCate",this.productCategoriesSerVice.FindAll());
         return "category/category";
     }
+
+
     @GetMapping("/category/add")
-    public String FormAddCategory(Model model) {
+    public String formAddCategory(Model model) {
         model.addAttribute("pageTitle","Category");
         model.addAttribute("TitleForm", "Add Category");
         model.addAttribute("isNewUser", true);
@@ -45,7 +47,7 @@ public class ProductCategoryController {
         return productCategories;
     }
     @PostMapping("/category/save")
-    public String saveCategory(Product_categories productCategories,Model model) throws Product_categoriesNotFoundException {
+    public String saveCategory(Product_categories productCategories,Model model) throws Product_categoriesException {
         if(productCategories.getId()==null||productCategories.getId()==0)
         {
             System.out.println("come this");
@@ -64,9 +66,9 @@ public class ProductCategoryController {
     public String DeleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             this.productCategoriesSerVice.DeleteCategory(id);
-            redirectAttributes.addFlashAttribute("Message", "Delete Successful User With Id " + id);
-        } catch (Product_categoriesNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Category With Id " + id + " Not Found");
+            redirectAttributes.addFlashAttribute("Message", "Delete Successful Categoty With Id " + id);
+        } catch (Product_categoriesException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/category";
     }
@@ -79,7 +81,7 @@ public class ProductCategoryController {
             model.addAttribute("TitleForm", "Edit Category");
             model.addAttribute("Category",Category);
             return "category/add-form";
-        } catch (Product_categoriesNotFoundException e) {
+        } catch (Product_categoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Category With Id " + id + " Not Found");
         }
         return "redirect:/category";

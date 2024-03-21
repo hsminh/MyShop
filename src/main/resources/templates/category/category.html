@@ -66,9 +66,10 @@
                 <a th:href="@{/category/edit/{id}(id=${Product_categories.id})}" class="text-indigo-600 hover:text-indigo-900 mr-2">
                     <i class="fas fa-edit"></i> <!-- Icon "edit" -->
                 </a>
-                <a th:href="@{/category/delete/{id}(id=${Product_categories.id})}" class="text-red-600 hover:text-red-900">
-                    <i class="fas fa-trash-alt"></i> <!-- Icon "delete" -->
-                </a>
+                    <a th:if="${Product_categories.getLiProducts().size()==0}" th:href="@{/category/delete/{id}(id=${Product_categories.id})}" class="text-red-600 hover:text-red-900">
+                        <i class="fas fa-trash-alt"></i> <!-- Icon "delete" -->
+                    </a>
+
             </td>
         </tr>
     </th:block>

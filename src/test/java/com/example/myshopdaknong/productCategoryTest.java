@@ -1,5 +1,6 @@
 package com.example.myshopdaknong;
 
+import com.example.myshopdaknong.Entity.Product;
 import com.example.myshopdaknong.Entity.Product_categories;
 import com.example.myshopdaknong.Repository.ProductCategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,15 @@ public class productCategoryTest {
     @Autowired
     ProductCategoryRepository productCategoryRepository;
 
-
+    @Test
+    public void Test()
+    {
+        Product_categories productCategories=this.productCategoryRepository.findById(1).get();
+        for(Product product: productCategories.getLiProducts())
+        {
+            System.out.println(product);
+        }
+    }
 
     @Test
     public void CreateProducCategory()

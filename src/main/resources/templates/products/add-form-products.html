@@ -12,7 +12,8 @@
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
-            <form id="submitForm" th:action="@{products/products}" th:object="${Product}" method="post" enctype="multipart/form-data">
+            <form id="submitForm" th:action="@{/products/save}" th:object="${Product}" method="post" enctype="multipart/form-data">
+                <!-- Nội dung form -->
                 <div id="AlertMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
                     <span id="Message" class="block sm:inline"></span>
@@ -39,14 +40,14 @@
                         class="block border border-grey-light w-full p-3 rounded mb-4"
                         name="slug"
                         placeholder="SKU"
-                        id="sku"
+                        id="slug"
                         th:field="*{Sku}"
                 />
                 <textarea
                         class="block border border-grey-light w-full p-3 rounded mb-4 resize-none"
                         rows="6"
                         name="description"
-                        id="content"
+                        id="des"
                         placeholder="Content"
                         th:field="*{Content}"
                 ></textarea>
@@ -55,9 +56,8 @@
                     <input
                             type="file"
                             class="hidden"
-                            name="image"
+                            name="images"
                             id="image"
-                            onchange="displayThumbnail(this)"
                     />
                     <div class="flex items-center mt-2">
                         <label
@@ -75,8 +75,24 @@
                     </div>
                 </div>
                 <div class="flex justify-center items-center">
-                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail" th:src="@{/images/img.png}"/>
+                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${Product.loadImages}}"/>
                 </div>
+                <div class="mt-4 mb-5">
+                    <label for="productCategories" class="block text-sm font-medium text-gray-700">Choose Product Categories</label>
+                    <select id="productCategories" name="productCategories" multiple size="5" class="mt-1 block w-full px-5 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <!-- Option mặc định nếu cần -->
+                        <option value="">-- Select Categories --</option>
+                        <!-- Sử dụng Thymeleaf để lặp qua d anh sách ListProductCategory -->
+                        <th:block th:each="productCategory : ${ListProductCategory}">
+                            <!-- Đặt giá trị của option là ID của danh mục -->
+                            <option th:value="${productCategory.id}" th:text="${productCategory.name}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+
+
+
                 <input
                         type="number"
                         class="block border border-grey-light w-full p-3 rounded mb-4"
@@ -120,6 +136,8 @@
                 >Create Product</button>
             </form>
 
+
+
             <div class="text-center text-sm text-grey-dark mt-4">
                 By signing up, you agree to the
                 <a class="no-underline border-b border-grey-dark text-grey-dark" href="#">
@@ -141,16 +159,24 @@
             $('#Message').text(message);
             $('#AlertMessage').removeClass('hidden');
             // Hide the alert after 10 seconds
-            setTimeout(function() {
+            setTimeout(function () {
                 $('#AlertMessage').addClass('hidden');
             }, 10000);
         }
+
         // Close the alert when clicking on the "x" button
-        $('#closeBtn').click(function() {
+        $('#closeBtn').click(function () {
             $('#AlertMessage').addClass('hidden');
         });
 
-        $('#')
+        $('#image').on('change', function (e) {
+            if (event.target.files.length > 0) {
+                var src = URL.createObjectURL(event.target.files[0]);
+                var thumbnail = document.getElementById("thumbnail");
+                thumbnail.src = src;
+                thumbnail.style.display = "block";
+            }
+        });
 
         $('#submitForm').on('submit', function (e) {
             let des = $('#des').val().trim();
@@ -173,11 +199,11 @@
                 url: "/category/check-slug-name-uni",
                 method: "GET",
                 data: {
-                    id:id,
-                    name:name,
-                    slug:slug
+                    id: id,
+                    name: name,
+                    slug: slug
                 },
-                success: function(data) {
+                success: function (data) {
                     if (data !== "ok") {
                         ShowMessageErrr("Name or Slug!", "Exist Please choose another Name Or Slug.");
                         check = true;
@@ -191,8 +217,7 @@
             }
         });
     });
-
-
 </script>
+
 </body>
 </html>
