@@ -1,14 +1,12 @@
 package com.example.myshopdaknong.Sercurity;
 
 import com.example.myshopdaknong.Entity.Users;
-import com.example.myshopdaknong.Service.UserService;
+import com.example.myshopdaknong.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 public class DetailService implements UserDetailsService {

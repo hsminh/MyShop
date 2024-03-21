@@ -3,7 +3,7 @@ package com.example.myshopdaknong;
 import com.example.myshopdaknong.Entity.Product;
 import com.example.myshopdaknong.Repository.ProducsRepository;
 import com.example.myshopdaknong.Repository.ProductCategoryRepository;
-import com.example.myshopdaknong.Service.ProductSerVice;
+import com.example.myshopdaknong.Services.ProductSerVice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

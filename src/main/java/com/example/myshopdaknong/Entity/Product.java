@@ -66,7 +66,26 @@ public class Product {
     private Set<Product_categories> ListProductCategories = new HashSet<>();
 
 
-        public Product(String name, String sku, String content, float price, float discount_price, float tax) {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", Sku='" + Sku + '\'' +
+                ", Content='" + Content + '\'' +
+                ", image='" + image + '\'' +
+                ", price=" + price +
+                ", discount_price=" + discount_price +
+                ", tax=" + tax +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", isActive=" + isActive +
+                ", ListProductCategories=" + ListProductCategories +
+                '}';
+    }
+
+    public Product(String name, String sku, String content, float price, float discount_price, float tax) {
         this.name = name;
         Sku = sku;
         Content = content;

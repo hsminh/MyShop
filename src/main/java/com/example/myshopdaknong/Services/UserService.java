@@ -1,10 +1,9 @@
-package com.example.myshopdaknong.Service;
+package com.example.myshopdaknong.Services;
 
 import com.example.myshopdaknong.Entity.Users;
 import com.example.myshopdaknong.Exception.UserNotFoundException;
 import com.example.myshopdaknong.Repository.UserRepository;
 import com.example.myshopdaknong.Repository.rolesRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
-package com.example.myshopdaknong.Controller;
+package com.example.myshopdaknong.Controllers;
 
-import com.example.myshopdaknong.Sercurity.DetailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

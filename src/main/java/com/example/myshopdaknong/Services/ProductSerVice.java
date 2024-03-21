@@ -1,9 +1,7 @@
-package com.example.myshopdaknong.Service;
+package com.example.myshopdaknong.Services;
 
 import com.example.myshopdaknong.Entity.Product;
-import com.example.myshopdaknong.Entity.Product_categories;
 import com.example.myshopdaknong.Repository.ProducsRepository;
-import com.example.myshopdaknong.Repository.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

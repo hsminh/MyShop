@@ -12,7 +12,7 @@
 <h1 class="text-3xl font-semibold text-gray-900">Manage Categories</h1>
 
 <div class="pt-3">
-    <a th:href="@{/category/add}" class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full shadow-md">
+    <a th:href="@{/products/add}" class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full shadow-md">
         <i class="fas fa-plus"></i> <!-- Icon "plus" -->
     </a>
 </div>
@@ -51,7 +51,7 @@
     <th:block th:each="Product : ${ListProduct}">
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900" >image</span>
+                <img class="text-sm leading-5 text-gray-900" th:src="@{/images/img.png}" ></img>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900" th:text="${Product.name}"></span>

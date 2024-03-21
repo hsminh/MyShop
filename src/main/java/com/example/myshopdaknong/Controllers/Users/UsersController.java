@@ -1,15 +1,11 @@
-package com.example.myshopdaknong.Controller.Users;
+package com.example.myshopdaknong.Controllers.Users;
 
 import com.example.myshopdaknong.Entity.Users;
 import com.example.myshopdaknong.Exception.UserNotFoundException;
-import com.example.myshopdaknong.Sercurity.DetailService;
-    import com.example.myshopdaknong.Service.UserService;
+import com.example.myshopdaknong.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
