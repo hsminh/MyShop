@@ -29,22 +29,61 @@ public class UsersController {
         return "users/register-form";
     }
 
-    @GetMapping("/users/detail")
-    public String updateInforUser(Model model) {
 
+
+    @GetMapping("/users/detail")
+    public String updateInforUser(@AuthenticationPrincipal UserDetails userDetails,Model model) {
         model.addAttribute("pageTitle","Update User");
-        model.addAttribute("TitleForm", "Update User");
-        UserProfile userProfile=new UserProfile();
-//        userProfile.setGender(null);
-        model.addAttribute("userProfile",new UserProfile());
+        model.addAttribute("TitleForm", "Update User Profile");
+        Users userLogin=null;
+        if(userDetails!=null)
+        {
+            userLogin = userService.findUserByUserName(userDetails.getUsername());
+        }
+        UserProfile isEsixtUserProfile=this.userService.getUserProfileByUsersId(userLogin.getId());
+        if(isEsixtUserProfile==null)
+        {
+            UserProfile userProfile=new UserProfile();
+            model.addAttribute("isCheckGenderChoose",false);
+            model.addAttribute("userProfile",new UserProfile());
+        }else
+        {
+            model.addAttribute("isCheckGenderChoose",true);
+            model.addAttribute("userProfile",isEsixtUserProfile);
+        }
         return "users/update-infor-user";
     }
 
+    @PostMapping("/users/user-infor/save")
+    public String saveUpdateInfor(@AuthenticationPrincipal UserDetails userDetails,UserProfile userProfile,Model model) {
+        if(userProfile.getUsers()==null)
+        {
+            Users userLogin = userService.findUserByUserName(userDetails.getUsername());
+            userProfile.setUsers(userLogin);
+        }
+        if(userProfile.getId()==null||userProfile.getId()==0)
+        {
+            userProfile.setCreatedAt(new Date());
+            this.userService.saveUserProfile(userProfile);
+
+        }else
+        {
+            UserProfile userProfileInData=this.userService.getUserProfileById(userProfile.getId()).get();
+            userProfileInData.setUpdatedAt(new Date());
+            userProfileInData.setGender(userProfile.isGender());
+            userProfileInData.setPhoneNumber(userProfile.getPhoneNumber());
+            userProfileInData.setAddress(userProfile.getAddress());
+            userProfileInData.setBio(userProfile.getBio());
+            this.userService.saveUserProfile(userProfileInData);
+        }
+        return "redirect:/main-page";
+    }
     @GetMapping("/users/edit")
     public String showEditForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {
             Users user = userService.findUserByUserName(userDetails.getUsername());
             System.out.println(user);
+            model.addAttribute("isUpdateUser", true);
             model.addAttribute("pageTitle", "Edit User");
             model.addAttribute("TitleForm", "Edit User");
             // Xác định khi nào đang tạo mới

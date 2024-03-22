@@ -9,6 +9,7 @@
 
 </head>
 <body>
+<div th:replace="fragmen-navigaiton ::Navbar"></div>
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
         <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
@@ -44,29 +45,47 @@
                         placeholder="address"
                         th:field="*{address}"
                 />
-                <p class="mb-8 text-3xl text-center">Choose Gender</p>
+                <input  type="hidden" th:field="*{id}"/>
+                <input  type="hidden" th:field="*{users}"/>
 
-                <div class="mb-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio" name="gender" value="true" th:checked="${userProfile.gender != null && userProfile.gender}">
-                        <span class="ml-2">Nam</span>
-                    </label>
+                <div th:if="${isCheckGenderChoose==true}">
+                    <div class="flex flex-col items-center justify-center mb-8">
+                        <span class="text-lg">Choose Gender</span>
+                        <div class="flex items-center">
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" th:field="*{gender}" class="form-radio" name="gender" value="true">
+                                <span class="ml-2">Nam</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" th:field="*{gender}"  class="form-radio" name="gender" value="false">
+                                <span class="ml-2">Nữ</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio" name="gender" value="false" th:checked="${userProfile.gender != null && !userProfile.gender}">
-                        <span class="ml-2">Nữ</span>
-                    </label>
+                <div th:if="${isCheckGenderChoose==false}">
+                    <div class="flex flex-col items-center justify-center mb-8">
+                        <span class="text-lg mb-4">Choose Gender</span>
+                        <div class="flex flex-col">
+                            <div class="mb-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" class="form-radio" name="gender" value="true" th:checked="${isCheckGenderChoose != false && userProfile.gender}">
+                                    <span class="ml-2">Nam</span>
+                                </label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="inline-flex items-center">
+                                        <input type="radio" class="form-radio" name="gender" value="false" th:checked="${isCheckGenderChoose != false && !userProfile.gender}">
+                                    <span class="ml-2">Nữ</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
-
-
-
                 <button
                         type="submit"
                         class="w-full text-center py-3 rounded bg-green text-white hover:bg-green-dark focus:outline-none my-1"
-                >Create Account</button>
+                >Save Profile</button>
             </form>
 
             <div class="text-center text-sm text-grey-dark mt-4">

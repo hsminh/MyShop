@@ -1,7 +1,9 @@
 package com.example.myshopdaknong.service;
 
+import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.Users;
 import com.example.myshopdaknong.exception.UserNotFoundException;
+import com.example.myshopdaknong.repository.UserProfileRepository;
 import com.example.myshopdaknong.repository.UserRepository;
 import com.example.myshopdaknong.repository.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,6 +21,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RolesRepository rolesRepository;
+    @Autowired
+    private UserProfileRepository userProfileRepository;
 
     public String checkUserNameUni(String userName)
     {
@@ -47,6 +52,12 @@ public class UserService {
         }
         return this.userRepository.save(users);
     }
+
+    public UserProfile saveUserProfile(UserProfile userProfile)
+    {
+        return this.userProfileRepository.save(userProfile);
+    }
+
     public Users findUserById(int id) throws UserNotFoundException {
         try {
             return this.userRepository.findById(id).get();
@@ -54,5 +65,14 @@ public class UserService {
         {
             throw new UserNotFoundException("Cannot Find User With Id : "+id);
         }
+    }
+
+    public UserProfile getUserProfileByUsersId(Integer id) {
+        UserProfile userProfile=this.userProfileRepository.getUserProfileByUsers_Id(id);
+        return userProfile;
+    }
+
+    public Optional<UserProfile> getUserProfileById(Integer id) {
+        return this.userProfileRepository.findById(id);
     }
 }

@@ -32,6 +32,7 @@ public class ProductController {
     @GetMapping("/products/add")
     public String formAddProduct(Model model) {
         model.addAttribute("pageTitle","Add Product");
+        model.addAttribute("TitleForm", "Add Product");
         model.addAttribute("ListProductCategory",this.productSerVice.findAllCategory());
         model.addAttribute("Product",new Product());
         return "products/add-form-products";
@@ -49,7 +50,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/edit/{id}")
-    public String deleteProducts(@PathVariable("id")Integer id, RedirectAttributes redirectAttributes,Model model) {
+    public String editProducts(@PathVariable("id")Integer id, RedirectAttributes redirectAttributes,Model model) {
         try{
 
             model.addAttribute("pageTitle","Edit Product | ID "+id);

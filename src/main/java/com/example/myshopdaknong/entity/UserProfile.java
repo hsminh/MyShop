@@ -51,6 +51,20 @@ public class UserProfile {
         this.createdAt=new Date();
     }
 
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "id=" + id +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", bio='" + bio + '\'' +
+                ", address='" + address + '\'' +
+                ", gender=" + gender +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", users=" + users +
+                '}';
+    }
+
     public UserProfile() {
     }
 }
