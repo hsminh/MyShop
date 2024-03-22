@@ -1,16 +1,25 @@
 package com.example.myshopdaknong.controller;
 
+import com.example.myshopdaknong.entity.Product;
+import com.example.myshopdaknong.service.ProductSerVice;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class MainController {
+    @Autowired
+    private ProductSerVice productSerVice;
     @GetMapping("/main-page")
-    public String MainFile()
+    public String MainFile(Model model)
     {
-        return "MainPage";
+        List<Product>listProduct=productSerVice.findAll();
+        model.addAttribute("listProduct",listProduct);
+        return "main-page";
     }
 
     @GetMapping("/login-form")
@@ -20,6 +29,6 @@ public class MainController {
         {
             model.addAttribute("messageErr","Account or password is incorrect");
         }
-        return "LoginForm";
+        return "login-form";
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myshopdaknong.controller.Users;
 
+import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.Users;
 import com.example.myshopdaknong.exception.UserNotFoundException;
 import com.example.myshopdaknong.service.UserService;
@@ -25,20 +26,31 @@ public class UsersController {
         model.addAttribute("isNewUser", true);
 
         model.addAttribute("Users",new Users());
-        return "Users/RegisterForm";
+        return "users/register-form";
+    }
+
+    @GetMapping("/users/detail")
+    public String updateInforUser(Model model) {
+
+        model.addAttribute("pageTitle","Update User");
+        model.addAttribute("TitleForm", "Update User");
+        UserProfile userProfile=new UserProfile();
+//        userProfile.setGender(null);
+        model.addAttribute("userProfile",new UserProfile());
+        return "users/update-infor-user";
     }
 
     @GetMapping("/users/edit")
     public String showEditForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {
             Users user = userService.findUserByUserName(userDetails.getUsername());
-            System.out.println("concak"+user);
+            System.out.println(user);
             model.addAttribute("pageTitle", "Edit User");
             model.addAttribute("TitleForm", "Edit User");
             // Xác định khi nào đang tạo mới
             model.addAttribute("isNewUser", false);
             model.addAttribute("Users", user);
-            return "Users/RegisterForm";
+            return "users/register-form";
         } else {
             // Redirect to login or handle the case where no user is authenticated
             return "redirect:/login";
@@ -66,7 +78,6 @@ public class UsersController {
         System.out.println("this is infor "+ Users);
         if(Users.getId()!=null&&Users.getId()!=0)
         {
-            System.out.println("come this");
              users =this.EditUser(editPassword,Users);
         }else
         {

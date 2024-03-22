@@ -16,7 +16,7 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String Name;
+
     @Column(name = "phone_number", length = 15, nullable = false)
     private String phoneNumber;
 
@@ -42,8 +42,7 @@ public class UserProfile {
     @JoinColumn(name = "users_id")
     private Users users;
 
-    public UserProfile(String name, String phoneNumber, String bio, String address, boolean gender, Users users) {
-        Name = name;
+    public UserProfile(String phoneNumber, String bio, String address, boolean gender, Users users) {
         this.phoneNumber = phoneNumber;
         this.bio = bio;
         this.address = address;

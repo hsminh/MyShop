@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../static/output.css">
+    <html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"/>
+    <title>[[${pageTitle}]]</title>
+
+</head>
+<body>
+<div class="bg-grey-lighter min-h-screen flex flex-col">
+    <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+        <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
+            <form id="registerForm" method="post" th:action="@{/users/user-infor/save}" th:object="${userProfile}">
+                <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <strong id="Title" class="font-bold"></strong>
+                    <span id="Message" class="block sm:inline"></span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg id="closeBtn" class="fill-current h-6 w-6 text-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M15.293 4.293a1 1 0 011.414 1.414L11.414 10l5.293 5.293a1 1 0 01-1.414 1.414L10 11.414l-5.293 5.293a1 1 0 01-1.414-1.414L8.586 10 3.293 4.707a1 1 0 011.414-1.414L10 8.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </span>
+                </div>
+                <h1 class="mb-8 text-3xl text-center">[[${TitleForm}]]</h1>
+
+                <input
+                        type="text"
+                        class="block border border-grey-light w-full p-3 rounded mb-4"
+                        name="confirm_password"
+                        placeholder="Phone Number"
+                        th:field="*{phoneNumber}"
+                />
+                <input
+                        type="text"
+                        class="block border border-grey-light w-full p-3 rounded mb-4"
+                        name="confirm_password"
+                        placeholder="Bio"
+                        th:field="*{bio}"
+                />
+                <input
+                        type="text"
+                        class="block border border-grey-light w-full p-3 rounded mb-4"
+                        placeholder="address"
+                        th:field="*{address}"
+                />
+                <p class="mb-8 text-3xl text-center">Choose Gender</p>
+
+                <div class="mb-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="gender" value="true" th:checked="${userProfile.gender != null && userProfile.gender}">
+                        <span class="ml-2">Nam</span>
+                    </label>
+                </div>
+                <div class="mb-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="gender" value="false" th:checked="${userProfile.gender != null && !userProfile.gender}">
+                        <span class="ml-2">Nữ</span>
+                    </label>
+                </div>
+
+
+
+
+
+                <button
+                        type="submit"
+                        class="w-full text-center py-3 rounded bg-green text-white hover:bg-green-dark focus:outline-none my-1"
+                >Create Account</button>
+            </form>
+
+            <div class="text-center text-sm text-grey-dark mt-4">
+                By signing up, you agree to the
+                <a class="no-underline border-b border-grey-dark text-grey-dark" href="#">
+                    Terms of Service
+                </a> and
+                <a class="no-underline border-b border-grey-dark text-grey-dark" href="#">
+                    Privacy Policy
+                </a>
+            </div>
+        </div>
+
+        <div class="text-grey-dark mt-6">
+            Already have an account?
+            <a class="no-underline border-b border-blue text-blue" th:href="@{/login-form}">
+                Log in
+            </a>.
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Function to show email exists alert with custom message
+    function ShowMessageErrr(title, message) {
+        $('#Title').text(title);
+        $('#Message').text(message);
+        $('#AlerMessage').removeClass('hidden');
+        // Hide the alert after 10 seconds
+        setTimeout(function() {
+            $('#AlerMessage').addClass('hidden');
+        }, 10000);
+    }
+    // Close the alert when clicking on the "x" button
+    $('#closeBtn').click(function() {
+        $('#AlerMessage').addClass('hidden');
+    });
+
+
+    $(document).ready(function() {
+        $('#registerForm').submit(function(event) {
+            let isEmailUnique = true; // Biến để kiểm tra tính duy nhất của email
+            let username = $('#username').val();
+            $.ajax({
+                url: "/users/check-username-unique",
+                method: "GET",
+                data: { username: username },
+                success: function(data) {
+                    if (data !== "ok") {
+                        ShowMessageErrr("Email already exists!", "Please choose another email.");
+                        isEmailUnique = false;
+                    }
+                },
+                async: false
+            });
+
+            if (!isEmailUnique) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
