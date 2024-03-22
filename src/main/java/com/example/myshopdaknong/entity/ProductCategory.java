@@ -58,15 +58,6 @@ public class ProductCategory {
 
     @Override
     public String toString() {
-        return "Product_categories{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", slug='" + slug + '\'' +
-                ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", deletedAt=" + deletedAt +
-                ", isActive=" + isActive +
-                '}';
+        return this.name;
     }
 }

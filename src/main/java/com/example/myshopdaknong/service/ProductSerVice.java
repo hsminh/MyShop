@@ -3,7 +3,7 @@ package com.example.myshopdaknong.service;
 import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductException;
-import com.example.myshopdaknong.repository.ProducsRepository;
+import com.example.myshopdaknong.repository.ProductsRepository;
 import com.example.myshopdaknong.repository.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class ProductSerVice {
     @Autowired
-    private ProducsRepository producsRepository;
+    private ProductsRepository producsRepository;
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
