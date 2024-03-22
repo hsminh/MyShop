@@ -1,7 +1,7 @@
 package com.example.myshopdaknong;
 
-import com.example.myshopdaknong.Entity.Users;
-import com.example.myshopdaknong.Repository.UserRepository;
+import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 @SpringBootTest
 public class UserTest {

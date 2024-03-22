@@ -38,18 +38,18 @@
                 <input
                         type="text"
                         class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="slug"
+                        name="sku"
                         placeholder="SKU"
-                        id="slug"
-                        th:field="*{Sku}"
+                        id="sku"
+                        th:field="*{sku}"
                 />
                 <textarea
                         class="block border border-grey-light w-full p-3 rounded mb-4 resize-none"
                         rows="6"
-                        name="description"
-                        id="des"
+                        name="content"
+                        id="content"
                         placeholder="Content"
-                        th:field="*{Content}"
+                        th:field="*{content}"
                 ></textarea>
                 <div class="mb-4">
                     <label for="image" class="text-sm font-bold text-gray-700">Choose Image:</label>
@@ -79,14 +79,15 @@
                 </div>
                 <div class="mt-4 mb-5">
                     <label for="productCategories" class="block text-sm font-medium text-gray-700">Choose Product Categories</label>
-                    <select id="productCategories" name="productCategories" multiple size="5" class="mt-1 block w-full px-5 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <select id="productCategories" th:field="*{listProductCategories}" name="productCategories" multiple size="5" class="mt-1 block w-full px-5 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <!-- Option mặc định nếu cần -->
-                        <option value="">-- Select Categories --</option>
-                        <!-- Sử dụng Thymeleaf để lặp qua d anh sách ListProductCategory -->
-                        <th:block th:each="productCategory : ${ListProductCategory}">
-                            <!-- Đặt giá trị của option là ID của danh mục -->
-                            <option th:value="${productCategory.id}" th:text="${productCategory.name}"></option>
-                        </th:block>
+                            <option value="">-- Select Categories --</option>
+                            <!-- Sử dụng Thymeleaf để lặp qua d anh sách ListProductCategory -->
+                            <th:block th:each="productCategory : ${ListProductCategory}">
+                                <!-- Đặt giá trị của option là ID của danh mục -->
+                                <option th:value="${productCategory.id}" th:text="${productCategory.name}"></option>
+                            </th:block>
+
                     </select>
                 </div>
 
@@ -179,33 +180,34 @@
         });
 
         $('#submitForm').on('submit', function (e) {
-            let des = $('#des').val().trim();
+            let content = $('#content').val().trim();
             let name = $('#name').val().trim();
-            let slug = $('#slug').val().trim();
+            let sku = $('#sku').val().trim();
             let id = $('#id').val().trim();
             let check = false;
 
-            if (des.length < 1 || des.length > 255) {
-                ShowMessageErrr("Description:", "Description must be between 1 and 255 characters.");
+            if (content.length < 1 || content.length > 255) {
+                ShowMessageErrr("Content:", "Description must be between 1 and 255 characters.");
                 check = true;
             } else if (name.length === 0) {
                 ShowMessageErrr("Name:", "Name is required and cannot be empty.");
                 check = true;
-            } else if (slug.length === 0) {
-                ShowMessageErrr("Slug:", "Slug is required and cannot be empty.");
+            } else if (sku.length === 0) {
+                ShowMessageErrr("SKU:", "SKU is required and cannot be empty.");
                 check = true;
             }
             $.ajax({
-                url: "/category/check-slug-name-uni",
+                url: "/products/check-sku-name-unique",
                 method: "GET",
                 data: {
-                    id: id,
-                    name: name,
-                    slug: slug
+                    id:id,
+                    name:name,
+                    sku:sku
                 },
-                success: function (data) {
+                success: function(data) {
+                    alert((data))
                     if (data !== "ok") {
-                        ShowMessageErrr("Name or Slug!", "Exist Please choose another Name Or Slug.");
+                        ShowMessageErrr("Name or Sku!", "Exist Please choose another Name Or SKU.");
                         check = true;
                     }
                 },

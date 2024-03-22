@@ -1,9 +1,9 @@
 package com.example.myshopdaknong;
 
-import com.example.myshopdaknong.Entity.Product;
-import com.example.myshopdaknong.Repository.ProducsRepository;
-import com.example.myshopdaknong.Repository.ProductCategoryRepository;
-import com.example.myshopdaknong.Services.ProductSerVice;
+import com.example.myshopdaknong.entity.Product;
+import com.example.myshopdaknong.repository.ProducsRepository;
+import com.example.myshopdaknong.repository.ProductCategoryRepository;
+import com.example.myshopdaknong.service.ProductSerVice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +16,15 @@ public class ProductsTest {
     private ProducsRepository producsRepository;
     @Autowired
     ProductCategoryRepository productCategoryRepository;
+
+    @Test
+    public void checkProductUnique()
+    {
+        Integer id = 0;
+        String name="123123";
+        String sku="1241234";
+        System.out.println("cc " +this.productSerVice.checkNameAndSkuUnique("123","2341321",11));
+    }
     @Test
      public void CreateFiveProducst()
      {
