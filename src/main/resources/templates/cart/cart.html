@@ -8,7 +8,8 @@
 </head>
 <body>
 <div th:replace="fragmen-navigaiton ::Navbar"></div>
-<form th:action="@{/cart/save}" th:object="${cart}">
+<form method="post" th:action="@{/cart/save}" th:object="${cart}">
+    <input type="hidden" id="selectProduct" name="selectProduct" th:value="${cartProduct.id}" />
     <!-- component -->
     <section class="text-gray-700 body-font overflow-hidden bg-white">
         <div class="container px-5 py-24 mx-auto">
@@ -54,49 +55,55 @@
             </a>
           </span>
                     </div>
-                    <p class="leading-relaxed">[[${cartProduct.content}]]</p>
-                    <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
-                        <div class="flex items-center">
-                            <span class="mr-3">Quantity</span>
-                            <div class="flex items-center border border-gray-300 rounded">
-                                <button type="button" class="h-6 w-6 flex items-center justify-center rounded-l cursor-pointer" onclick="decrementQuantity()">-</button>
-                                <input type="number" class="outline-none text-center w-16 h-6 border-r border-l border-gray-300" id="quantity" th:field="*{count_items}" value="1">
-                                <button type="button" class="h-6 w-6 flex items-center justify-center rounded-r cursor-pointer" onclick="incrementQuantity()">+</button>
+                    <div class="mt-5">
+                        <div class="leading-relaxed">[[${cartProduct.content}]]</div>
+                        <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
+                            <div class="flex mr-4">
+                                <span class="mr-3">Quantity</span>
+                                <div class="flex items-center border border-gray-300 rounded">
+                                    <button type="button" class="h-6 w-6 flex items-center justify-center rounded-l cursor-pointer" onclick="decrementQuantity()">-</button>
+                                    <input type="number" class="outline-none text-center w-16 h-6 border-r border-l border-gray-300" id="quantity" name="quantity" value="1">
+                                    <button type="button" class="h-6 w-6 flex items-center justify-center rounded-r cursor-pointer" onclick="incrementQuantity()">+</button>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="flex ml-6 items-center">
-                            <span class="mr-3">Size</span>
-                            <div class="relative">
-                                <select class="rounded border appearance-none border-gray-400 py-2 focus:outline-none focus:border-red-500 text-base pl-3 pr-10">
-                                    <option>SM</option>
-                                    <option>M</option>
-                                    <option>L</option>
-                                    <option>XL</option>
-                                </select>
-                                <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
-                  <path d="M6 9l6 6 6-6"></path>
-                </svg>
-              </span>
+                            <div class="flex">
+                                <button id="buyButton" type="button" class="text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                    <i class="fas fa-shopping-cart fa-1x"></i>
+                                    <span class="ml-2">Buy</span>
+                                </button>
+                                <button id="addToCart" type="button" class="ml-4 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                    <i class="fas fa-shopping-cart fa-1x"></i>
+                                    <span class="ml-2">Add to Cart</span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="flex">
-                        <div class="row-auto">
-                            <div class="col-auto">
-                                <input type="hidden" id="originalProductPrice" name="originalProductPrice" th:value="${cartProduct.price}" />
-                                <input type="hidden" id="originalDiscountProductPrice" name="originalDiscountProductPrice" th:value="${cartProduct.discount_price}" />
 
-                                <span id="price" class="title-font font-medium text-2xl text-gray-900" >Price :$[[${cartProduct.price}]]</span>
+                    <div class="flex">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <del style="color: red">
+                                <div>
+                                    <input type="hidden" id="originalProductPrice" name="originalProductPrice" th:value="${cartProduct.price}" />
+                                    <input type="hidden" id="originalDiscountProductPrice" name="originalDiscountProductPrice" th:value="${cartProduct.discount_price}" />
+
+                                    <span id="price" class="block text-lg font-medium text-gray-900">Price: $[[${cartProduct.price}]]</span>
+                                </div>
+                            </del>
+                            <div>
+                                <span id="discountPrice" class="block text-lg font-medium text-gray-900">Discount Price: $[[${cartProduct.discount_price}]]</span>
                             </div>
-                            <div class="col-auto mt-0.5">
-                                <span id="discountPrice" class="title-font font-medium text-2xl text-gray-900">Price :$[[${cartProduct.discount_price}]]</span>
+                            <div>
+                                <span id="taxPrice" class="block text-lg font-medium text-gray-900">Tax: [[${cartProduct.tax}]]%</span>
                             </div>
                         </div>
+                    </div>
 
-                        <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Button</button>
-                        <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+
+
+
+
+
+                    <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                             <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                             </svg>
@@ -108,7 +115,33 @@
     </section>
 </form>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+        $(document).ready(function() {
+        $('#addToCart').on('click', function() {
+            alert("Button clicked!");
+            var quantity = document.getElementById('quantity').value;
+            var productId = document.getElementById('selectProduct').value;
+            $.ajax({
+                url: "/cart/update-cart",
+                method: "GET",
+                data: {
+                    selectProduct: productId,
+                    quantity: quantity
+                },
+                success: function(data) {
+                    alert(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+
+
+
     function decrementQuantity() {
         var quantityElement = document.getElementById('quantity');
         var originalProductPrice = parseFloat(document.getElementById('originalProductPrice').value);
