@@ -8,17 +8,18 @@
 </head>
 <body>
 <div th:replace="fragmen-navigaiton ::Navbar"></div>
-
-<form method="post" th:action="@{/cart/save}" th:object="${cart}">
-    <input type="hidden" id="selectProduct" name="selectProduct" th:value="${cartProduct.id}" />
+<th:block th:each="CartLineItems,index : ${listCartLineItem}">
+    <input type="hidden" id="selectProduct" name="selectProduct" th:value="${CartLineItems.getProductId().id}" />
     <!-- component -->
     <section class="text-gray-700 body-font overflow-hidden bg-white">
         <div class="container px-5 py-24 mx-auto">
             <div class="lg:w-4/5 mx-auto flex flex-wrap">
-                <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{${cartProduct.loadImages()}}">
+                <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{${CartLineItems.getProductId().loadImages()}}">
+                <!--                    <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" src="public/images/1/Powershot ELPH 180 main.png">-->
+
                 <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                    <h2 class="text-sm title-font text-gray-500 tracking-widest">[[${cartProduct.ListProductCategories}]]</h2>
-                    <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">[[${cartProduct.name}]]</h1>
+                    <h2 class="text-sm title-font text-gray-500 tracking-widest">[[${CartLineItems.getProductId().ListProductCategories}]]</h2>
+                    <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">[[${CartLineItems.getProductId().name}]]</h1>
                     <div class="flex mb-4">
           <span class="flex items-center">
             <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
@@ -57,13 +58,13 @@
           </span>
                     </div>
                     <div class="mt-5">
-                        <div class="leading-relaxed">[[${cartProduct.content}]]</div>
+                        <div class="leading-relaxed">[[${CartLineItems.getProductId().content}]]</div>
                         <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
                             <div class="flex mr-4">
                                 <span class="mr-3">Quantity</span>
                                 <div class="flex items-center border border-gray-300 rounded">
                                     <button type="button" class="h-6 w-6 flex items-center justify-center rounded-l cursor-pointer" onclick="decrementQuantity()">-</button>
-                                    <input type="number" class="outline-none text-center w-16 h-6 border-r border-l border-gray-300" id="quantity" name="quantity" value="1">
+                                    <input type="number" class="outline-none text-center w-16 h-6 border-r border-l border-gray-300" id="quantity" name="quantity" th:value="${CartLineItems.getQuantity()}">
                                     <button type="button" class="h-6 w-6 flex items-center justify-center rounded-r cursor-pointer" onclick="incrementQuantity()">+</button>
                                 </div>
                             </div>
@@ -85,36 +86,36 @@
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                             <del style="color: red">
                                 <div>
-                                    <input type="hidden" id="originalProductPrice" name="originalProductPrice" th:value="${cartProduct.price}" />
-                                    <input type="hidden" id="originalDiscountProductPrice" name="originalDiscountProductPrice" th:value="${cartProduct.discount_price}" />
+                                    <input type="hidden" id="originalProductPrice" name="originalProductPrice" th:value="${CartLineItems.getProductId().price}" />
+                                    <input type="hidden" id="originalDiscountProductPrice" name="originalDiscountProductPrice" th:value="${CartLineItems.getProductId().discount_price}" />
 
-                                    <span id="price" class="block text-lg font-medium text-gray-900">Price: $[[${cartProduct.price}]]</span>
+                                    <span id="price" class="block text-lg font-medium text-gray-900">Price: $[[${CartLineItems.getProductId().price}]]</span>
                                 </div>
                             </del>
                             <div>
-                                <span id="discountPrice" class="block text-lg font-medium text-gray-900">Discount Price: $[[${cartProduct.discount_price}]]</span>
+                                <span id="discountPrice" class="block text-lg font-medium text-gray-900">Discount Price: $[[${CartLineItems.getProductId().discount_price}]]</span>
                             </div>
                             <div>
-                                <span id="taxPrice" class="block text-lg font-medium text-gray-900">Tax: [[${cartProduct.tax}]]%</span>
+                                <span id="taxPrice" class="block text-lg font-medium text-gray-900">Tax: [[${CartLineItems.getProductId().tax}]]%</span>
                             </div>
                         </div>
                     </div>
 
                     <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                            </svg>
-                        </button>
-                    </div>
+                        <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
+        </div>
     </section>
-</form>
+</th:block>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
         $('#addToCart').on('click', function() {
             alert("Button clicked!");
             var quantity = document.getElementById('quantity').value;
@@ -136,7 +137,17 @@
         });
     });
 
+    $(document).ready(function ()
+    {
+        var quantityElement =parseFloat(document.getElementById('quantity').value);
+        var originalProductPrice = parseFloat(document.getElementById('originalProductPrice').value);
+        var originalDiscountPrice = parseFloat(document.getElementById('originalDiscountProductPrice').value);
 
+        let totalPrice=originalProductPrice*quantityElement;
+        let totalDiscountPrice=originalDiscountPrice*quantityElement;
+        document.getElementById('price').textContent = "Price: $" + totalPrice;
+        document.getElementById('discountPrice').textContent = "Price: $" + totalDiscountPrice;
+    })
 
 
     function decrementQuantity() {

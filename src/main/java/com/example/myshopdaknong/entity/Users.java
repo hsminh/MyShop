@@ -92,7 +92,13 @@ public class Users {
     public Boolean getActive() {
         return isActive;
     }
-
+    public String getFullName() {
+        if(this.firstName!=null&&this.lastName!=null&&!this.firstName.isEmpty()&&!this.lastName.isEmpty())
+        {
+            return this.lastName+ " " +this.firstName;
+        }
+        return null;
+    }
     public void setActive(Boolean active) {
         isActive = active;
     }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${pageTitle}]]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"/>
+</head>
+<body>
+<div th:replace="fragmen-navigaiton ::Navbar"></div>
+<div class="mt-8 text-center">
+    <h1 class="text-2xl font-bold">Shopping Cart</h1>
+</div>
+<div class="flex justify-center mt-6 space-x-4">
+    <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
+    <span><b>Quantity</b> - The quantity of products ordered.</span>
+</div>
+
+<div class="flex justify-center mt-2 space-x-4">
+    <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
+    <span><b>Price Per Product</b> - The price of each individual product.</span>
+</div>
+
+<div class="flex justify-center mt-2 space-x-4">
+    <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
+    <span><b>Sub Total Amount</b> - The subtotal amount for each line item (quantity * price per product).</span>
+</div>
+
+<div class="flex justify-center mt-2 space-x-4">
+    <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
+    <span><b>Tax</b> - The tax amount for each line item.</span>
+</div>
+
+<div class="flex justify-center mt-2 space-x-4">
+    <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
+    <span><b>Total Amount</b> - The total amount for each line item (subtotal + total tax).</span>
+</div>
+
+<div class="absolute top-5 left-5 mt-14">
+    <h2 class="text-lg font-bold mb-4">Transaction Summary</h2>
+    <table class="w-48 min-w-full divide-y divide-gray-200 text-left">
+        <thead>
+        <tr>
+            <th class="px-4 py-2 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total Amount Paid</th>
+            <th class="px-4 py-2 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total Tax Paid</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="px-4 py-2 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${cartCustomer.getTotal_amount()}"></span>
+            </td>
+            <td class="px-4 py-2 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${cartCustomer.getTax_amount()}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<table class="min-w-full divide-y divide-gray-200 mt-5">    <thead>
+    <tr>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Image</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Product</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Price Per Product</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Sub Total Amount</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Tax</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Tax Total Amount</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Buy Again</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="CartLineItems : ${listCartLineItem}">
+        <tr>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <img class="text-sm leading-5 text-gray-900" th:src="@{${CartLineItems.getProductId().loadImages()}}" ></img>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getProductId().name}"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getQuantity()}"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getProductId().discount_price}"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getSubTotalAmount()}"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getProductId().discount_price/100*CartLineItems.getProductId().tax}"></span>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getTaxTotalAmount()}"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="text-sm leading-5 text-gray-900" th:text="${CartLineItems.getTotalAmount()}"></span>
+            </td>
+            <td>
+                <a th:href="@{/cart(productId=${CartLineItems.getProductId().id})}" id="addToCart" type="button" class="ml-4 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
+                    <i class="fas fa-shopping-cart fa-1x"></i>
+                    <span class="ml-2">Buy</span>
+                </a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>

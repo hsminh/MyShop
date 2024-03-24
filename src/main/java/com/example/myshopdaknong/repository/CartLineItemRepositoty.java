@@ -13,4 +13,6 @@ public interface CartLineItemRepositoty extends JpaRepository<CartLineItems,Inte
     public CartLineItems findByCartId_Id(Integer cartId_id);
     public CartLineItems findByProductId(Product productId);
 
+    public List<CartLineItems> findByCartId(Cart cartId);
+
 }

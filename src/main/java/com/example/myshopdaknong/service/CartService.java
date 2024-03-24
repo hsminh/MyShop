@@ -4,6 +4,7 @@ import com.example.myshopdaknong.entity.Cart;
 import com.example.myshopdaknong.entity.CartLineItems;
 import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.CartLineItemRepositoty;
 import com.example.myshopdaknong.repository.CartReposttory;
@@ -47,6 +48,14 @@ public class CartService {
         return this.cartLineItemRepositoty.save(cartLineItems);
     }
 
+    public List<CartLineItems> getListCartItem(Cart cart) throws ProductException {
+        return this.cartLineItemRepositoty.findByCartId(cart);
+    }
+
+    public Cart getCartItem(Users customer) throws ProductException {
+        return this.cartReposttory.findByUsersId(customer);
+    }
+
     public String updateCartAndCartLineItem(Users customer, Product selectProduct, Integer quantity) throws ProductException {
         //luu cart
         Cart Cart=this.cartReposttory.findByUsersId(customer);
@@ -59,8 +68,9 @@ public class CartService {
         {
             Cart.setUpdatedAt(new Date());
         }
-        CartLineItems cartLineItemContainProduct=this.cartLineItemRepositoty.findByCartId_Id(Cart.getId());
-        if(cartLineItemContainProduct==null)
+        CartLineItems cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
+
+        if(cartLineItems==null)
         {
             Cart.setCount_items(Cart.getCount_items()+1);
         }
@@ -71,8 +81,7 @@ public class CartService {
 
 
         //luu cart line item
-        CartLineItems cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
-        if(cartLineItems==null)
+            if(cartLineItems==null)
         {
             cartLineItems=new CartLineItems();
             cartLineItems.setCreatedAt(new Date());
@@ -89,6 +98,20 @@ public class CartService {
         this.cartLineItemRepositoty.save(cartLineItems);
         this.cartReposttory.save(Cart);
         return "ok";
+    }
+
+
+    public void deleteCardLineItem(Integer cardLineItemId) {
+        Optional<CartLineItems> cartLineItems= this.cartLineItemRepositoty.findById(cardLineItemId);
+        if(cartLineItems.isPresent())
+        {
+            this.cartLineItemRepositoty.delete(cartLineItems.get());
+        }else
+        {
+            throw new CardLineItemException("Cannot Found Card With Id : "+cardLineItemId );
+        }
+
+
     }
 
 

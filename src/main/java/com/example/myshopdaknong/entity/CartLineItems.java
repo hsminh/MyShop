@@ -47,6 +47,25 @@ public class CartLineItems {
     @JoinColumn(name = "product_id")
     private Product productId;
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "CartLineItems{" +
+                "id=" + id +
+                ", quantity=" + quantity +
+                ", totalAmount=" + totalAmount +
+                ", subTotalAmount=" + subTotalAmount +
+                ", taxTotalAmount=" + taxTotalAmount +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", cartId=" + cartId +
+                ", productId=" + productId +
+                '}';
+    }
+
     public CartLineItems() {
 
         this.quantity=0;
