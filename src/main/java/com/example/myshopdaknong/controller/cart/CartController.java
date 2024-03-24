@@ -37,9 +37,18 @@ public class CartController {
 
 
     @GetMapping("/cart/remove")
-    public String listCart(@RequestParam("cartLineItemId")Integer cardLineItemId) {
-        this.cartService.deleteCardLineItem(cardLineItemId);
-        return "cart/cart";
+    public String listCart(@AuthenticationPrincipal ShopMeUserDetail Customer,@RequestParam("cartLineItemId")Integer cardLineItemId,RedirectAttributes redirectAttributes) throws CardLineItemException {
+        try{
+            Users customer=this.cartService.findUserById(Customer.getUserId());
+            this.cartService.deleteCardLineItem(cardLineItemId,customer);
+        }catch (CardLineItemException ex)
+        {
+            redirectAttributes.addFlashAttribute("message",ex.getMessage());
+        } catch (ProductException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/cart/shopping-cart";
+
     }
 
     @GetMapping("/cart/shopping-cart")
@@ -49,7 +58,6 @@ public class CartController {
             Cart cartCustomer=this.cartService.getCartItem(customer);
 //            model.addAttribute("cartCustomer",cartCustomer);
 //            model.addAttribute("customer",customer);
-        System.out.println("cc ");
         for(CartLineItems cartLineItems:  this.cartService.getListCartItem(cartCustomer))
         {
             System.out.println(cartLineItems.getProductId().loadImages());

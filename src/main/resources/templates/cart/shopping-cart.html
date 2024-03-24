@@ -10,7 +10,9 @@
     <div th:replace="fragmen-navigaiton ::Navbar"></div>
 
     <h3 class="text-center mt-5 text-lg font-medium text-gray-900 mb-4">Your Shopping Cart</h3>
-
+    <div th:if="${listCartLineItem.size()==0}">
+        <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty</h3>
+    </div>
     <th:block th:each="CartLineItems : ${listCartLineItem}">
         <input type="hidden" id="selectProduct[[${CartLineItems.getProductId().id}]]" name="selectProduct" th:value="${CartLineItems.getProductId().id}" />
         <input type="hidden" id="selectCartLineItem[[${CartLineItems.getProductId().id}]]" name="selectCartLineItem" th:value="${CartLineItems.id}" />

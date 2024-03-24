@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="fragmen-navigaiton ::Navbar"></div>
 <div class="bg-white">
-    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 class="sr-only">Products</h2>
 
         <!-- Search input -->
@@ -21,64 +19,63 @@
         </div>
 
         <!-- Brand List -->
-<!--        <div class="w-full md:w-1/4 bg-gray-200 p-4">-->
-<!--            <h3 class="text-lg font-semibold mb-2">Brands:</h3>-->
-<!--            <ul>-->
-<!--                <li><a href="#" class="text-blue-600 hover:text-blue-800 block">Brand A</a></li>-->
-<!--                <li><a href="#" class="text-blue-600 hover:text-blue-800 block">Brand B</a></li>-->
-<!--                <li><a href="#" class="text-blue-600 hover:text-blue-800 block">Brand C</a></li>-->
-<!--                <li><a href="#" class="text-blue-600 hover:text-blue-800 block">Brand D</a></li>-->
-<!--                &lt;!&ndash; Add more brands here &ndash;&gt;-->
-<!--            </ul>-->
-<!--        </div>-->
-        <!-- Product Cards -->
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2">
-            <th:block th:each="Product : ${listProduct}">
-                   <div class="w-full px-4 lg:px-0">
-                       <div class="p-3 bg-white rounded shadow-md">
-                           <div class="relative w-full mb-3 h-62 lg:mb-0">
-                               <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-fill w-full h-full rounded">
-                           </div>
-                           <div class="flex-auto p-2 justify-evenly">
-                               <div class="flex flex-wrap">
-                                   <div class="flex items-center justify-between w-full min-w-0">
-                                       <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                           <b>Name :</b> [[${Product.name}]]
-                                       </h2>
-                                   </div>
-                                   <div class="flex items-center justify-between w-full min-w-0">
-                                       <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                           <b>Description :</b> [[${Product.content}]]
-                                       </h2>
-                                   </div>
-                                   <div class="flex items-center justify-between w-full min-w-0">
-                                       <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                           <p class="product-content"><b>SKU :</b> [[${Product.sku}]]</p>
-                                       </h2>
-                                   </div>
-                               </div>
-                               <div class="mt-1 text-xl font-semibold">
-                                   <b>Price :</b>
-                                   <del class="text-red-500">[[${Product.price}]]</del>
-                                   <span>[[${Product.discount_price}]]</span>
-                               </div>
-                               <form th:action="@{/cart}" method="get">
-                                   <input type="hidden" name="productId" th:value="${Product.id}" />
-                                   <button type="submit" class="mt-1 text-xl font-semibold">
-                                       <i class="fas fa-shopping-cart fa-1x"></i>
-                                       <span>Add to Cart</span>
-                                   </button>
-                               </form>
-                           </div>
-                       </div>
-                   </div>
-
-            </th:block>
+        <div class="flex items-center justify-center mb-6 flex-wrap">
+            <h3 class="text-lg font-semibold mb-2 mr-4">Categories List:</h3>
+            <div class="flex flex-wrap gap-4">
+                <th:block th:each="ProductCategory, rowStat : ${listCategory}">
+                    <a href="#" class="text-blue-600 hover:text-blue-800 block mb-2" th:text="${ProductCategory.name}"
+                       th:classappend="${rowStat.even} ? 'md:mr-4' : ''"></a>
+                </th:block>
+            </div>
         </div>
 
 
+        <!-- Product Cards -->
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2">
+            <th:block th:each="Product : ${listProduct}">
+                <div class="w-full px-4">
+                    <div class="p-3 bg-white rounded shadow-md">
+                        <div class="relative w-full mb-3 h-96">
+                            <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-cover w-full h-full rounded">
+                        </div>
+                        <div class="flex-auto p-2 justify-evenly">
+                            <div class="flex flex-wrap">
+                                <div class="flex items-center justify-between w-full min-w-0">
+                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
+                                        <b>Name :</b> [[${Product.name}]]
+                                    </h2>
+                                </div>
+                                <div class="flex items-center justify-between w-full min-w-0">
+                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
+                                        <b>Description :</b> [[${Product.content}]]
+                                    </h2>
+                                </div>
+                                <div class="flex items-center justify-between w-full min-w-0">
+                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
+                                        <p class="product-content"><b>SKU :</b> [[${Product.sku}]]</p>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="mt-1 text-xl font-semibold">
+                                <b>Price :</b>
+                                <del class="text-red-500">[[${Product.price}]]</del>
+                                <span>[[${Product.discount_price}]]</span>
+                            </div>
+                            <form th:action="@{/cart}" method="get">
+                                <input type="hidden" name="productId" th:value="${Product.id}" />
+                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md">
+                                    <i class="fas fa-shopping-cart fa-1x"></i>
+                                    <span class="ml-2">Add to Cart</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
     </div>
 </div>
+
 <p class="text-center text-xl font-semibold text-gray-700 mt-10">Shop</p>
 
 <script>
@@ -101,7 +98,6 @@
             }
         });
     });
-
 </script>
 </body>
 </html>

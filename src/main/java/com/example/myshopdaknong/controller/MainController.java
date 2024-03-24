@@ -1,6 +1,7 @@
 package com.example.myshopdaknong.controller;
 
 import com.example.myshopdaknong.entity.Product;
+import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.service.ProductSerVice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,10 @@ public class MainController {
     public String MainFile(Model model)
     {
         List<Product>listProduct=productSerVice.findAll();
+        List<ProductCategory>listCategory=productSerVice.findAllCategory();
+
         model.addAttribute("listProduct",listProduct);
+        model.addAttribute("listCategory",listCategory);
         return "main-page";
     }
 

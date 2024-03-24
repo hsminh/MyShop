@@ -101,18 +101,25 @@ public class CartService {
     }
 
 
-    public void deleteCardLineItem(Integer cardLineItemId) {
-        Optional<CartLineItems> cartLineItems= this.cartLineItemRepositoty.findById(cardLineItemId);
-        if(cartLineItems.isPresent())
-        {
-            this.cartLineItemRepositoty.delete(cartLineItems.get());
-        }else
-        {
-            throw new CardLineItemException("Cannot Found Card With Id : "+cardLineItemId );
+    public void deleteCardLineItem(Integer cardLineItemId, Users customer) throws CardLineItemException {
+        Optional<CartLineItems> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
+        if(cartLineItemsOptional.isPresent()) {
+            //set Cart Null
+            CartLineItems cartLineItems = cartLineItemsOptional.get();
+            cartLineItems.setCartId(null);
+            this.cartLineItemRepositoty.save(cartLineItems);
+            //Set Cart in CartLineItem
+            Cart cart=this.cartReposttory.findByUsersId(customer);
+            cart.setCount_items(cart.getCount_items()-1);
+            cart.setTax_amount(cart.getTax_amount()-cartLineItems.getTaxTotalAmount());
+            cart.setTotal_amount(cart.getTotal_amount()-cartLineItems.getTotalAmount());
+            this.cartReposttory.save(cart);
+            this.cartLineItemRepositoty.delete(cartLineItems);
+        } else {
+            throw new CardLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId);
         }
-
-
     }
+
 
 
 }
