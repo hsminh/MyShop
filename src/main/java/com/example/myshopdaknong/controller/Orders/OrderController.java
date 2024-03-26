@@ -31,6 +31,7 @@ public class OrderController {
         redirectAttributes.addFlashAttribute("messageSuccessfull","Congratulations on your successful purchase");
         return "redirect:/main-page"; // Trả về trang order_success.html sau khi mua hàng thành công
     }
+
     @GetMapping("/order/history")
     public String transactionHistory(Model model,@AuthenticationPrincipal ShopMeUserDetail user) {
         Optional<Users> Customer=this.userRepository.findById(user.getUserId());

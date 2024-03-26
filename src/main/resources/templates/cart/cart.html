@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="flex">
-                                <button id="buyButton" type="button" class="text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                <button onclick="paymentCart()" id="buyButton" type="button" class="text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
                                     <i class="fas fa-shopping-cart fa-1x"></i>
                                     <span class="ml-2">Buy</span>
                                 </button>
@@ -119,6 +119,38 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+
+    function paymentCart() {
+        var quantity = parseInt($('#quantity').val());
+        var productId = parseInt($('#selectProduct').val());
+
+
+        alert(quantity)
+        var confirmation = confirm("Are you sure you want to proceed with the payment?");
+        if(confirmation)
+        {
+            $.ajax({
+                type: 'GET',
+                url: '/order/buy-direct',
+                data: {
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function(response) {
+
+                    window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
+
+                    // Handle success response, if needed
+                },
+                error: function(xhr, status, error) {
+                    alert("Error updating quantity")
+
+                    console.error('Error updating quantity:', error);
+                    // Handle error response, if needed
+                }
+            });
+        }
+    }
 
         $(document).ready(function() {
         $('#addToCart').on('click', function() {

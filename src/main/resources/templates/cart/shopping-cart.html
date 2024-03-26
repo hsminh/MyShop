@@ -138,29 +138,29 @@
             var confirmation = confirm("Are you sure you want to proceed with the payment?");
             if(confirmation)
             {
+                $.ajax({
+                    type: 'GET',
+                    url: '/order',
+                    data: {
+                        cartLineItemId: productId,
+                        quantity: quantity
+                    },
+                    success: function(response) {
 
+                        window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
+
+                        // Handle success response, if needed
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error updating quantity")
+
+                        console.error('Error updating quantity:', error);
+                        // Handle error response, if needed
+                    }
+                });
             }
-            $.ajax({
-                type: 'GET',
-                url: '/order',
-                data: {
-                    cartLineItemId: productId,
-                    quantity: quantity
-                },
-                success: function(response) {
+            }
 
-                    window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
-
-                    // Handle success response, if needed
-                },
-                error: function(xhr, status, error) {
-                    alert("nook")
-
-                    console.error('Error updating quantity:', error);
-                    // Handle error response, if needed
-                }
-            });
-        }
         /*<![CDATA[*/
         function decrementQuantity(productId) {
             var quantityElement = $('#quantityInput' + productId);

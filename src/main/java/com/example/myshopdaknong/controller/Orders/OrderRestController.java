@@ -28,4 +28,14 @@ public class OrderRestController {
         String Notification=this.orderService.saveOrder( cartLineItemId,quantity,Customer);
             return Notification;
     }
+
+    @GetMapping("/order/buy-direct")
+    public String buyDirect(
+            @AuthenticationPrincipal ShopMeUserDetail customer,
+            @RequestParam(value = "productId") Integer cartLineItemId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) throws ProductException, CardLineItemException {
+        Users Customer=this.cartService.findUserById(customer.getUserId());
+        String Notification=this.orderService.saveOrderDirect( cartLineItemId,quantity,Customer);
+        return "Notification";
+    }
 }
