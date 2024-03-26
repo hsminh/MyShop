@@ -1,9 +1,8 @@
 package com.example.myshopdaknong.controller.products;
 
 import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductException;
-import com.example.myshopdaknong.service.ProductSerVice;
+import com.example.myshopdaknong.services.ProductSerVice;
 import com.example.myshopdaknong.util.FileUploadUltil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class ProductController {
@@ -25,7 +23,7 @@ public class ProductController {
     @GetMapping("/products")
     public String listProduct(Model model) {
         model.addAttribute("pageTitle","Products");
-        model.addAttribute("ListProduct",this.productSerVice.findAll());
+        model.addAttribute("ListProduct",this.productSerVice.findAll(null, null));
         return "products/products";
     }
 

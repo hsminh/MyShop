@@ -1,4 +1,4 @@
-package com.example.myshopdaknong.service;
+package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.Cart;
 import com.example.myshopdaknong.entity.CartLineItems;
@@ -63,17 +63,15 @@ public class CartService {
         {
             Cart=new Cart();
             Cart.setUsersId(customer);
+
             Cart=this.cartReposttory.save(Cart);
         }else
         {
             Cart.setUpdatedAt(new Date());
         }
         CartLineItems cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
+        Cart.setCount_items(Cart.getCount_items()+quantity);
 
-        if(cartLineItems==null)
-        {
-            Cart.setCount_items(Cart.getCount_items()+1);
-        }
         Float taxAmount=((selectProduct.getDiscount_price()*quantity)/100)*selectProduct.getTax();
         Float PriceBeforeTax=selectProduct.getDiscount_price()*quantity;
         Cart.setTax_amount(Cart.getTax_amount()+taxAmount);
@@ -110,9 +108,16 @@ public class CartService {
             this.cartLineItemRepositoty.save(cartLineItems);
             //Set Cart in CartLineItem
             Cart cart=this.cartReposttory.findByUsersId(customer);
-            cart.setCount_items(cart.getCount_items()-1);
+            cart.setCount_items(cart.getCount_items()-cartLineItems.getQuantity());
             cart.setTax_amount(cart.getTax_amount()-cartLineItems.getTaxTotalAmount());
             cart.setTotal_amount(cart.getTotal_amount()-cartLineItems.getTotalAmount());
+
+            List<CartLineItems>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
+            if (cartLineItemContailCartId.isEmpty())
+            {
+                cart.setDeletedAt(new Date());
+            }
+
             this.cartReposttory.save(cart);
             this.cartLineItemRepositoty.delete(cartLineItems);
         } else {

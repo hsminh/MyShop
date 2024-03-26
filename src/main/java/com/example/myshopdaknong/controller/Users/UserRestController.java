@@ -1,6 +1,6 @@
 package com.example.myshopdaknong.controller.Users;
 
-import com.example.myshopdaknong.service.UserService;
+import com.example.myshopdaknong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

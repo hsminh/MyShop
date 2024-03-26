@@ -3,7 +3,7 @@ package com.example.myshopdaknong.controller.Users;
 import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.Users;
 import com.example.myshopdaknong.exception.UserNotFoundException;
-import com.example.myshopdaknong.service.UserService;
+import com.example.myshopdaknong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -104,6 +104,9 @@ public class UsersController {
         if(editPassword!=null&&!editPassword.isEmpty())
         {
             user.setPassword(editPassword);
+        }else
+        {
+            user.setPassword(user.getPassword());
         }
         return user;
     }
@@ -114,13 +117,11 @@ public class UsersController {
     @PostMapping("/users/save")
     public String saveUser(@RequestParam(value = "editPassword",required = false)String editPassword, Users Users, Model model) throws UserNotFoundException {
         Users users=null;
-        System.out.println("this is infor "+ Users);
         if(Users.getId()!=null&&Users.getId()!=0)
         {
              users =this.EditUser(editPassword,Users);
         }else
         {
-            System.out.println("come thisss");
              users=CreateNewUser(Users);
         }
         this.userService.save(users);

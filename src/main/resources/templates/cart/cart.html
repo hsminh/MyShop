@@ -10,6 +10,11 @@
 <div th:replace="fragmen-navigaiton ::Navbar"></div>
 
 <form method="post" th:action="@{/cart/save}" th:object="${cart}">
+
+    <div th:if="${messageSuccessfull}" class="mt-4 text-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert" id="successMessage">
+        <strong class="font-bold">Congratulations!</strong>
+        <span class="block sm:inline" th:text="${messageSuccessfull}"></span>
+    </div>
     <input type="hidden" id="selectProduct" name="selectProduct" th:value="${cartProduct.id}" />
     <!-- component -->
     <section class="text-gray-700 body-font overflow-hidden bg-white">
@@ -114,9 +119,9 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+
         $(document).ready(function() {
         $('#addToCart').on('click', function() {
-            alert("Button clicked!");
             var quantity = document.getElementById('quantity').value;
             var productId = document.getElementById('selectProduct').value;
             $.ajax({

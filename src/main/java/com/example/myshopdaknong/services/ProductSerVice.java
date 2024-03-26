@@ -1,7 +1,8 @@
-package com.example.myshopdaknong.service;
+package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
+import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.ProductsRepository;
 import com.example.myshopdaknong.repository.ProductCategoryRepository;
@@ -19,14 +20,34 @@ public class ProductSerVice {
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
-    public List<Product> findAll()
+    public List<Product> findAll(Integer id, String search)
     {
+        if(id!=null&&search!=null)
+        {
+            return this.producsRepository.findAll(id,search);
+        }else if(id!=null)
+        {
+            return this.producsRepository.findAll(id);
+        }else if(search!=null)
+        {
+            return this.producsRepository.findAll(search);
+
+        }
         return this.producsRepository.findAll();
     }
 
     public List<ProductCategory>findAllCategory()
     {
         return this.productCategoryRepository.findAll();
+    }
+
+    public ProductCategory getCategoryById(Integer id) throws CategoryProductException {
+        Optional<ProductCategory> productCategory= this.productCategoryRepository.findById(id);
+        if(productCategory.isPresent())
+        {
+            return  productCategory.get();
+        }
+        throw new CategoryProductException("Cannot Find Category With ID :"+id);
     }
 
     public Product save(Product product) {

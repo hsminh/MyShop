@@ -30,14 +30,12 @@ public class UserSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security
                 .authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/public/images/**").permitAll() // Thêm dòng này
-                        .requestMatchers("/main-page").permitAll()
-                        .requestMatchers("/users/save").permitAll() // Chỉnh sửa đây
-                        .requestMatchers("/users/check-username-unique").permitAll() // Chỉnh sửa đây
-                         .requestMatchers("/users/register").permitAll()
+                        //url ko xac thuc
+                        .requestMatchers("/login","/public/images/**","/main-page","/users/save","/users/check-username-unique","/users/register").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
-                        .requestMatchers("/category/**").hasAnyAuthority("Admin","User")
+                        .requestMatchers("/category/**").hasAnyAuthority("Admin")
+                        .requestMatchers("/products/**").hasAnyAuthority("Admin")
+
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")
@@ -45,6 +43,11 @@ public class UserSecurityConfiguration {
                                 .permitAll()
                                 .usernameParameter("username")
                                 .passwordParameter("password")
+                ).logout(
+                       logout->logout.logoutUrl("/logout") // URL để logout
+                               .logoutSuccessUrl("/login") // URL chuyển hướng sau khi logout thành công
+                               .invalidateHttpSession(true) // Invalidates the HttpSession
+                               .deleteCookies("JSESSIONID") // Xóa cookie (nếu cần)
                 );
         return security.build();
     }

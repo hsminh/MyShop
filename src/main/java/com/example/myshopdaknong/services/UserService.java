@@ -1,4 +1,4 @@
-package com.example.myshopdaknong.service;
+package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.Users;
@@ -41,13 +41,13 @@ public class UserService {
 
     public Users save(Users users)
     {
-        users.setPassword(this.bCryptPasswordEncoder.encode(users.getPassword()));
         users.addRoles(rolesRepository.findById(2).get());
         if(users.getId()!=null)
         {
             users.setUpdatedAt(new Date());
         }else
         {
+            users.setPassword(this.bCryptPasswordEncoder.encode(users.getPassword()));
             users.setCreatedAt(new Date());
         }
         return this.userRepository.save(users);

@@ -1,7 +1,7 @@
 package com.example.myshopdaknong.sercurity;
 
 import com.example.myshopdaknong.entity.Users;
-import com.example.myshopdaknong.service.UserService;
+import com.example.myshopdaknong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

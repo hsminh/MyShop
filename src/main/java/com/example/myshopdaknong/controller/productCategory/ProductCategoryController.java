@@ -2,7 +2,7 @@ package com.example.myshopdaknong.controller.productCategory;
 
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductCategoriesException;
-import com.example.myshopdaknong.service.ProductCategoriesSerVice;
+import com.example.myshopdaknong.services.ProductCategoriesSerVice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

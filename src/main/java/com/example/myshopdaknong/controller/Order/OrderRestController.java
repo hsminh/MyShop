@@ -1,32 +1,31 @@
-package com.example.myshopdaknong.controller.cart;
+package com.example.myshopdaknong.controller.Order;
 
-import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
 import com.example.myshopdaknong.services.CartService;
+import com.example.myshopdaknong.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CartRestController {
+public class OrderRestController {
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/cart/update-cart")
-    public String updateCart(
-            Model model,
+    @GetMapping("/order")
+    public String SaveOrder(
             @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "selectProduct",required = false) Integer productId,
-            @RequestParam(value = "quantity" ,required = false) int quantity) throws ProductException {
+            @RequestParam(value = "cartLineItemId") Integer cartLineItemId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) throws ProductException, CardLineItemException {
         Users Customer=this.cartService.findUserById(customer.getUserId());
-        Product selectProduct=this.cartService.getProductById(productId);
-        this.cartService.updateCartAndCartLineItem(Customer,selectProduct,quantity);
-        model.addAttribute("messageSuccessfull","Happy");
-        return "Cart updated successfully";
+        String Notification=this.orderService.saveOrder( cartLineItemId,quantity,Customer);
+            return Notification;
     }
 }

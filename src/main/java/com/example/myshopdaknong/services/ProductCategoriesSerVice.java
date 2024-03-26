@@ -1,4 +1,4 @@
-package com.example.myshopdaknong.service;
+package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductCategoriesException;

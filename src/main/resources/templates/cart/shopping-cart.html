@@ -9,10 +9,13 @@
     <body>
     <div th:replace="fragmen-navigaiton ::Navbar"></div>
 
-    <h3 class="text-center mt-5 text-lg font-medium text-gray-900 mb-4">Your Shopping Cart</h3>
+    <div th:if="${listCartLineItem.size()!=0}">
+        <h3 class="text-center mt-5 text-lg font-medium text-gray-900 mb-4">Your Shopping Cart</h3>
+    </div>
     <div th:if="${listCartLineItem.size()==0}">
         <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty</h3>
     </div>
+
     <th:block th:each="CartLineItems : ${listCartLineItem}">
         <input type="hidden" id="selectProduct[[${CartLineItems.getProductId().id}]]" name="selectProduct" th:value="${CartLineItems.getProductId().id}" />
         <input type="hidden" id="selectCartLineItem[[${CartLineItems.getProductId().id}]]" name="selectCartLineItem" th:value="${CartLineItems.id}" />
@@ -80,11 +83,13 @@
                                     </div>
                                 </div>
                                 <div class="flex">
-                                    <button id="buyButton[[${CartLineItems.getProductId().id}]]" type="button" class="text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg" onclick="updateCart([[${CartLineItems.getProductId().id}]]);">
-                                        <i class="fas fa-shopping-cart fa-1x"></i>
-                                        <span title="Click Here to Payment" class="ml-2">Payment</span>
+                                    <button  type="button" class="text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg" th:onclick="paymentCart([[${CartLineItems.id}]])">
+                                        <a >
+                                            <i class="fas fa-shopping-cart fa-1x"></i>
+                                            <span title="Click Here to Payment" class="ml-2">Payment</span>
+                                        </a>
                                     </button>
-                                    <a  th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="ml-7 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg" onclick="updateCart([[${CartLineItems.getProductId().id}]]);">
+                                    <a  th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="ml-7 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg" >
                                         <i class="fa-solid fa-trash"></i>
                                         <span title="Click Here to Payment" class="ml-2">Remove</span>
                                     </a>
@@ -127,6 +132,35 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:inline="javascript">
+
+        function paymentCart(productId) {
+            var quantity = parseInt($('#quantityInput' + productId).val())  ;
+            var confirmation = confirm("Are you sure you want to proceed with the payment?");
+            if(confirmation)
+            {
+
+            }
+            $.ajax({
+                type: 'GET',
+                url: '/order',
+                data: {
+                    cartLineItemId: productId,
+                    quantity: quantity
+                },
+                success: function(response) {
+
+                    window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
+
+                    // Handle success response, if needed
+                },
+                error: function(xhr, status, error) {
+                    alert("nook")
+
+                    console.error('Error updating quantity:', error);
+                    // Handle error response, if needed
+                }
+            });
+        }
         /*<![CDATA[*/
         function decrementQuantity(productId) {
             var quantityElement = $('#quantityInput' + productId);

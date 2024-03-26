@@ -1,11 +1,14 @@
 package com.example.myshopdaknong;
 
+import com.example.myshopdaknong.entity.Roles;
 import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.repository.RolesRepository;
 import com.example.myshopdaknong.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +17,19 @@ import java.util.List;
 public class UserTest {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RolesRepository rolesRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Test
     public void CteateNewUser()
     {
-        Users users=new Users("hosyminh1182004@gmail.com","123","Ho","minh");
+        Users users=new Users("100","100","Ho","minh");
+        users.setPassword(bCryptPasswordEncoder.encode("10"));
+        Roles role=this.rolesRepository.findById(1).get();
+        users.setActive(true);
+        users.addRoles(role);
         Users SavedUser=this.userRepository.save(users);
         Assertions.assertTrue(SavedUser.getId()!=0);
     }

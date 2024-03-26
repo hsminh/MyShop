@@ -13,21 +13,18 @@ import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CartLineItems {
+public class OrderLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private float quantity;
+    private Integer   quantity ;
 
-    @Column(name = "total_amount", nullable = false)
-    private float totalAmount;
+    private Float totalAmount;
 
-    @Column(name = "sub_total_amount", nullable = false)
-    private float subTotalAmount;
+    private Float subTotalAmount;
 
-    @Column(name = "tax_total_amount", nullable = false)
-    private float taxTotalAmount;
+    private Float taxTotalAmount;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,21 +36,13 @@ public class CartLineItems {
     @LastModifiedDate
     private Date updatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cartId;
-
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product productId;
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
     @Override
     public String toString() {
-        return "CartLineItems{" +
+        return "OrderLineItem{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", totalAmount=" + totalAmount +
@@ -61,18 +50,19 @@ public class CartLineItems {
                 ", taxTotalAmount=" + taxTotalAmount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", cartId=" + cartId +
-                ", productId=" + productId +
                 '}';
     }
 
-    public CartLineItems() {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Order orderId;
+
+    public OrderLineItem() {
 
         this.quantity=0;
-        this.totalAmount=0;
-        this.subTotalAmount=0;
-        this.taxTotalAmount=0;
+        this.totalAmount=0f;
+        this.subTotalAmount=0f;
+        this.taxTotalAmount=0f;
         this.createdAt=new Date();
     }
-
 }
