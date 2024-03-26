@@ -25,8 +25,8 @@ public class UserTest {
     @Test
     public void CteateNewUser()
     {
-        Users users=new Users("100","100","Ho","minh");
-        users.setPassword(bCryptPasswordEncoder.encode("10"));
+        Users users=new Users("admin","100","Ho","minh");
+        users.setPassword(bCryptPasswordEncoder.encode("admin"));
         Roles role=this.rolesRepository.findById(1).get();
         users.setActive(true);
         users.addRoles(role);

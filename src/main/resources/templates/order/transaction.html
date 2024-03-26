@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>[[${pageTitle}]]</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"/>
+    <div th:replace="fragmen ::header"></div>
+
 </head>
 <body>
-<div th:replace="fragmen-navigaiton ::Navbar"></div>
+<div th:replace="fragmen ::Navbar"></div>
 <div class="mt-8 text-center">
     <h1 class="text-2xl font-bold">Transaction History</h1>
 </div>

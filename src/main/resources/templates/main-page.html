@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 
-</head>
+<div th:replace="fragmen ::header"></div>
 
 <body>
-<div th:replace="fragmen-navigaiton ::Navbar"></div>
-<script th:src="@{/script/Dropdown.js}"></script>
+<div th:replace="fragmen ::Navbar"></div>
+<script th:src="@{/script/Dropdown.js}" type="text/javascript"></script>
+
+<script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
+
 <div class="bg-white">
     <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 class="sr-only">Products</h2>
@@ -101,31 +98,6 @@
     </div>
 
 </div>
-
-
-<script>
-    var searchButton = document.getElementById('searchButton');
-    var categoryId = document.getElementById('categoryId').value;
-
-    searchButton.addEventListener('click', function() {
-        var keyword = document.getElementById("default-search").value;
-        window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
-    });
-
-    function clearSearch() {
-        document.getElementById('default-search').value = '';
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var successMessage = document.getElementById("successMessage");
-        if (successMessage) {
-            setTimeout(function() {
-                successMessage.style.display = "none";
-            }, 3000);
-        }
-    });
-
-</script>
 
 </body>
 </html>

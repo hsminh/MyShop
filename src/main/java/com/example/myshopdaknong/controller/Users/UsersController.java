@@ -108,6 +108,9 @@ public class UsersController {
         {
             user.setPassword(user.getPassword());
         }
+//        System.out.println("cc "+user.getPassword());
+
+        System.out.println("cc "+user.getPassword());
         return user;
     }
     public Users CreateNewUser(Users newUser) throws UserNotFoundException {

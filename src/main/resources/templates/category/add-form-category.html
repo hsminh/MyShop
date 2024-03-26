@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../static/output.css">
-    <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"/>
+    <div th:replace="fragmen ::header"></div>
+
     <title>[[${pageTitle}]]</title>
 </head>
 <body>
-<div th:replace="fragmen-navigaiton ::Navbar"></div>
+<script th:src="@{/script/category/addFormCategoryServic.js}" type="text/javascript"></script>
+
+<div th:replace="fragmen ::Navbar"></div>
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
@@ -79,64 +79,7 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-
-        function ShowMessageErrr(title, message) {
-            $('#Title').text(title);
-            $('#Message').text(message);
-            $('#AlertMessage').removeClass('hidden');
-            // Hide the alert after 10 seconds
-            setTimeout(function() {
-                $('#AlertMessage').addClass('hidden');
-            }, 10000);
-        }
-        // Close the alert when clicking on the "x" button
-        $('#closeBtn').click(function() {
-            $('#AlertMessage').addClass('hidden');
-        });
-
-        $('#submitForm').on('submit', function (e) {
-            let des = $('#des').val().trim();
-            let name = $('#name').val().trim();
-            let slug = $('#slug').val().trim();
-            let id = $('#id').val().trim();
-            let check = false;
-
-            if (des.length < 1 || des.length > 255) {
-                ShowMessageErrr("Description:", "Description must be between 1 and 255 characters.");
-                check = true;
-            } else if (name.length === 0) {
-                ShowMessageErrr("Name:", "Name is required and cannot be empty.");
-                check = true;
-            } else if (slug.length === 0) {
-                ShowMessageErrr("Slug:", "Slug is required and cannot be empty.");
-                check = true;
-            }
-            $.ajax({
-                url: "/category/check-slug-name-uni",
-                method: "GET",
-                data: {
-                    id:id,
-                    name:name,
-                    slug:slug
-                },
-                success: function(data) {
-                    if (data !== "ok") {
-                        ShowMessageErrr("Name or Slug!", "Exist Please choose another Name Or Slug.");
-                        check = true;
-                    }
-                },
-                async: false
-            });
-
-            if (check) {
-                e.preventDefault();
-            }
-        });
-    });
-
 
 </script>
 </body>

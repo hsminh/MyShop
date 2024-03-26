@@ -31,7 +31,7 @@ public class ProductCategoryController {
         model.addAttribute("TitleForm", "Add Category");
         model.addAttribute("isNewUser", true);
         model.addAttribute("Category",new ProductCategory());
-        return "category/add-form";
+        return "category/add-form-category";
     }
     public ProductCategory SetEditCategory(ProductCategory productCategories, ProductCategory EditCategory)
     {
@@ -78,7 +78,7 @@ public class ProductCategoryController {
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Edit Category");
             model.addAttribute("Category",Category);
-            return "category/add-form";
+            return "category/add-form-category";
         } catch (ProductCategoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Category With Id " + id + " Not Found");
         }
