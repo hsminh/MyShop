@@ -1,4 +1,4 @@
-package com.example.myshopdaknong.controller.cart;
+package com.example.myshopdaknong.controller.carts;
 
 import com.example.myshopdaknong.entity.Cart;
 import com.example.myshopdaknong.entity.CartLineItems;

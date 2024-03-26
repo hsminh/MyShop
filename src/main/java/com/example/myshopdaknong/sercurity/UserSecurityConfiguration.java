@@ -31,11 +31,11 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
                         //url ko xac thuc
-                        .requestMatchers("/login","/public/images/**","/main-page","/users/save","/users/check-username-unique","/users/register").permitAll()
+                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")
-
+                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll() // Đường dẫn tĩnh được phép truy cập mà không cần xác thực
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")
@@ -48,7 +48,16 @@ public class UserSecurityConfiguration {
                                .logoutSuccessUrl("/login") // URL chuyển hướng sau khi logout thành công
                                .invalidateHttpSession(true) // Invalidates the HttpSession
                                .deleteCookies("JSESSIONID") // Xóa cookie (nếu cần)
-                );
+                ).rememberMe(
+                        rememberme->rememberme
+                .rememberMeParameter("rememberMe")
+                .tokenValiditySeconds(604800) // Thời gian sống của token là 7 ngày
+                .key("uniqueAndSecret")
+                ).exceptionHandling(
+                        exceptionHandling->exceptionHandling
+                                .accessDeniedPage("/access-denied")
+                )
+        ;
         return security.build();
     }
 }

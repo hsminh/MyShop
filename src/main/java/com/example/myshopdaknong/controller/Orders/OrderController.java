@@ -1,4 +1,4 @@
-package com.example.myshopdaknong.controller.Order;
+package com.example.myshopdaknong.controller.Orders;
 
 import com.example.myshopdaknong.entity.Order;
 import com.example.myshopdaknong.entity.Users;
