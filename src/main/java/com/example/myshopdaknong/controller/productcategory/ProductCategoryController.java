@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
@@ -18,9 +19,9 @@ public class ProductCategoryController {
     @Autowired
     private ProductCategoriesSerVice productCategoriesSerVice;
     @GetMapping("/category")
-    public String listProduct(Model model) {
+    public String listProduct(@RequestParam(value = "search",required = false) String serachValue, Model model) {
         model.addAttribute("pageTitle","Category");
-        model.addAttribute("ListCate",this.productCategoriesSerVice.FindAll());
+        model.addAttribute("ListCate",this.productCategoriesSerVice.findAll(serachValue));
         return "category/category";
     }
 

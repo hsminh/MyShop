@@ -14,10 +14,14 @@ import java.util.Optional;
 public class ProductCategoriesSerVice {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
-    public List<ProductCategory> FindAll()
-    {
-        return this.productCategoryRepository.findAll();
+
+    public List<ProductCategory> findAll(String searchValue) {
+        if(searchValue != null && !searchValue.trim().isEmpty()) {
+            return productCategoryRepository.findByNameContaining(searchValue);
+        }
+        return productCategoryRepository.findAll();
     }
+
 
     public ProductCategory save(ProductCategory productCategories) {
         return this.productCategoryRepository.save(productCategories);

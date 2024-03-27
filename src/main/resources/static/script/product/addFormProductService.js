@@ -24,6 +24,8 @@ $(document).ready(function () {
         }
     });
 
+
+
     $('#submitForm').on('submit', function (e) {
         let content = $('#content').val().trim();
         let name = $('#name').val().trim();

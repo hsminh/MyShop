@@ -28,7 +28,7 @@ public class ProductSerVice {
         }else if(id!=null)
         {
             return this.producsRepository.findAll(id);
-        }else if(search!=null)
+        }else if(search!=null&&!search.trim().isEmpty())
         {
             return this.producsRepository.findAll(search);
 

@@ -25,9 +25,9 @@ public class ProductController {
     @Autowired
     private EntityManager entityManager;
     @GetMapping("/products")
-    public String listProduct(Model model) {
+    public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord, Model model) {
         model.addAttribute("pageTitle", "Products");
-        model.addAttribute("ListProduct", productSerVice.findAll(null, null));
+        model.addAttribute("ListProduct", productSerVice.findAll(null, keyWord));
         return "products/products";
     }
 
