@@ -51,7 +51,6 @@ public class ProductSerVice {
     }
 
     public Product save(Product product) {
-        product.setCreatedAt(new Date());
         return this.producsRepository.save(product);
     }
 

@@ -13,7 +13,6 @@ public class ProductRestController {
 
     @GetMapping("/products/check-sku-name-unique")
     public String CheckSkuAndNameUni(@RequestParam("name") String name, @RequestParam("sku") String sku, @RequestParam(value = "id", required = false) Integer id) {
-        System.out.println("cc dm "+this.productSerVice.checkNameAndSkuUnique(name, sku, id));
         return this.productSerVice.checkNameAndSkuUnique(name, sku, id);
     }
 }
