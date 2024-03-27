@@ -21,12 +21,23 @@ public class CartRestController {
     public String updateCart(
             Model model,
             @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "selectProduct",required = false) Integer productId,
-            @RequestParam(value = "quantity" ,required = false) int quantity) throws ProductException {
-        Users Customer=this.cartService.findUserById(customer.getUserId());
-        Product selectProduct=this.cartService.getProductById(productId);
-        this.cartService.updateCartAndCartLineItem(Customer,selectProduct,quantity);
-        model.addAttribute("messageSuccessfull","Happy");
-        return "Cart updated successfully";
+            @RequestParam(value = "selectProduct", required = false) Integer productId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) {
+        try {
+            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            if (productId == null || quantity == null || quantity <= 0) {
+                throw new IllegalArgumentException("Invalid productId or quantity.");
+            }
+            Product selectedProduct = this.cartService.getProductById(productId);
+            this.cartService.updateCartAndCartLineItem(customerUser, selectedProduct, quantity);
+            model.addAttribute("messageSuccess", "Cart updated successfully");
+            return "Cart updated successfully";
+        } catch (ProductException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "Error updating cart: " + ex.getMessage();
+        } catch (IllegalArgumentException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "Error updating cart: " + ex.getMessage();
+        }
     }
 }

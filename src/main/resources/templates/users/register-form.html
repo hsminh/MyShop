@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <div th:replace="fragmen ::header"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <title>[[${pageTitle}]]</title>
 </head>
 <body>
-<script th:src="@{/script/users/registerFormService.js}" type="text/javascript"></script>
+<!--<script th:src="@{/script/users/registerFormService.js}" type="text/javascript"></script>-->
+<script th:src="@{/static/script/users/registerFormService.js}" type="text/javascript"></script>
 
 <div th:if="${isUpdateUser}" >
     <div th:replace="fragmen ::Navbar"></div>
@@ -99,11 +101,14 @@
                     />
                     <label for="active" class="ml-2">Acitve</label>
                 </div>
-                <button
-                        type="submit"
-                        class="w-full text-center py-3 rounded bg-green text-white hover:bg-green-dark focus:outline-none my-1"
-                >Create Account</button>
-            </form>
+                <div class="mt-6">
+                    <button
+                            type="submit"
+                            class="w-full px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md"
+                    >
+                        Create Acount
+                    </button>
+                </div>
 
             <div class="text-center text-sm text-grey-dark mt-4">
                 By signing up, you agree to the
@@ -114,8 +119,8 @@
                     Privacy Policy
                 </a>
             </div>
+            </form>
         </div>
-
         <div class="text-grey-dark mt-6">
             Already have an account?
             <a class="no-underline border-b border-blue text-blue" th:href="@{/login-form}">
@@ -124,7 +129,72 @@
         </div>
     </div>
 </div>
+<!--<script th:src="@{/static/script/users/registerFormService.js}" type="text/javascript"></script>-->
 
+<script>
+
+    function ShowMessageErrr(title, message) {
+        $('#Title').text(title);
+        $('#Message').text(message);
+        $('#AlerMessage').removeClass('hidden');
+        // Hide the alert after 10 seconds
+        setTimeout(function() {
+            $('#AlerMessage').addClass('hidden');
+        }, 10000);
+    }
+    // Close the alert when clicking on the "x" button
+    $('#closeBtn').click(function() {
+        $('#AlerMessage').addClass('hidden');
+    });
+
+    $(document).ready(function() {
+            $('#registerForm').submit(function(event) {
+            let checkInforInForm = true;
+            let username = $('#username').val();
+
+            let firstName=$('#firstName').val();
+            let lastName=$('#lastName').val();
+            if(firstName.length===0||lastName.length===0)
+            {
+                checkInforInForm=false;
+                ShowMessageErrr("Notification!", "Please fill in all required information");
+            }
+            if(checkInforInForm)
+            {
+                $.ajax({
+                    url: "/users/check-username-unique",
+                    method: "GET",
+                    data: { username: username },
+                    success: function(data) {
+                        if (data !== "ok") {
+                            ShowMessageErrr("Email already exists!", "Please choose another email.");
+                            checkInforInForm = false;
+                        }
+                    },
+                    async: false
+                });
+
+
+            }
+            if (!checkInforInForm) {
+                event.preventDefault();
+            }
+        });
+
+        $('#registerForm').submit(function(event) {
+            let id=$('#id').val();
+            if(id==='0'||id==='')
+            {
+                let password = $('#password').val();
+                let repassword = $('#repassword').val();
+                if (password !== repassword) {
+                    ShowMessageErrr("Password not Match!", "Please make sure your passwords match.");
+                    event.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

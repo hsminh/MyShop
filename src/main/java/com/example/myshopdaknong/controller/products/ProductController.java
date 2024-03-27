@@ -88,22 +88,21 @@ public class ProductController {
                     FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
                 }
 
-                entityManager.merge(productInDb); // Cập nhật thông tin sản phẩm
+                entityManager.merge(productInDb);
 
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
-                // Nếu sản phẩm chưa có id, đây là sản phẩm mới
                 if (!multipartFile.isEmpty()) {
                     String fileName = multipartFile.getOriginalFilename();
                     product.setImage(fileName);
 
                     product.setCreatedAt(new Date());
-                    product = productSerVice.save(product); // Lưu sản phẩm mới vào DB
+                    product = productSerVice.save(product);
 
                     String directory = "public/images/" + product.getId();
-                    FileUploadUltil.saveFile(directory, fileName, multipartFile, null); // Lưu file ảnh
+                    FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
                 } else {
-                    product = productSerVice.save(product); // Lưu sản phẩm mới vào DB
+                    product = productSerVice.save(product);
                 }
 
                 redirectAttributes.addFlashAttribute("Message", "Save Successful");

@@ -7,6 +7,7 @@ import com.example.myshopdaknong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ import java.util.Date;
 public class UsersController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @GetMapping("/users/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("pageTitle","Register Form");
@@ -91,7 +94,6 @@ public class UsersController {
             model.addAttribute("Users", user);
             return "users/register-form";
         } else {
-            // Redirect to login or handle the case where no user is authenticated
             return "redirect:/login";
         }
     }
@@ -103,17 +105,15 @@ public class UsersController {
         user.setLastName(UsersEdit.getLastName());
         if(editPassword!=null&&!editPassword.isEmpty())
         {
-            user.setPassword(editPassword);
+            user.setPassword(this.bCryptPasswordEncoder.encode(editPassword));
         }else
         {
             user.setPassword(user.getPassword());
         }
-//        System.out.println("cc "+user.getPassword());
-
-        System.out.println("cc "+user.getPassword());
         return user;
     }
     public Users CreateNewUser(Users newUser) throws UserNotFoundException {
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         newUser.setCreatedAt(new Date());
         return newUser;
     }
@@ -125,6 +125,7 @@ public class UsersController {
              users =this.EditUser(editPassword,Users);
         }else
         {
+
              users=CreateNewUser(Users);
         }
         this.userService.save(users);

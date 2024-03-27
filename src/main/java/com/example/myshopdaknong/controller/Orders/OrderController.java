@@ -20,32 +20,33 @@ import java.util.Optional;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
     @Autowired
     private CartService cartService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private OrderLineItemRepository orderLineItemRepository;
+
     @GetMapping("/order/success")
     public String orderSuccess(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("messageSuccessfull","Congratulations on your successful purchase");
-        return "redirect:/main-page"; // Trả về trang order_success.html sau khi mua hàng thành công
+        redirectAttributes.addFlashAttribute("messageSuccessfull", "Congratulations on your successful purchase");
+        return "redirect:/main-page"; // Redirect to main page after successful purchase
     }
 
-    @GetMapping("/order/history")
-    public String transactionHistory(Model model,@AuthenticationPrincipal ShopMeUserDetail user) {
-        Optional<Users> Customer=this.userRepository.findById(user.getUserId());
-        if(Customer.isPresent())
-        {
-            Users customerLogin=Customer.get();
-            Order order=this.orderService.getOrderById(customerLogin);
-            model.addAttribute("order",order) ;
-            System.out.println("here");
-
-            model.addAttribute("listOderLineItem",this.orderLineItemRepository.findByOrderId(order));
-            return "order/transaction"; // Trả về trang order_success.html sau khi mua hàng thành công
+        @GetMapping("/order/history")
+        public String transactionHistory(Model model, @AuthenticationPrincipal ShopMeUserDetail user) {
+            Optional<Users> optionalUser = this.userRepository.findById(user.getUserId());
+            if (optionalUser.isPresent()) {
+                Users customerLogin = optionalUser.get();
+                Order order = this.orderService.getOrderById(customerLogin);
+                model.addAttribute("order", order);
+                model.addAttribute("listOrderLineItem", this.orderLineItemRepository.findByOrderId(order));
+                return "order/transaction"; // Show transaction history
+            }
+            return "redirect:/login-form";
         }
-        return "cc";
-    }
 
-}
+    }
