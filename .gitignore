@@ -35,3 +35,6 @@ build/
 /.mvn/
 
 node_modules
+
+public/images
+
