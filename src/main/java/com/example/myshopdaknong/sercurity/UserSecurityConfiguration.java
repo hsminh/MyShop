@@ -35,8 +35,8 @@ public class UserSecurityConfiguration {
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")
-                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll() // Đường dẫn tĩnh được phép truy cập mà không cần xác thực
-                        .anyRequest().authenticated()
+                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .anyRequest().permitAll()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")
                                 .defaultSuccessUrl("/main-page",true)
@@ -45,7 +45,7 @@ public class UserSecurityConfiguration {
                                 .passwordParameter("password")
                 ).logout(
                        logout->logout.logoutUrl("/logout")
-                               .logoutSuccessUrl("/login")
+                               .logoutSuccessUrl("/login-form")
                                .invalidateHttpSession(true) // Invalidates the HttpSession
                                .deleteCookies("JSESSIONID")
                 ).rememberMe(

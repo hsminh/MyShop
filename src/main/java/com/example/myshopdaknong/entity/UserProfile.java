@@ -1,6 +1,9 @@
 package com.example.myshopdaknong.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,13 +19,19 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
+    @NotNull
+    @NotBlank(message = "Phone Number Is Required!")
+    @Size(min = 10,max = 10,message = "Please enter a valid phone number!")
     @Column(name = "phone_number", length = 15, nullable = false)
     private String phoneNumber;
+
 
     @Column(name = "bio", columnDefinition = "TEXT",nullable = false)
     private String bio;
 
+    @NotNull
+    @NotBlank(message = "address Is Required!")
+    @Size(min = 6,message = "Please enter a valid address!")
     @Column(name = "addresss",nullable = false)
     private String address;
 

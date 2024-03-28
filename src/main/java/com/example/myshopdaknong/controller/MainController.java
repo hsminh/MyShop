@@ -17,7 +17,6 @@ public class MainController {
     @Autowired
     private ProductSerVice productSerVice;
 
-
     @GetMapping("/main-page")
     public String MainFile(@RequestParam(value = "category", required = false) Integer id,
                            @RequestParam(value = "search", required = false) String search,
@@ -39,6 +38,7 @@ public class MainController {
         }
         return "main-page";
     }
+
 
 
 

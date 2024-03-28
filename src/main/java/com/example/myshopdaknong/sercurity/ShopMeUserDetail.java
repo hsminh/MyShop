@@ -17,6 +17,9 @@
         private Users users;
         private static final long serialVersionUID = 8434638013158790457L; // Cập nhật serialVersionUID
 
+//        public ShopMeUserDetail(Users users) {
+//            this.users = users;
+//        }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {

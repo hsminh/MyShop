@@ -11,7 +11,7 @@
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
         <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-            <form id="registerForm" method="post" th:action="@{/users/user-infor/save}" th:object="${userProfile}">
+            <form id="registerForm" method="post" th:action="@{/users/update_information/save}" th:object="${userProfile}">
                 <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
                     <span id="Message" class="block sm:inline"></span>
@@ -21,28 +21,41 @@
                 </svg>
             </span>
                 </div>
-                <h1 class="mb-8 text-3xl text-center">[[${TitleForm}]]</h1>
+                <h1 class="mb-8 text-3xl text-center">[[${titleForm}]]</h1>
 
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="confirm_password"
-                        placeholder="Phone Number"
-                        th:field="*{phoneNumber}"
-                />
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="confirm_password"
-                        placeholder="Bio"
-                        th:field="*{bio}"
-                />
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        placeholder="address"
-                        th:field="*{address}"
-                />
+                    <input type="text"
+                           class="block border border-grey-light w-full p-3 rounded mb-1"
+                           th:classappend="${#fields.hasErrors('phoneNumber')} ? 'border-red-500' : ''"
+                           name="phoneNumber"
+                           id="phoneNumber"
+                           placeholder="phoneNumber"
+                           th:field="*{phoneNumber}" />
+                    <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-red-500 italic mt-1 text-sm">
+                        <span th:errors="*{phoneNumber}"></span>
+                    </div>
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('bio')} ? 'border-red-500' : ''"
+                       name="bio"
+                       id="bio"
+                       placeholder="Bio"
+                       th:field="*{bio}" />
+                <div th:if="${#fields.hasErrors('bio')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{bio}"></span>
+                </div>
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('address')} ? 'border-red-500' : ''"
+                       name="address"
+                       id="address"
+                       placeholder="address"
+                       th:field="*{address}" />
+                <div th:if="${#fields.hasErrors('address')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{address}"></span>
+                </div>
+
                 <input  type="hidden" th:field="*{id}"/>
                 <input  type="hidden" th:field="*{users}"/>
 
