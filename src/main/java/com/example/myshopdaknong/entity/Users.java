@@ -1,6 +1,7 @@
 package com.example.myshopdaknong.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,6 +18,8 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull
     @Column(name = "user_name", length = 255, nullable = false)
     private String userName;
     @Column(name = "password", length = 255, nullable = false)

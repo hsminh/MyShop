@@ -33,8 +33,3 @@ build/
 .vscode/
 /node_modules/
 /.mvn/
-
-node_modules
-
-public/images
-
