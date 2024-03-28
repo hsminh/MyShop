@@ -1,3 +1,4 @@
+
 function ShowMessageErrr(title, message) {
     $('#Title').text(title);
     $('#Message').text(message);
@@ -12,10 +13,10 @@ $('#closeBtn').click(function() {
     $('#AlerMessage').addClass('hidden');
 });
 
-
 $(document).ready(function() {
+    alert("come");
     $('#registerForm').submit(function(event) {
-        let checkInforInForm = true; // Biến để kiểm tra tính duy nhất của email
+        let checkInforInForm = true;
         let username = $('#username').val();
 
         let firstName=$('#firstName').val();
@@ -46,8 +47,6 @@ $(document).ready(function() {
             event.preventDefault();
         }
     });
-
-
 
     $('#registerForm').submit(function(event) {
         let id=$('#id').val();

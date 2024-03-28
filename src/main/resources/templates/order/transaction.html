@@ -2,7 +2,6 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <div th:replace="fragmen ::header"></div>
-
 </head>
 <body>
 <div th:replace="fragmen ::Navbar"></div>
@@ -13,20 +12,15 @@
     <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
     <span><b>Quantity</b> - The quantity of products ordered.</span>
 </div>
-
-
 <div class="flex justify-center mt-2 space-x-4">
     <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
     <span><b>Tax Total Amount</b> - The tax amount for each line item.</span>
 </div>
-
 <div class="flex justify-center mt-2 space-x-4">
     <i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>
     <span><b>Total Amount</b> - The total amount for each line item (subtotal + total tax).</span>
 </div>
-<!-- Nếu order là null -->
-<!-- Nếu order là null -->
-<div th:if="${order==null}" class="flex items-center justify-center mt-10 ">
+<div th:if="${order == null}" class="flex items-center justify-center mt-10">
     <div class="text-center">
         <svg class="w-24 h-24 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -37,13 +31,7 @@
         </div>
     </div>
 </div>
-
-
-
-
-<div th:if="${order!=null}">
-
-
+<div th:if="${order != null}">
     <div class="absolute top-5 left-5 mt-14">
         <h2 class="text-lg font-bold mb-4">Transaction Summary</h2>
         <table class="w-48 min-w-full divide-y divide-gray-200 text-left">
@@ -57,10 +45,10 @@
             <tbody>
             <tr>
                 <td class="px-4 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${order.getCountItems()}" ></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${order.getCountItems()}"></span>
                 </td>
                 <td class="px-4 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${order.getTaxAmount()}" ></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${order.getTaxAmount()}"></span>
                 </td>
                 <td class="px-4 py-2 whitespace-no-wrap border-b border-gray-200">
                     <span class="text-sm leading-5 text-gray-900" th:text="${order.getTotalAmount()}"></span>
@@ -69,41 +57,37 @@
             </tbody>
         </table>
     </div>
-
-    <table class="min-w-full divide-y divide-gray-200 mt-5">    <thead>
-    <tr>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Image</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Product</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Tax</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Buy Again</th>
-    </tr>
-    </thead>
+    <table class="min-w-full divide-y divide-gray-200 mt-5">
+        <thead>
+        <tr>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Image</th>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Product</th>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Tax</th>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+            <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Buy Again</th>
+        </tr>
+        </thead>
         <tbody>
-        <th:block th:each="OrderLineItems : ${listOderLineItem}">
+        <th:block th:each="orderLineItem : ${listOrderLineItem}">
             <tr>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                    <img class="text-sm leading-5 text-gray-900" th:src="@{${OrderLineItems.getProductId().loadImages()}}" ></img>
+                    <img class="text-sm leading-5 text-gray-900" th:src="@{${orderLineItem.getProductId().loadImages()}}"></img>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${OrderLineItems.getProductId().name}"></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${orderLineItem.getProductId().name}"></span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${OrderLineItems.getQuantity()}"></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${orderLineItem.getQuantity()}"></span>
                 </td>
-                <
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${OrderLineItems.taxTotalAmount}"></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${orderLineItem.taxTotalAmount}"></span>
                 </td>
-
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                    <span class="text-sm leading-5 text-gray-900" th:text="${OrderLineItems.totalAmount}"></span>
+                    <span class="text-sm leading-5 text-gray-900" th:text="${orderLineItem.totalAmount}"></span>
                 </td>
-
                 <td>
-                    <a th:href="@{/cart(productId=${OrderLineItems.getProductId().id})}" id="addToCart" type="button" class="ml-4 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
+                    <a th:href="@{/cart(productId=${orderLineItem.getProductId().id})}" id="addToCart" type="button" class="ml-4 text-xl font-semibold px-4 py-2 bg-blue-500 text-white rounded-lg">
                         <i class="fas fa-shopping-cart fa-1x"></i>
                         <span class="ml-2">Buy</span>
                     </a>
@@ -112,6 +96,7 @@
         </th:block>
         </tbody>
     </table>
+
 </div>
 </body>
 </html>

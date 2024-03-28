@@ -35,7 +35,6 @@ public class MainController {
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
         } catch (CategoryProductException ex) {
-            System.out.println("cc " + ex.getMessage());
             model.addAttribute("messageErr", ex.getMessage());
         }
         return "main-page";

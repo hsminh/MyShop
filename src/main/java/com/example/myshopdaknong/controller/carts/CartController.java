@@ -20,81 +20,70 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CartController {
     @Autowired
     private CartService cartService;
+
     @GetMapping("/cart")
-    public String listCart(@RequestParam("productId")Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String showCartPage(@RequestParam("productId") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
-            Product chooseProduct=this.cartService.getProductById(id);
-            model.addAttribute("pageTitle","Page Cart");
-            model.addAttribute("cart",new Cart());
-            model.addAttribute("cartProduct",chooseProduct);
+            Product chosenProduct = this.cartService.getProductById(id);
+            model.addAttribute("pageTitle", "Page Cart");
+            model.addAttribute("cart", new Cart());
+            model.addAttribute("cartProduct", chosenProduct);
             return "cart/cart";
-        }catch (ProductException ex)
-        {
+        } catch (ProductException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
             return "redirect:/main-page";
         }
     }
 
-
     @GetMapping("/cart/remove")
-    public String listCart(@AuthenticationPrincipal ShopMeUserDetail Customer,@RequestParam("cartLineItemId")Integer cardLineItemId,RedirectAttributes redirectAttributes) throws CardLineItemException {
-        try{
-            Users customer=this.cartService.findUserById(Customer.getUserId());
-            this.cartService.deleteCardLineItem(cardLineItemId,customer);
-        }catch (CardLineItemException ex)
-        {
-            redirectAttributes.addFlashAttribute("message",ex.getMessage());
+    public String removeCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer,
+                                     @RequestParam("cartLineItemId") Integer cartLineItemId,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            Users user = this.cartService.findUserById(customer.getUserId());
+            this.cartService.deleteCardLineItem(cartLineItemId, user);
+        } catch (CardLineItemException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
         } catch (ProductException e) {
             throw new RuntimeException(e);
         }
         return "redirect:/cart/shopping-cart";
-
     }
 
     @GetMapping("/cart/shopping-cart")
-    public String shoppingCart(@AuthenticationPrincipal ShopMeUserDetail Customer, Model model, RedirectAttributes redirectAttributes) throws ProductException {
-            Users customer=this.cartService.findUserById(Customer.getUserId());
-            model.addAttribute("pageTitle","Page Cart");
-            Cart cartCustomer=this.cartService.getCartItem(customer);
-//            model.addAttribute("cartCustomer",cartCustomer);
-//            model.addAttribute("customer",customer);
-        for(CartLineItems cartLineItems:  this.cartService.getListCartItem(cartCustomer))
-        {
-            System.out.println(cartLineItems.getProductId().loadImages());
-        }
-            model.addAttribute("listCartLineItem",this.cartService.getListCartItem(cartCustomer));
+    public String showShoppingCart(@AuthenticationPrincipal ShopMeUserDetail customer,
+                                   Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Users user = this.cartService.findUserById(customer.getUserId());
+            model.addAttribute("pageTitle", "Page Cart");
+            Cart cartCustomer = this.cartService.getCartItem(user);
+            for (CartLineItems cartLineItems : this.cartService.getListCartItem(cartCustomer)) {
+                System.out.println(cartLineItems.getProductId().loadImages());
+            }
+            model.addAttribute("listCartLineItem", this.cartService.getListCartItem(cartCustomer));
             return "/cart/shopping-cart";
+        } catch (ProductException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/main-page";
+        }
     }
 
-//    @GetMapping("/cart/shopping-cart")
-//    public String historyShopping(@AuthenticationPrincipal ShopMeUserDetail Customer, Model model, RedirectAttributes redirectAttributes) {
-//        try {
-//            Users customer=this.cartService.findUserById(Customer.getUserId());
-//            model.addAttribute("pageTitle","Page Cart");
-//            Cart cartCustomer=this.cartService.getCartItem(customer);
-//            model.addAttribute("cartCustomer",cartCustomer);
-//            model.addAttribute("customer",customer);
-//            model.addAttribute("listCartLineItem",this.cartService.getListCartItem(cartCustomer));
-//            return "cart/shopping-cart1";
-//        }catch (ProductException ex)
-//        {
-//            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-//            return "redirect:/main-page";
-//        }
-//    }
-//    @PostMapping("/cart/save")
-//    public String saveCart(@RequestParam("quantity")Integer quantity,
-//                           @RequestParam("selectProduct")Integer productId,
-//                           Model model, RedirectAttributes redirectAttributes) throws ProductException {
-//        Cart newCart=new Cart();
-//        Product selectProduct=this.cartService.getProductById(productId);
-//        newCart.setCount_items(quantity);
-//        Float taxAmount=((selectProduct.getDiscount_price()*quantity)/100)*selectProduct.getTax();
-//        newCart.setTax_amount(taxAmount);
-//        newCart.setTotal_amount((selectProduct.getDiscount_price()*quantity)+ newCart.getTax_amount());
-//        newCart.setCreatedAt(new Date());
-//        this.cartService.saveCart(newCart);
-//        return "redirect:/main-page";
-//    }
+    // Other methods can be added here...
+
+    // For example:
+    // @PostMapping("/cart/save")
+    // public String saveCart(@RequestParam("quantity") Integer quantity,
+    //                        @RequestParam("selectProduct") Integer productId,
+    //                        Model model, RedirectAttributes redirectAttributes) throws ProductException {
+    //     Cart newCart = new Cart();
+    //     Product selectedProduct = this.cartService.getProductById(productId);
+    //     newCart.setCountItems(quantity);
+    //     Float taxAmount = ((selectedProduct.getDiscountPrice() * quantity) / 100) * selectedProduct.getTax();
+    //     newCart.setTaxAmount(taxAmount);
+    //     newCart.setTotalAmount((selectedProduct.getDiscountPrice() * quantity) + newCart.getTaxAmount());
+    //     newCart.setCreatedAt(new Date());
+    //     this.cartService.saveCart(newCart);
+    //     return "redirect:/main-page";
+    // }
 
 }

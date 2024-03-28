@@ -30,7 +30,7 @@ public class UserSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security
                 .authorizeHttpRequests(configurer -> configurer
-                        //url ko xac thuc
+
                         .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
@@ -44,14 +44,14 @@ public class UserSecurityConfiguration {
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                 ).logout(
-                       logout->logout.logoutUrl("/logout") // URL để logout
-                               .logoutSuccessUrl("/login") // URL chuyển hướng sau khi logout thành công
+                       logout->logout.logoutUrl("/logout")
+                               .logoutSuccessUrl("/login")
                                .invalidateHttpSession(true) // Invalidates the HttpSession
-                               .deleteCookies("JSESSIONID") // Xóa cookie (nếu cần)
+                               .deleteCookies("JSESSIONID")
                 ).rememberMe(
                         rememberme->rememberme
                 .rememberMeParameter("rememberMe")
-                .tokenValiditySeconds(604800) // Thời gian sống của token là 7 ngày
+                .tokenValiditySeconds(604800)
                 .key("uniqueAndSecret")
                 ).exceptionHandling(
                         exceptionHandling->exceptionHandling

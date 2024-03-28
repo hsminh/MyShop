@@ -16,26 +16,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderRestController {
     @Autowired
     private OrderService orderService;
+
     @Autowired
     private CartService cartService;
 
     @GetMapping("/order")
-    public String SaveOrder(
+    public String saveOrder(
             @AuthenticationPrincipal ShopMeUserDetail customer,
             @RequestParam(value = "cartLineItemId") Integer cartLineItemId,
-            @RequestParam(value = "quantity", required = false) Integer quantity) throws ProductException, CardLineItemException {
-        Users Customer=this.cartService.findUserById(customer.getUserId());
-        String Notification=this.orderService.saveOrder( cartLineItemId,quantity,Customer);
-            return Notification;
+            @RequestParam(value = "quantity", required = false) Integer quantity) {
+        try {
+            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            String notification = this.orderService.saveOrder(cartLineItemId, quantity, customerUser);
+            return notification;
+        } catch (ProductException | CardLineItemException ex) {
+            return "Error saving order: " + ex.getMessage();
+        }
     }
 
     @GetMapping("/order/buy-direct")
     public String buyDirect(
             @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "productId") Integer cartLineItemId,
-            @RequestParam(value = "quantity", required = false) Integer quantity) throws ProductException, CardLineItemException {
-        Users Customer=this.cartService.findUserById(customer.getUserId());
-        String Notification=this.orderService.saveOrderDirect( cartLineItemId,quantity,Customer);
-        return "Notification";
+            @RequestParam(value = "productId") Integer productId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) {
+        try {
+            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            String notification = this.orderService.saveOrderDirect(productId, quantity, customerUser);
+            return notification;
+        } catch (ProductException | CardLineItemException ex) {
+            return "Error saving order: " + ex.getMessage();
+        }
     }
 }

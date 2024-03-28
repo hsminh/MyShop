@@ -42,7 +42,6 @@ public class UserService {
     public Users save(Users users)
     {
         users.addRoles(rolesRepository.findById(2).get());
-        users.setPassword(this.bCryptPasswordEncoder.encode(users.getPassword()));
         if(users.getId()!=null)
         {
             users.setUpdatedAt(new Date());
