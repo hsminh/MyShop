@@ -27,9 +27,9 @@ public class UserTest {
     {
         Users users=new Users("admin","100","Ho","minh");
         users.setPassword(bCryptPasswordEncoder.encode("admin"));
-        Roles role=this.rolesRepository.findById(1).get();
-        users.setActive(true);
-        users.addRoles(role);
+//        Roles role=this.rolesRepository.findById(1).get();
+//        users.setActive(true);
+//        users.addRoles(role);
         Users SavedUser=this.userRepository.save(users);
         Assertions.assertTrue(SavedUser.getId()!=0);
     }
@@ -43,6 +43,15 @@ public class UserTest {
             usersList.add(users);
         }
         Assertions.assertTrue(this.userRepository.saveAll(usersList).size()!=0);
+    }
+
+    @Test
+    public void set()
+    {
+        Users users=this.userRepository.findUsersByUserName("admin");
+        System.out.println(users);
+//        this.userRepository.save(users);
+//        Assertions.assertTrue(this.userRepository.saveAll(usersList).size()!=0);
     }
 
     @Test

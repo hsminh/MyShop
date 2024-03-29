@@ -66,14 +66,6 @@ public class UsersController {
     public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid UserProfile userProfile, BindingResult bindingResult,Model model) {
         if(bindingResult.hasErrors())
         {
-            for(FieldError error :bindingResult.getFieldErrors())
-            {
-                    // Làm điều gì đó với mỗi lỗi trường
-                String field = error.getField();
-                String defaultMessage = error.getDefaultMessage();
-                // Ví dụ: In ra tên trường và thông báo lỗi mặc định
-                System.out.println("Field: " + field + ", Error: " + defaultMessage);
-            }
             this.setUpToUpdateForm(model,userProfile);
             return "users/update-information-user";
         }
@@ -140,7 +132,7 @@ public class UsersController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid Users users, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid Users users, BindingResult bindingResult, Model model) throws UserNotFoundException {
         // Check if the form is invalid
         if (bindingResult.hasErrors()) {
             // Check if editing user

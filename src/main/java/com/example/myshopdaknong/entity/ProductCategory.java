@@ -1,8 +1,11 @@
 package com.example.myshopdaknong.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,12 +21,21 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @NotBlank(message = "Name Is Required")
+    @Length(min = 2,message = "Name must be at least 2 characters")
     @Column(name = "name",length = 255,nullable = false,unique = true)
     private String name ;
 
+    @NotNull
+    @NotBlank(message = "Slug Is Required")
+    @Length(min = 2,message = "Slug must be at least 2 characters")
     @Column(name = "slug",length = 100,nullable = false,unique = true)
     private String slug ;
 
+    @NotNull
+    @NotBlank(message = "Description Is Required")
+    @Length(min = 6,message = "description must be at least 6 characters")
     @Column(name = "description",length = 255,nullable = false)
     private String description;
 
@@ -55,7 +67,9 @@ public class ProductCategory {
 
     public ProductCategory() {
     }
-
+    public String getLog() {
+        return this.id +" " +this.name +" "+this.slug ;
+    }
     @Override
     public String toString() {
         return this.name;

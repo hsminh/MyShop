@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <div th:replace="fragmen ::header"></div>
 
@@ -12,7 +12,7 @@
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
-            <form id="submitForm" th:action="@{/category/save}" th:object="${Category}" method="post">
+            <form id="submitForm" th:action="@{/category/save}" th:object="${category}" method="post">
                 <div id="AlertMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
                     <span id="Message" class="block sm:inline"></span>
@@ -25,31 +25,41 @@
                     </span>
                 </div>
                 <h1 class="mb-8 text-3xl text-center">[[${TitleForm}]]</h1>
+
                 <input type="hidden" th:field="*{id}" id="id">
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="name"
-                        placeholder="Name"
-                        th:field="*{name}"
-                        id="name"
-                />
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="slug"
-                        placeholder="Slug"
-                        id="slug"
-                        th:field="*{slug}"
-                />
-                <textarea
-                        class="block border border-grey-light w-full p-3 rounded mb-4 resize-none"
-                        rows="6"
-                        name="description"
-                        id="des"
-                        placeholder="Description"
-                        th:field="*{description}"
-                ></textarea>
+
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('name')} ? 'border-red-500' : ''"
+                       name="name"
+                       id="name"
+                       placeholder="name"
+                       th:field="*{name}" />
+                <div th:if="${#fields.hasErrors('name')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{name}"></span>
+                </div>
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('slug')} ? 'border-red-500' : ''"
+                       name="slug"
+                       id="slug"
+                       placeholder="slug"
+                       th:field="*{slug}" />
+                <div th:if="${#fields.hasErrors('slug')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{slug}"></span>
+                </div>
+
+                <textarea class="block border border-grey-light w-full p-3 rounded mb-1"
+                          th:classappend="${#fields.hasErrors('description')} ? 'border-red-500' : ''"
+                          name="description" id="des" placeholder="description"
+                          th:field="*{description}"></textarea>
+                <div th:if="${#fields.hasErrors('description')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{description}"></span>
+                </div>
+
+
 
                 <div class="flex items-center mb-4">
                     <input

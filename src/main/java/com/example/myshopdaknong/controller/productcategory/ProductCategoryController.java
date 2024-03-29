@@ -3,9 +3,12 @@ package com.example.myshopdaknong.controller.productcategory;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductCategoriesException;
 import com.example.myshopdaknong.services.ProductCategoriesSerVice;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +34,7 @@ public class ProductCategoryController {
         model.addAttribute("pageTitle","Category");
         model.addAttribute("TitleForm", "Add Category");
         model.addAttribute("isNewUser", true);
-        model.addAttribute("Category",new ProductCategory());
+        model.addAttribute("category",new ProductCategory());
         return "category/add-form-category";
     }
     public ProductCategory SetEditCategory(ProductCategory productCategories, ProductCategory EditCategory)
@@ -48,16 +51,31 @@ public class ProductCategoryController {
         return productCategories;
     }
     @PostMapping("/category/save")
-    public String saveCategory(ProductCategory productCategories, Model model) throws ProductCategoriesException {
-        if(productCategories.getId()==null||productCategories.getId()==0)
+    public String saveCategory(@Valid ProductCategory category, BindingResult bindingResult, Model model) throws ProductCategoriesException {
+        if(bindingResult.hasErrors())
         {
-            productCategories=this.SetCreateNewCategory(productCategories);
+            model.addAttribute("pageTitle","Category");
+            model.addAttribute("TitleForm", "Add Category");
+            model.addAttribute("isNewUser", true);
+            model.addAttribute("category",category);
+            for(FieldError error:bindingResult.getFieldErrors())
+            {
+                String fiel=error.getField();
+                String mssg=error.getDefaultMessage();
+                System.out.println("cc "+fiel+" : "+mssg);
+            }
+            System.out.println(category.getLog());
+            return "category/add-form-category";
+        }
+        if(category.getId()==null||category.getId()==0)
+        {
+            category=this.SetCreateNewCategory(category);
         }else
         {
-            ProductCategory productCategory=this.productCategoriesSerVice.FindById(productCategories.getId());
-            productCategories=this.SetEditCategory(productCategory,productCategories);
+            ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId());
+            category=this.SetEditCategory(productCategory,category);
         }
-        this.productCategoriesSerVice.save(productCategories);
+        this.productCategoriesSerVice.save(category);
         return "redirect:/category";
     }
 
