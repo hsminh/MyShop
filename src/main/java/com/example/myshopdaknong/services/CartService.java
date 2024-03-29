@@ -1,14 +1,14 @@
 package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.Cart;
-import com.example.myshopdaknong.entity.CartLineItems;
+import com.example.myshopdaknong.entity.CartLineItem;
 import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.CartLineItemRepositoty;
 import com.example.myshopdaknong.repository.CartReposttory;
-import com.example.myshopdaknong.repository.ProductsRepository;
+import com.example.myshopdaknong.repository.ProductRepository;
 import com.example.myshopdaknong.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class CartService {
     @Autowired
     private CartReposttory cartReposttory;
     @Autowired
-    private ProductsRepository productsRepository;
+    private ProductRepository productsRepository;
     @Autowired
     private CartLineItemRepositoty cartLineItemRepositoty;
     @Autowired
@@ -40,23 +40,23 @@ public class CartService {
         return this.cartReposttory.save(cart);
     }
 
-    public Users findUserById(Integer id) throws ProductException {
+    public User findUserById(Integer id) throws ProductException {
         return userRepository.findById(id).get();
     }
 
-    public CartLineItems saveCartLineItem(CartLineItems cartLineItems) throws ProductException {
+    public CartLineItem saveCartLineItem(CartLineItem cartLineItems) throws ProductException {
         return this.cartLineItemRepositoty.save(cartLineItems);
     }
 
-    public List<CartLineItems> getListCartItem(Cart cart) throws ProductException {
+    public List<CartLineItem> getListCartItem(Cart cart) throws ProductException {
         return this.cartLineItemRepositoty.findByCartId(cart);
     }
 
-    public Cart getCartItem(Users customer) throws ProductException {
+    public Cart getCartItem(User customer) throws ProductException {
         return this.cartReposttory.findByUsersId(customer);
     }
 
-    public String updateCartAndCartLineItem(Users customer, Product selectProduct, Integer quantity) throws ProductException {
+    public String updateCartAndCartLineItem(User customer, Product selectProduct, Integer quantity) throws ProductException {
         //luu cart
         Cart Cart=this.cartReposttory.findByUsersId(customer);
         if(Cart==null)
@@ -69,7 +69,7 @@ public class CartService {
         {
             Cart.setUpdatedAt(new Date());
         }
-        CartLineItems cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
+        CartLineItem cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
         Cart.setCount_items(Cart.getCount_items()+quantity);
 
         Float taxAmount=((selectProduct.getDiscount_price()*quantity)/100)*selectProduct.getTax();
@@ -81,7 +81,7 @@ public class CartService {
         //luu cart line item
             if(cartLineItems==null)
         {
-            cartLineItems=new CartLineItems();
+            cartLineItems=new CartLineItem();
             cartLineItems.setCreatedAt(new Date());
         }else
         {
@@ -99,11 +99,11 @@ public class CartService {
     }
 
 
-    public void deleteCardLineItem(Integer cardLineItemId, Users customer) throws CardLineItemException {
-        Optional<CartLineItems> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
+    public void deleteCardLineItem(Integer cardLineItemId, User customer) throws CardLineItemException {
+        Optional<CartLineItem> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
         if(cartLineItemsOptional.isPresent()) {
             //set Cart Null
-            CartLineItems cartLineItems = cartLineItemsOptional.get();
+            CartLineItem cartLineItems = cartLineItemsOptional.get();
             cartLineItems.setCartId(null);
             this.cartLineItemRepositoty.save(cartLineItems);
             //Set Cart in CartLineItem
@@ -112,7 +112,7 @@ public class CartService {
             cart.setTax_amount(cart.getTax_amount()-cartLineItems.getTaxTotalAmount());
             cart.setTotal_amount(cart.getTotal_amount()-cartLineItems.getTotalAmount());
 
-            List<CartLineItems>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
+            List<CartLineItem>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
             if (cartLineItemContailCartId.isEmpty())
             {
                 cart.setDeletedAt(new Date());

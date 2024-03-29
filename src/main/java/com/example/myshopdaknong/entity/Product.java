@@ -23,19 +23,19 @@ public class Product {
 
     @NotNull
     @NotBlank(message = "Name Is Required")
-    @Length(min = 2,message = "Name must be at least 2 characters")
+    @Length(min = 2,max = 100,message = "Name must be at least 2 characters")
     @Column(name = "name",length = 100,unique = true)
     private String name ;
 
     @NotNull
     @NotBlank(message = "SKU Is Required")
-    @Length(min = 2,message = "SKU must be at least 2 characters")
+    @Length(min = 2,max = 15,message = "SKU  must be between 2 and 15 characters")
     @Column(name = "sku",length = 15,unique = true)
     private String sku ;
 
     @NotNull
     @NotBlank(message = "Content Is Required")
-    @Length(min = 2,message = "Content must be at least 10 characters")
+    @Length(min = 10,message = "Content must be at least 10 characters")
     @Column(name = "content")
     @Lob
     private String content ;
@@ -86,18 +86,7 @@ public class Product {
             return "images/"+this.id+"/"+this.image;
         }
     }
-//    public String loadImages() {
-//        if (this.image == null || this.image.isEmpty()) {
-//            return "images/img.png";
-//        } else {
-//            String imagePath = "images/";
-//            if (this.id != null) {
-//                imagePath += this.id + "/";
-//            }
-//            imagePath += this.image;
-//            return imagePath;
-//        }
-//    }
+
     @Override
     public String toString() {
         return "Product{" +

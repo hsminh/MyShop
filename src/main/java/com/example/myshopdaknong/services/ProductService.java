@@ -4,19 +4,18 @@ import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
-import com.example.myshopdaknong.repository.ProductsRepository;
+import com.example.myshopdaknong.repository.ProductRepository;
 import com.example.myshopdaknong.repository.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductSerVice {
+public class ProductService {
     @Autowired
-    private ProductsRepository producsRepository;
+    private ProductRepository producsRepository;
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;

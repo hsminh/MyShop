@@ -1,7 +1,7 @@
     package com.example.myshopdaknong.sercurity;
     
-    import com.example.myshopdaknong.entity.Users;
-    import com.example.myshopdaknong.entity.Roles;
+    import com.example.myshopdaknong.entity.User;
+    import com.example.myshopdaknong.entity.Role;
     import lombok.AllArgsConstructor;
     import lombok.Data;
     import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +14,7 @@
     @Data
     @AllArgsConstructor
     public class ShopMeUserDetail implements UserDetails {
-        private Users users;
+        private User users;
         private static final long serialVersionUID = 8434638013158790457L; // Cập nhật serialVersionUID
 
 //        public ShopMeUserDetail(Users users) {
@@ -23,9 +23,9 @@
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            Collection<Roles> roles=  users.getListRoles();
+            Collection<Role> roles=  users.getListRoles();
             List<SimpleGrantedAuthority> authorities=new ArrayList<>();
-            for(Roles role : roles)
+            for(Role role : roles)
             {
                 authorities.add(new SimpleGrantedAuthority(role.getName()));
             }

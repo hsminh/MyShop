@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @Entity(name = "roles")
-public class Roles {
+public class Role {
     @Id
     private Integer id;
 
@@ -23,14 +23,14 @@ public class Roles {
     private String des;
 
     @ManyToMany(mappedBy = "listRoles",fetch = FetchType.EAGER)
-    private Set<Users> list_User=new HashSet<>();
+    private Set<User> list_User=new HashSet<>();
 
-    public Roles(String name, String des) {
+    public Role(String name, String des) {
         Name = name;
         this.des = des;
     }
 
 
-    public Roles() {
+    public Role() {
     }
 }

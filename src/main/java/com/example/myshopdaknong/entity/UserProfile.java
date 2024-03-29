@@ -49,9 +49,9 @@ public class UserProfile {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "users_id")
-    private Users users;
+    private User users;
 
-    public UserProfile(String phoneNumber, String bio, String address, boolean gender, Users users) {
+    public UserProfile(String phoneNumber, String bio, String address, boolean gender, User users) {
         this.phoneNumber = phoneNumber;
         this.bio = bio;
         this.address = address;

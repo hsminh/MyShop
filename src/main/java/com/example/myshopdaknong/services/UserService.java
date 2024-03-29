@@ -1,12 +1,12 @@
 package com.example.myshopdaknong.services;
 
-import com.example.myshopdaknong.entity.Roles;
+import com.example.myshopdaknong.entity.Role;
 import com.example.myshopdaknong.entity.UserProfile;
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.UserNotFoundException;
 import com.example.myshopdaknong.repository.UserProfileRepository;
 import com.example.myshopdaknong.repository.UserRepository;
-import com.example.myshopdaknong.repository.RolesRepository;
+import com.example.myshopdaknong.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RolesRepository rolesRepository;
+    private RoleRepository rolesRepository;
     @Autowired
     private UserProfileRepository userProfileRepository;
 
     public String checkUserNameUni(String userName)
     {
-        Users users=this.userRepository.findUsersByUserName(userName);
+        User users=this.userRepository.findUsersByUserName(userName);
         if(users!=null)
         {
             return "duplicated";
@@ -35,13 +35,13 @@ public class UserService {
         return "ok";
     }
 
-    public Users findUserByUserName(String userName)
+    public User findUserByUserName(String userName)
     {
         return this.userRepository.findUsersByUserName(userName);
     }
 
-    public Users save(Users users) {
-        Roles defaultRole = rolesRepository.findById(1).orElseGet(() -> createDefaultRole(1));
+    public User save(User users) {
+        Role defaultRole = rolesRepository.findById(1).orElseGet(() -> createDefaultRole(1));
         users.addRoles(defaultRole);
 
         if (users.getId() != null) {
@@ -53,7 +53,7 @@ public class UserService {
         return this.userRepository.save(users);
     }
 
-    private Roles createDefaultRole(int roleId) {
+    private Role createDefaultRole(int roleId) {
         String roleName;
         String roleDescription;
 
@@ -68,7 +68,7 @@ public class UserService {
             roleDescription = "Unknown description";
         }
 
-        Roles defaultRole = new Roles(roleName, roleDescription);
+        Role defaultRole = new Role(roleName, roleDescription);
         defaultRole.setId(roleId);
         return this.rolesRepository.save(defaultRole);
     }
@@ -80,7 +80,7 @@ public class UserService {
         return this.userProfileRepository.save(userProfile);
     }
 
-    public Users findUserById(int id) throws UserNotFoundException {
+    public User findUserById(int id) throws UserNotFoundException {
         try {
             return this.userRepository.findById(id).get();
         }catch (Exception ex)

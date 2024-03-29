@@ -25,16 +25,16 @@ public class OrderService {
     private CartReposttory cartReposttory;
 
     @Autowired
-    private ProductsRepository productsRepository;
+    private ProductRepository productsRepository;
 
-    public Order getOrderById(Users users)
+    public Order getOrderById(User users)
     {
         return this.orderRepository.findByUsersId(users);
     }
-    public String saveOrder(Integer id, Integer quantity, Users customer) throws CardLineItemException {
-        Optional<CartLineItems> cartOptional = this.cartLineItemRepositoty.findById(id);
+    public String saveOrder(Integer id, Integer quantity, User customer) throws CardLineItemException {
+        Optional<CartLineItem> cartOptional = this.cartLineItemRepositoty.findById(id);
         if (cartOptional.isPresent()) {
-            CartLineItems cartLineItemPayment = cartOptional.get();
+            CartLineItem cartLineItemPayment = cartOptional.get();
             Float taxPerProduct = cartLineItemPayment.getTaxTotalAmount() / cartLineItemPayment.getQuantity();
 
             // Lấy Order
@@ -104,7 +104,7 @@ public class OrderService {
             return orderLineItem;
         }
 
-    public String saveOrderDirect(Integer productId, Integer quantity, Users customer) throws CardLineItemException, ProductException {
+    public String saveOrderDirect(Integer productId, Integer quantity, User customer) throws CardLineItemException, ProductException {
                 Optional<Product> selectProduct=this.productsRepository.findById(productId);
                 if(selectProduct.isPresent())
                 {

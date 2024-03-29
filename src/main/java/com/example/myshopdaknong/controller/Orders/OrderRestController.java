@@ -1,6 +1,6 @@
 package com.example.myshopdaknong.controller.Orders;
 
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
@@ -26,7 +26,7 @@ public class OrderRestController {
             @RequestParam(value = "cartLineItemId") Integer cartLineItemId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
-            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            User customerUser = this.cartService.findUserById(customer.getUserId());
             String notification = this.orderService.saveOrder(cartLineItemId, quantity, customerUser);
             return notification;
         } catch (ProductException | CardLineItemException ex) {
@@ -40,7 +40,7 @@ public class OrderRestController {
             @RequestParam(value = "productId") Integer productId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
-            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            User customerUser = this.cartService.findUserById(customer.getUserId());
             String notification = this.orderService.saveOrderDirect(productId, quantity, customerUser);
             return notification;
         } catch (ProductException | CardLineItemException ex) {

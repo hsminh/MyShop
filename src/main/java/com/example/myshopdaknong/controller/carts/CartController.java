@@ -1,9 +1,9 @@
 package com.example.myshopdaknong.controller.carts;
 
 import com.example.myshopdaknong.entity.Cart;
-import com.example.myshopdaknong.entity.CartLineItems;
+import com.example.myshopdaknong.entity.CartLineItem;
 import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
@@ -40,7 +40,7 @@ public class CartController {
                                      @RequestParam("cartLineItemId") Integer cartLineItemId,
                                      RedirectAttributes redirectAttributes) {
         try {
-            Users user = this.cartService.findUserById(customer.getUserId());
+            User user = this.cartService.findUserById(customer.getUserId());
             this.cartService.deleteCardLineItem(cartLineItemId, user);
         } catch (CardLineItemException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
@@ -54,10 +54,10 @@ public class CartController {
     public String showShoppingCart(@AuthenticationPrincipal ShopMeUserDetail customer,
                                    Model model, RedirectAttributes redirectAttributes) {
         try {
-            Users user = this.cartService.findUserById(customer.getUserId());
+            User user = this.cartService.findUserById(customer.getUserId());
             model.addAttribute("pageTitle", "Page Cart");
             Cart cartCustomer = this.cartService.getCartItem(user);
-            for (CartLineItems cartLineItems : this.cartService.getListCartItem(cartCustomer)) {
+            for (CartLineItem cartLineItems : this.cartService.getListCartItem(cartCustomer)) {
                 System.out.println(cartLineItems.getProductId().loadImages());
             }
             model.addAttribute("listCartLineItem", this.cartService.getListCartItem(cartCustomer));

@@ -3,7 +3,7 @@ package com.example.myshopdaknong.controller;
 import  com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.CategoryProductException;
-import com.example.myshopdaknong.services.ProductSerVice;
+import com.example.myshopdaknong.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class MainController {
     @Autowired
-    private ProductSerVice productSerVice;
+    private ProductService productSerVice;
 
     @GetMapping("/main-page")
     public String MainFile(@RequestParam(value = "category", required = false) Integer id,
@@ -38,8 +38,6 @@ public class MainController {
         }
         return "main-page";
     }
-
-
 
 
 

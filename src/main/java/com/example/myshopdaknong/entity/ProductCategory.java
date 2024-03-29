@@ -23,13 +23,13 @@ public class ProductCategory {
 
     @NotNull
     @NotBlank(message = "Name Is Required")
-    @Length(min = 2,message = "Name must be at least 2 characters")
+    @Length(min = 2,max = 100,message = "Name must be at least 2 characters")
     @Column(name = "name",length = 255,nullable = false,unique = true)
     private String name ;
 
     @NotNull
     @NotBlank(message = "Slug Is Required")
-    @Length(min = 2,message = "Slug must be at least 2 characters")
+    @Length(min = 2, max = 100, message = "Slug must be between 2 and 100 characters")
     @Column(name = "slug",length = 100,nullable = false,unique = true)
     private String slug ;
 

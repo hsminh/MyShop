@@ -2,7 +2,7 @@ package com.example.myshopdaknong.controller.products;
 
 import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.exception.ProductException;
-import com.example.myshopdaknong.services.ProductSerVice;
+import com.example.myshopdaknong.services.ProductService;
 import com.example.myshopdaknong.util.FileUploadUltil;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -11,19 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Optional;
 
 @Controller
 public class ProductController {
 
     @Autowired
-    private ProductSerVice productSerVice;
+    private ProductService productSerVice;
     @Autowired
     private EntityManager entityManager;
     @GetMapping("/products")
@@ -57,6 +57,8 @@ public class ProductController {
     public String editProducts(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
             model.addAttribute("pageTitle", "Edit Product | ID " + id);
+            model.addAttribute("pageTitle", "Add Product");
+            model.addAttribute("TitleForm", "Add Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
             model.addAttribute("Product", productSerVice.findByid(id).orElseThrow(() -> new ProductException("Product not found")));
             return "products/add-form-products";
@@ -68,29 +70,35 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid Product product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-            model.addAttribute("Product", product);
+//            model.addAttribute("Product", Product);
+            for(FieldError error : bindingResult.getFieldErrors())
+            {
+                System.out.println("come : "+error.getField());
+                System.out.println("come : "+error.getDefaultMessage());
+            }
             return "products/add-form-products";
         }
         try {
-            if (product.getId() != null) {
-                Product productInDb = productSerVice.findByid(product.getId()).orElseThrow(() -> new ProductException("Product not found"));
+            if (Product.getId() != null) {
+                Product productInDb = productSerVice.findByid(Product.getId()).orElseThrow(() -> new ProductException("Product not found"));
                 productInDb.setUpdatedAt(new Date());
-                productInDb.setContent(product.getContent());
-                productInDb.setSku(product.getSku());
-                productInDb.setListProductCategories(product.getListProductCategories());
-                productInDb.setPrice(product.getPrice());
-                productInDb.setName(product.getName());
-                productInDb.setDiscount_price(product.getDiscount_price());
-                productInDb.setTax(product.getTax());
-
+                productInDb.setContent(Product.getContent());
+                productInDb.setSku(Product.getSku());
+                productInDb.setListProductCategories(Product.getListProductCategories());
+                productInDb.setPrice(Product.getPrice());
+                productInDb.setName(Product.getName());
+                productInDb.setDiscount_price(Product.getDiscount_price());
+                productInDb.setTax(Product.getTax());
+                productInDb.setIsActive(Product.getIsActive());
                 if (!multipartFile.isEmpty()) {
                     String fileName = multipartFile.getOriginalFilename();
+                    fileName=fileName.replace(" ","_");
                     productInDb.setImage(fileName);
 
                     String directory = "public/images/" + productInDb.getId();
@@ -101,17 +109,17 @@ public class ProductController {
 
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
+                Product.setCreatedAt(new Date());
                 if (!multipartFile.isEmpty()) {
                     String fileName = multipartFile.getOriginalFilename();
-                    product.setImage(fileName);
+                    fileName=fileName.replace(" ","_");
+                    Product.setImage(fileName);
+                    Product = productSerVice.save(Product);
 
-                    product.setCreatedAt(new Date());
-                    product = productSerVice.save(product);
-
-                    String directory = "public/images/" + product.getId();
+                    String directory = "public/images/" + Product.getId();
                     FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
                 } else {
-                    product = productSerVice.save(product);
+                    Product = productSerVice.save(Product);
                 }
 
                 redirectAttributes.addFlashAttribute("Message", "Save Successful");

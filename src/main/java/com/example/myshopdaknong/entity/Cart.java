@@ -40,7 +40,7 @@ public class Cart {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "users_id")
-    private Users usersId;
+    private User usersId;
 
     public Cart() {
         this.count_items=0;

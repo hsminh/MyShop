@@ -27,22 +27,11 @@ $(document).ready(function () {
 
 
     $('#submitForm').on('submit', function (e) {
-        let content = $('#content').val().trim();
         let name = $('#name').val().trim();
         let sku = $('#sku').val().trim();
         let id = $('#id').val().trim();
         let check = false;
 
-        if (content.length < 1 || content.length > 255) {
-            ShowMessageErrr("Content:", "Description must be between 1 and 255 characters.");
-            check = true;
-        } else if (name.length === 0) {
-            ShowMessageErrr("Name:", "Name is required and cannot be empty.");
-            check = true;
-        } else if (sku.length === 0) {
-            ShowMessageErrr("SKU:", "SKU is required and cannot be empty.");
-            check = true;
-        }
         $.ajax({
             url: "/products/check-sku-name-unique",
             method: "GET",

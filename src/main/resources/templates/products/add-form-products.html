@@ -38,22 +38,30 @@
                         <span th:errors="*{name}"></span>
                     </div>
 
-                <input
-                        type="text"
-                        class="block border border-grey-light w-full p-3 rounded mb-4"
-                        name="sku"
-                        placeholder="SKU"
-                        id="sku"
-                        th:field="*{sku}"
-                />
-                <textarea
-                        class="block border border-grey-light w-full p-3 rounded mb-4 resize-none"
-                        rows="6"
-                        name="content"
-                        id="content"
-                        placeholder="Content"
-                        th:field="*{content}"
-                ></textarea>
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('sku')} ? 'border-red-500' : ''"
+                       name="sku"
+                       id="sku"
+                       placeholder="sku"
+                       th:field="*{sku}" />
+                <div th:if="${#fields.hasErrors('sku')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{sku}"></span>
+                </div>
+
+
+                <textarea type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('content')} ? 'border-red-500' : ''"
+                       name="content"
+                       id="content"
+                       placeholder="content"
+                       th:field="*{content}"    ></textarea>
+                <div th:if="${#fields.hasErrors('content')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{content}"></span>
+                </div>
+                <p th:if="${#fields.hasErrors('content')}">Invalid Age</p>
+
                 <div class="mb-4">
                     <label for="image" class="text-sm font-bold text-gray-700">Choose Image:</label>
                     <input
@@ -83,11 +91,9 @@
                 <div class="mt-4 mb-5">
                     <label for="productCategories" class="block text-sm font-medium text-gray-700">Choose Product Categories</label>
                     <select id="productCategories" th:field="*{listProductCategories}" name="productCategories" multiple size="5" class="mt-1 block w-full px-5 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <!-- Option mặc định nếu cần -->
+                        <!-- Default Option -->
                             <option value="">-- Select Categories --</option>
-                            <!-- Sử dụng Thymeleaf để lặp qua d anh sách ListProductCategory -->
-                            <th:block th:each="productCategory : ${ListProductCategory}">
-                                <!-- Đặt giá trị của option là ID của danh mục -->
+                        <th:block th:each="productCategory : ${ListProductCategory}">
                                 <option th:value="${productCategory.id}" th:text="${productCategory.name}"></option>
                             </th:block>
 

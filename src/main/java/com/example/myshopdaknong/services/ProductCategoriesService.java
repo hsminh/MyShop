@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductCategoriesSerVice {
+public class ProductCategoriesService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 

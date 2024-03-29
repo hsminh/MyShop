@@ -1,7 +1,7 @@
 package com.example.myshopdaknong.controller.Users;
 
 import com.example.myshopdaknong.entity.UserProfile;
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.UserNotFoundException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
 import com.example.myshopdaknong.services.UserService;
@@ -13,11 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 
@@ -33,7 +31,7 @@ public class UsersController {
         model.addAttribute("pageTitle", "Register Form");
         model.addAttribute("titleForm", "Sign Up");
         model.addAttribute("isNewUser", true);
-        model.addAttribute("users", new Users());
+        model.addAttribute("users", new User());
         return "users/register-form";
     }
 
@@ -53,7 +51,7 @@ public class UsersController {
     @GetMapping("/users/update_information")
     public String formUpdateInformation(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
-        Users loggedInUser = null;
+        User loggedInUser = null;
         if (userDetails != null) {
             loggedInUser = userService.findUserByUserName(userDetails.getUsername());
         }
@@ -70,7 +68,7 @@ public class UsersController {
             return "users/update-information-user";
         }
         if (userProfile.getUsers() == null) {
-            Users loggedInUser = userService.findUserByUserName(userDetails.getUsername());
+            User loggedInUser = userService.findUserByUserName(userDetails.getUsername());
             userProfile.setUsers(loggedInUser);
         }
         if (userProfile.getId() == null || userProfile.getId() == 0) {
@@ -90,7 +88,7 @@ public class UsersController {
         return "redirect:/main-page";
     }
 
-    public void setUpForEditOrRegister(Model model, String pageTitle, boolean isNewUser) {
+    public void prepareFormModel(Model model, String pageTitle, boolean isNewUser) {
         model.addAttribute("isUpdateUser", true);
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("titleForm", pageTitle);
@@ -100,8 +98,8 @@ public class UsersController {
     @GetMapping("/users/edit")
     public String showEditForm(@AuthenticationPrincipal ShopMeUserDetail userDetails, Model model) {
         if (userDetails != null) {
-            Users user = userService.findUserByUserName(userDetails.getUsername());
-            this.setUpForEditOrRegister(model, "Edit User", false);
+            User user = userService.findUserByUserName(userDetails.getUsername());
+            this.prepareFormModel(model, "Edit User", false);
             model.addAttribute("pageTitle", "Edit User");
             model.addAttribute("titleForm", "Edit User");
             model.addAttribute("users", user);
@@ -111,8 +109,8 @@ public class UsersController {
         }
     }
 
-    public Users updateUser(String editPassword, Users editedUser) throws UserNotFoundException {
-        Users user = this.userService.findUserById(editedUser.getId());
+    public User updateUser(String editPassword, User editedUser) throws UserNotFoundException {
+        User user = this.userService.findUserById(editedUser.getId());
         user.setActive(editedUser.getActive());
         user.setUpdatedAt(new Date());
         user.setFirstName(editedUser.getFirstName());
@@ -125,26 +123,26 @@ public class UsersController {
         return user;
     }
 
-    public Users createNewUser(Users newUser) {
+    public User createNewUser(User newUser) {
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser.setCreatedAt(new Date());
         return newUser;
     }
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid Users users, BindingResult bindingResult, Model model) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
         // Check if the form is invalid
         if (bindingResult.hasErrors()) {
             // Check if editing user
             if (users.getId() != null) {
-                this.setUpForEditOrRegister(model, "Edit User", false);
+                this.prepareFormModel(model, "Edit User", false);
             } else {
                 // Check if creating new user
-                this.setUpForEditOrRegister(model, "Sign Up", true);
+                this.prepareFormModel(model, "Sign Up", true);
             }
             return "users/register-form";
         }
-        Users userToSave;
+        User userToSave;
         if (users.getId() != null && users.getId() != 0) {
             userToSave = this.updateUser(editPassword, users);
         } else {

@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CartLineItems {
+public class CartLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -66,7 +66,7 @@ public class CartLineItems {
                 '}';
     }
 
-    public CartLineItems() {
+    public CartLineItem() {
 
         this.quantity=0;
         this.totalAmount=0;

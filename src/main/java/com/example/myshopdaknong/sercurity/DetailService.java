@@ -1,6 +1,6 @@
 package com.example.myshopdaknong.sercurity;
 
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,7 @@ public class DetailService implements UserDetailsService {
         System.out.println("come this");
         System.out.println(username);
 
-        Users user=this.userService.findUserByUserName(username);
+        User user=this.userService.findUserByUserName(username);
         System.out.println(user);
         if(user==null)
         {

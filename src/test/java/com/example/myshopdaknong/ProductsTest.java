@@ -1,9 +1,9 @@
 package com.example.myshopdaknong;
 
 import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.repository.ProductsRepository;
+import com.example.myshopdaknong.repository.ProductRepository;
 import com.example.myshopdaknong.repository.ProductCategoryRepository;
-import com.example.myshopdaknong.services.ProductSerVice;
+import com.example.myshopdaknong.services.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProductsTest {
     @Autowired
-    private ProductSerVice productSerVice;
+    private ProductService productSerVice;
     @Autowired
-    private ProductsRepository producsRepository;
+    private ProductRepository producsRepository;
     @Autowired
     ProductCategoryRepository productCategoryRepository;
 

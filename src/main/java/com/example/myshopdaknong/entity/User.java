@@ -1,7 +1,6 @@
     package com.example.myshopdaknong.entity;
 
     import jakarta.persistence.*;
-    import jakarta.validation.constraints.Email;
     import jakarta.validation.constraints.NotBlank;
     import jakarta.validation.constraints.NotNull;
     import lombok.Getter;
@@ -17,7 +16,7 @@
     @Entity(name = "Users")
     @Getter
     @Setter
-    public class Users {
+    public class User {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer id;
@@ -62,12 +61,12 @@
         @JoinTable(name = "users_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "roles_id"))
-        private Collection<Roles> listRoles = new ArrayList<>();
+        private Collection<Role> listRoles = new ArrayList<>();
 
-        public Users() {
+        public User() {
         }
 
-        public Users(String userName, String password, String firstName, String lastName, Date deletedAt, Boolean isActive) {
+        public User(String userName, String password, String firstName, String lastName, Date deletedAt, Boolean isActive) {
             this.userName = userName;
             this.password = password;
             this.firstName = firstName;
@@ -76,7 +75,7 @@
             this.isActive = isActive;
         }
 
-        public Users(String userName, String password, String firstName, String lastName) {
+        public User(String userName, String password, String firstName, String lastName) {
             this.userName = userName;
             this.password = password;
             this.firstName = firstName;
@@ -115,7 +114,7 @@
             isActive = active;
         }
 
-        public void addRoles(Roles roles) {
+        public void addRoles(Role roles) {
             this.listRoles.add(roles);
         }
     }

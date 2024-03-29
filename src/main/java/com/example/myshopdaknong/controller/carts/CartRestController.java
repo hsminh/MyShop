@@ -1,7 +1,7 @@
 package com.example.myshopdaknong.controller.carts;
 
 import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.entity.Users;
+import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
 import com.example.myshopdaknong.services.CartService;
@@ -24,7 +24,7 @@ public class CartRestController {
             @RequestParam(value = "selectProduct", required = false) Integer productId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
-            Users customerUser = this.cartService.findUserById(customer.getUserId());
+            User customerUser = this.cartService.findUserById(customer.getUserId());
             if (productId == null || quantity == null || quantity <= 0) {
                 throw new IllegalArgumentException("Invalid productId or quantity.");
             }

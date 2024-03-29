@@ -41,7 +41,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "users_id")
-    private Users usersId;
+    private User usersId;
 
     public Order() {
         this.taxAmount=0;
