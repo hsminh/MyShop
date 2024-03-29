@@ -57,7 +57,7 @@ public class ProductCategoryController {
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Add Category");
             model.addAttribute("isNewUser", true);
-            model.addAttribute("category",category);
+//            model.addAttribute("category",category);
             for(FieldError error:bindingResult.getFieldErrors())
             {
                 String fiel=error.getField();

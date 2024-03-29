@@ -1,8 +1,11 @@
 package com.example.myshopdaknong.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,13 +21,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
+    @NotNull
+    @NotBlank(message = "Name Is Required")
+    @Length(min = 2,message = "Name must be at least 2 characters")
     @Column(name = "name",length = 100,unique = true)
     private String name ;
 
+    @NotNull
+    @NotBlank(message = "SKU Is Required")
+    @Length(min = 2,message = "SKU must be at least 2 characters")
     @Column(name = "sku",length = 15,unique = true)
     private String sku ;
 
+    @NotNull
+    @NotBlank(message = "Content Is Required")
+    @Length(min = 2,message = "Content must be at least 10 characters")
     @Column(name = "content")
     @Lob
     private String content ;

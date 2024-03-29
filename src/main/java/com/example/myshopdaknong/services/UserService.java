@@ -1,5 +1,6 @@
 package com.example.myshopdaknong.services;
 
+import com.example.myshopdaknong.entity.Roles;
 import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.Users;
 import com.example.myshopdaknong.exception.UserNotFoundException;
@@ -39,18 +40,40 @@ public class UserService {
         return this.userRepository.findUsersByUserName(userName);
     }
 
-    public Users save(Users users)
-    {
-        users.addRoles(rolesRepository.findById(2).get());
-        if(users.getId()!=null)
-        {
+    public Users save(Users users) {
+        Roles defaultRole = rolesRepository.findById(1).orElseGet(() -> createDefaultRole(1));
+        users.addRoles(defaultRole);
+
+        if (users.getId() != null) {
             users.setUpdatedAt(new Date());
-        }else
-        {
+        } else {
             users.setCreatedAt(new Date());
         }
+
         return this.userRepository.save(users);
     }
+
+    private Roles createDefaultRole(int roleId) {
+        String roleName;
+        String roleDescription;
+
+        if (roleId == 1) {
+            roleName = "Admin";
+            roleDescription = "Do Anything";
+        } else if (roleId == 2) {
+            roleName = "User";
+            roleDescription = "User role is for those who engage in buying and selling goods";
+        } else {
+            roleName = "Unknown Role";
+            roleDescription = "Unknown description";
+        }
+
+        Roles defaultRole = new Roles(roleName, roleDescription);
+        defaultRole.setId(roleId);
+        return this.rolesRepository.save(defaultRole);
+    }
+
+
 
     public UserProfile saveUserProfile(UserProfile userProfile)
     {

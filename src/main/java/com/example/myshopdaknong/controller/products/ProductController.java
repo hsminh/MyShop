@@ -6,9 +6,11 @@ import com.example.myshopdaknong.services.ProductSerVice;
 import com.example.myshopdaknong.util.FileUploadUltil;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -66,10 +68,17 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(@ModelAttribute Product product, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProducts(Model model,@Valid Product product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors())
+        {
+            model.addAttribute("pageTitle", "Add Product");
+            model.addAttribute("TitleForm", "Add Product");
+            model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
+            model.addAttribute("Product", product);
+            return "products/add-form-products";
+        }
         try {
             if (product.getId() != null) {
-                // Nếu sản phẩm đã có id, lấy thông tin sản phẩm từ DB để cập nhật
                 Product productInDb = productSerVice.findByid(product.getId()).orElseThrow(() -> new ProductException("Product not found"));
                 productInDb.setUpdatedAt(new Date());
                 productInDb.setContent(product.getContent());
@@ -88,7 +97,7 @@ public class ProductController {
                     FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
                 }
 
-                entityManager.merge(productInDb);
+                this.productSerVice.save(productInDb);
 
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
