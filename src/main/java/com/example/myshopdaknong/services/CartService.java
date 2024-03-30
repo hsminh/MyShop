@@ -63,13 +63,12 @@ public class CartService {
         {
             Cart=new Cart();
             Cart.setUsersId(customer);
-
             Cart=this.cartReposttory.save(Cart);
         }else
         {
             Cart.setUpdatedAt(new Date());
         }
-        CartLineItem cartLineItems=this.cartLineItemRepositoty.findByProductId(selectProduct);
+        CartLineItem cartLineItems=this.cartLineItemRepositoty.findByCartIdAndProductId(Cart,selectProduct);
         Cart.setCount_items(Cart.getCount_items()+quantity);
 
         Float taxAmount=((selectProduct.getDiscount_price()*quantity)/100)*selectProduct.getTax();

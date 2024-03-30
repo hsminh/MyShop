@@ -24,8 +24,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productSerVice;
-    @Autowired
-    private EntityManager entityManager;
     @GetMapping("/products")
     public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord, Model model) {
         model.addAttribute("pageTitle", "Products");
@@ -77,7 +75,6 @@ public class ProductController {
             model.addAttribute("pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-//            model.addAttribute("Product", Product);
             for(FieldError error : bindingResult.getFieldErrors())
             {
                 System.out.println("come : "+error.getField());
@@ -131,8 +128,4 @@ public class ProductController {
 
         return "redirect:/products";
     }
-
-
-
-
 }

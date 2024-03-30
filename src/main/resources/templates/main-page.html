@@ -26,7 +26,8 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
             </div>
-            <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search....." required />
+            <!-- Thêm onchange="saveSearchValue(this.value)" để lưu giá trị tìm kiếm khi người dùng nhập -->
+            <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search....." required onchange="saveSearchValue(this.value)" />
             <button id="searchButton" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
         </div>
     </div>
@@ -46,8 +47,13 @@
         <div class="flex flex-wrap gap-4">
             <a th:href="@{/main-page}" class="text-blue-600 hover:text-blue-800 block mb-2">All</a>
             <th:block th:each="ProductCategory, rowStat : ${listCategory}">
-                <a th:href="@{/main-page(category=${ProductCategory.id},keyword=${keyword})}" class="text-blue-600 hover:text-blue-800 block mb-2" th:text="${ProductCategory.name}" th:classappend="${rowStat.even} ? 'md:mr-4' : ''"></a>
+                <!-- Thêm tham số search=${search} để giữ nguyên giá trị tìm kiếm -->
+
+                <a  th:href="@{/main-page(category=${ProductCategory.id},search=${search})}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" th:text="${ProductCategory.name}"></a>
+
+                <a class="text-blue-600 hover:text-blue-800 block mb-2"  th:classappend="${rowStat.even} ? 'md:mr-4' : ''"></a>
             </th:block>
+
         </div>
     </div>
 
@@ -109,11 +115,24 @@
         window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
     });
 
-    function clearSearch() {
-        document.getElementById('default-search').value = '';
+    function saveSearchValue(value) {
+        // Lưu giá trị tìm kiếm vào Local Storage
+        localStorage.setItem('previousSearch', value);
+    }
+
+    function restoreSearchValue() {
+        // Lấy giá trị tìm kiếm từ Local Storage
+        var previousSearch = localStorage.getItem('previousSearch');
+        if (previousSearch) {
+            // Gán lại giá trị tìm kiếm cho ô input
+            document.getElementById('default-search').value = previousSearch;
+        }
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+        // Gọi hàm để khôi phục giá trị tìm kiếm khi trang được tải lại
+        restoreSearchValue();
+
         var successMessage = document.getElementById("successMessage");
         if (successMessage) {
             setTimeout(function() {

@@ -1,14 +1,19 @@
 package com.example.myshopdaknong.services;
 
+import com.example.myshopdaknong.entity.Cart;
+import com.example.myshopdaknong.entity.CartLineItem;
 import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
+import com.example.myshopdaknong.repository.CartLineItemRepositoty;
+import com.example.myshopdaknong.repository.CartReposttory;
 import com.example.myshopdaknong.repository.ProductRepository;
 import com.example.myshopdaknong.repository.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +21,11 @@ import java.util.Optional;
 public class ProductService {
     @Autowired
     private ProductRepository producsRepository;
+    @Autowired
+    private CartLineItemRepositoty cartLineItemRepositoty;
 
+    @Autowired
+    private CartReposttory cartReposttory;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
     public List<Product> findAll(Integer id, String search)
@@ -57,6 +66,19 @@ public class ProductService {
         Optional<Product> productOption=this.findByid(id);
         if(productOption.isPresent())
         {
+            Product product=productOption.get();
+            for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
+            {
+                Cart setCart=cartLineItem.getCartId();
+                setCart.setTax_amount(setCart.getTax_amount()-cartLineItem.getTaxTotalAmount());
+                setCart.setCount_items(setCart.getCount_items()-cartLineItem.getQuantity());
+                setCart.setTotal_amount(setCart.getTotal_amount()-cartLineItem.getTotalAmount());
+                setCart.setCreatedAt(new Date());
+                cartLineItem.setCartId(null);
+                this.cartLineItemRepositoty.save(cartLineItem);
+                this.cartReposttory.save(setCart);
+                this.cartLineItemRepositoty.delete(cartLineItem);
+            }
             this.producsRepository.delete(productOption.get());
         }else {
             throw new ProductException("Cannot Found Product With Id : "+id);

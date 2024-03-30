@@ -22,7 +22,7 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/cart")
-    public String showCartPage(@RequestParam("productId") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String showCart(@RequestParam("productId") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Product chosenProduct = this.cartService.getProductById(id);
             model.addAttribute("pageTitle", "Page Cart");
@@ -68,22 +68,5 @@ public class CartController {
         }
     }
 
-    // Other methods can be added here...
-
-    // For example:
-    // @PostMapping("/cart/save")
-    // public String saveCart(@RequestParam("quantity") Integer quantity,
-    //                        @RequestParam("selectProduct") Integer productId,
-    //                        Model model, RedirectAttributes redirectAttributes) throws ProductException {
-    //     Cart newCart = new Cart();
-    //     Product selectedProduct = this.cartService.getProductById(productId);
-    //     newCart.setCountItems(quantity);
-    //     Float taxAmount = ((selectedProduct.getDiscountPrice() * quantity) / 100) * selectedProduct.getTax();
-    //     newCart.setTaxAmount(taxAmount);
-    //     newCart.setTotalAmount((selectedProduct.getDiscountPrice() * quantity) + newCart.getTaxAmount());
-    //     newCart.setCreatedAt(new Date());
-    //     this.cartService.saveCart(newCart);
-    //     return "redirect:/main-page";
-    // }
 
 }

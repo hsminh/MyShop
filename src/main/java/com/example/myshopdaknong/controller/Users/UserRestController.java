@@ -32,7 +32,7 @@ public class UserRestController {
                 String token=GenarateRandomNumber.generateRandomNumberString();
                 String from = "kucantscute@gmail.com";
                 String password = "ugop edsx ieoo fecs";
-                String to = "hosyminh11820004@gmail.com";
+                String to = email;
                 //Content
                 String subject ="Your Verification Code";
                 String content = "Hello : "  + accountForgot.getFullName() + ", here is your verification code: " + token;

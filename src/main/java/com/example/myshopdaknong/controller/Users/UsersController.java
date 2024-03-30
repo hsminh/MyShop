@@ -15,9 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
@@ -155,7 +154,6 @@ public class UsersController {
     public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
         Token resetToken = this.tokenService.findByToken(token);
         if (resetToken == null) {
-//            model.addAttribute("error", "Invalid or expired token");
             return "redirect:/users/forgot";
         }
         model.addAttribute("token", token);
@@ -168,7 +166,6 @@ public class UsersController {
         Token token=this.tokenService.findByToken(code);
 
         if (!(this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser))) {
-            model.addAttribute("messageErr","!!");
             return "redirect:/users/forgot";
         }
 
@@ -202,9 +199,16 @@ public class UsersController {
 
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
         // Check if the form is invalid
         if (bindingResult.hasErrors()) {
+            System.out.println("this fail");
+            for(FieldError error: bindingResult.getFieldErrors())
+            {
+                String fieldError=error.getField();
+                String Message=error.getDefaultMessage();
+                System.out.println(fieldError +" Has "+Message);
+            }
             // Check if editing user
             if (users.getId() != null) {
                 this.prepareFormModel(model, "Edit User", false);
