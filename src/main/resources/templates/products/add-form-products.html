@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="flex justify-center items-center">
-                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${Product.loadImages}}"/>
+                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${Product.loadImages()}}"/>
                 </div>
                 <div class="mt-4 mb-5">
                     <label for="productCategories" class="block text-sm font-medium text-gray-700">Choose Product Categories</label>

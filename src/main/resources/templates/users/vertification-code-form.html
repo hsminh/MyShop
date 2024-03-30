@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="fragmen ::header"></div>
+
+</head>
+<body>
+<main id="content" role="main" class="w-full  max-w-md mx-auto p-6">
+    <div class="mt-7 bg-white  rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 border-2 border-indigo-300">
+        <div class="p-4 sm:p-7">
+            <div class="text-center">
+                <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">[[${pageTitle}]]</h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    Remember your password?
+                    <a class="text-blue-600 decoration-2 hover:underline font-medium" th:href="@{/login-form}">
+                        Login here
+                    </a>
+                </p>
+            </div>
+
+            <div class="mt-5">
+                <form id="submitButton" action="#" method="post">
+                    <input type="hidden" id="email" name="email" th:value="${email}">
+                    <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                        <strong id="Title" class="font-bold"></strong>
+                        <span id="Message" class="block sm:inline"></span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg id="closeBtn" class="fill-current h-6 w-6 text-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M15.293 4.293a1 1 0 011.414 1.414L11.414 10l5.293 5.293a1 1 0 01-1.414 1.414L10 11.414l-5.293 5.293a1 1 0 01-1.414-1.414L8.586 10 3.293 4.707a1 1 0 011.414-1.414L10 8.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="grid gap-y-4">
+                        <div>
+                            <label  class="block text-sm font-bold ml-1 mb-2 dark:text-white">Enter Verification Code</label>
+                            <div class="relative">
+                                <div class="flex gap-4 max-w-lg mx-auto justify-center font-[sans-serif]">
+                                    <input type="text" id="digit1" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                    <input type="text" id="digit2" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                    <input type="text" id="digit3" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                    <input type="text" id="digit4" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                    <input type="text" id="digit5" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                    <input type="text" id="digit6" maxlength="1" class="w-12 h-10 flex items-center text-center text-black text-base border-2 border-gray-300 focus:border-[#007bff] outline-none rounded" />
+                                </div>
+                            </div>
+                            <p class="hidden text-xs text-red-600 mt-2" id="email-error">Please include a valid email address so we can get back to you</p>
+                        </div>
+                        <button id="submit" type="submit" class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">Enter Code</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+<script>
+    // Function to move focus to the next input
+    function moveToNextInput(currentInput, nextInput) {
+        if (currentInput.value.length === currentInput.maxLength) {
+            nextInput.focus();
+        }
+    }
+    // Event listener to move focus to the next input
+    document.getElementById('digit1').addEventListener('input', function () {
+        moveToNextInput(this, document.getElementById('digit2'));
+    });
+    document.getElementById('digit2').addEventListener('input', function () {
+        moveToNextInput(this, document.getElementById('digit3'));
+    });
+    document.getElementById('digit3').addEventListener('input', function () {
+        moveToNextInput(this, document.getElementById('digit4'));
+    });
+    document.getElementById('digit4').addEventListener('input', function () {
+        moveToNextInput(this, document.getElementById('digit5'));
+    });
+    document.getElementById('digit5').addEventListener('input', function () {
+        moveToNextInput(this, document.getElementById('digit6'));
+    });
+    function ShowMessageError(title, message) {
+        $('#Title').text(title);
+        $('#Message').text(message);
+        $('#AlerMessage').removeClass('hidden');
+        // Hide the alert after 10 seconds
+        setTimeout(function() {
+            $('#AlerMessage').addClass('hidden');
+        }, 10000);
+    }
+
+
+    // Close the alert when clicking on the "x" button
+    $('#closeBtn').click(function() {
+        $('#AlerMessage').addClass('hidden');
+    });
+    $('#submit').click(function (event) {
+        event.preventDefault();
+        let email = $('#email').val();
+        let digit1 = parseInt($('#digit1').val());
+        let digit2 = parseInt($('#digit2').val());
+        let digit3 = parseInt($('#digit3').val());
+        let digit4 = parseInt($('#digit4').val());
+        let digit5 = parseInt($('#digit5').val());
+        let digit6 = parseInt($('#digit6').val());
+        let token =digit1+digit2+digit3+digit4+digit5+digit6;
+        $.ajax({
+            url: "/users/verify-verification-code",
+            method: "GET",
+            data: {
+                digit1: digit1,
+                digit2: digit2,
+                digit3: digit3,
+                digit4: digit4,
+                digit5: digit5,
+                digit6: digit6,
+                email : email
+            },
+            success: function (data) {
+                if (data !== "duplicated") {
+                    window.location.href = "/users/update-password?token=" + encodeURIComponent(data)+"&email="+email;
+                } else {
+
+                    ShowMessageError("Verification Code!", "Incorrect Verification Code Or Time Out!");
+                }
+            },
+            error: function () {
+                ShowMessageError("Error!", "Something went wrong.");
+            }
+        });
+    });
+
+
+
+</script>
+</html>

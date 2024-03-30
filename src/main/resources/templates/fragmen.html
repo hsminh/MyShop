@@ -38,18 +38,19 @@
                             <div class="flex flex-shrink-0 items-center">
                                 <img class="h-8 w-auto" th:src="@{images/logo.png}" alt="Your Company">
                             </div>
-
+                            <div th:if="${isChoice!=null}">
+                                <span th:text="${isChoice}"></span>
+                            </div>
 
                             <div class="hidden sm:ml-6 sm:block">
                                 <div class="flex space-x-4">
-
-                                    <!-- Menu item dành cho User -->
-                                    <a th:href="@{/main-page}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" sec:authorize="hasRole('ROLE_USER')">Shop</a>
-                                    <!-- Menu item dành cho Admin -->
-                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
-                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
+                                    <a th:href="@{/main-page}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Shop'}?'bg-purple-100':''" sec:authorize="hasRole('ROLE_USER')">Shop</a>
+                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Products'}?'bg-purple-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
+                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Category'}?'bg-purple-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
                                 </div>
                             </div>
+
+
 
 
 

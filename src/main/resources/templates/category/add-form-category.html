@@ -51,7 +51,7 @@
                     <span th:errors="*{slug}"></span>
                 </div>
 
-                <textarea class="block border border-grey-light w-full p-3 rounded mb-1"
+                <textarea class=" w-64 h-40 block border border-grey-light w-full p-3 rounded mb-1"
                           th:classappend="${#fields.hasErrors('description')} ? 'border-red-500' : ''"
                           name="description" id="des" placeholder="description"
                           th:field="*{description}"></textarea>
@@ -73,9 +73,8 @@
                 </div>
                 <button
                         type="submit"
-                        class="w-full text-center py-3 rounded bg-green text-white hover:bg-green-dark focus:outline-none my-1"
-                >Create Category</button>
-            </form>
+                        class="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
+                >Create <Category></Category></button>
 
             <div class="text-center text-sm text-grey-dark mt-4">
                 By signing up, you agree to the

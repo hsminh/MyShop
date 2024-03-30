@@ -2,8 +2,6 @@ function paymentCart() {
     var quantity = parseInt($('#quantity').val());
     var productId = parseInt($('#selectProduct').val());
 
-
-    alert(quantity)
     var confirmation = confirm("Are you sure you want to proceed with the payment?");
     if(confirmation)
     {
@@ -16,7 +14,7 @@ function paymentCart() {
             },
             success: function(response) {
 
-                window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
+                window.location.href = '/order/success';
 
                 // Handle success response, if needed
             },

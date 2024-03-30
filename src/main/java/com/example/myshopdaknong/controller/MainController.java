@@ -4,6 +4,7 @@ import  com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.services.ProductService;
+import com.example.myshopdaknong.util.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,12 +34,12 @@ public class MainController {
             model.addAttribute("search", search);
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
+            model.addAttribute("isChoice", "Shop");
         } catch (CategoryProductException ex) {
             model.addAttribute("messageErr", ex.getMessage());
         }
         return "main-page";
     }
-
 
 
     @GetMapping("/login-form")

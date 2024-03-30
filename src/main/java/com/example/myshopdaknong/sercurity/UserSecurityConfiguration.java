@@ -31,7 +31,7 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
 
-                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register").permitAll()
+                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","users/forgot","/users/reset-password","users/send-email","/users/verify","users/update-password","/user/save-update-password","users/verify-verification-code").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")

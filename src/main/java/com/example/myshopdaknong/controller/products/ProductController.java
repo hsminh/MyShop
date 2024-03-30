@@ -29,6 +29,7 @@ public class ProductController {
     @GetMapping("/products")
     public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord, Model model) {
         model.addAttribute("pageTitle", "Products");
+        model.addAttribute("isChoice", "Products");
         model.addAttribute("ListProduct", productSerVice.findAll(null, keyWord));
         return "products/products";
     }

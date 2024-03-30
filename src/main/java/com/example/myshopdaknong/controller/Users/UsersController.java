@@ -1,9 +1,11 @@
 package com.example.myshopdaknong.controller.Users;
 
+import com.example.myshopdaknong.entity.Token;
 import com.example.myshopdaknong.entity.UserProfile;
 import com.example.myshopdaknong.entity.User;
 import com.example.myshopdaknong.exception.UserNotFoundException;
 import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
+import com.example.myshopdaknong.services.TokenService;
 import com.example.myshopdaknong.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 
@@ -23,6 +26,10 @@ import java.util.Date;
 public class UsersController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenService tokenService;
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -128,6 +135,71 @@ public class UsersController {
         newUser.setCreatedAt(new Date());
         return newUser;
     }
+
+    @GetMapping("/users/forgot")
+    public String showForgotPassWordForm(Model model)
+    {
+        model.addAttribute("pageTitle", "Forgot Password");
+        model.addAttribute("users", new User());
+        return "users/forgot";
+    }
+
+    @GetMapping("/users/verify")
+    public String showVerificationForm(@RequestParam("email") String email, Model model) {
+        model.addAttribute("pageTitle", "Verification Code");
+        model.addAttribute("email",email);
+        return "users/vertification-code-form";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        Token resetToken = this.tokenService.findByToken(token);
+        if (resetToken == null) {
+//            model.addAttribute("error", "Invalid or expired token");
+            return "redirect:/users/forgot";
+        }
+        model.addAttribute("token", token);
+        return "users/update-password";
+    }
+
+    @GetMapping("/users/update-password")
+    public String showUpdatePasswordForm(@RequestParam("email")String email, @RequestParam("token")String code,Model model, RedirectAttributes redirectAttributes) {
+        User verifiedUser = this.userService.findUserByUserName(email);
+        Token token=this.tokenService.findByToken(code);
+
+        if (!(this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser))) {
+            model.addAttribute("messageErr","!!");
+            return "redirect:/users/forgot";
+        }
+
+        model.addAttribute("pageTitle", "Change Password");
+        model.addAttribute("email",email);
+        model.addAttribute("token",token);
+        return "users/update-password";
+    }
+
+
+    @PostMapping("/user/save-update-password")
+    public String saveUpdatePasswrord(@RequestParam("email")String email
+                                      ,@RequestParam("password")String newPassword
+                                      ,@RequestParam("token")String token
+
+
+                                     , RedirectAttributes redirectAttributes) {
+
+        User user=this.userService.findUserByUserName(email);
+        if(user!=null)
+        {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            this.tokenService.deleteToken(user);
+            this.userService.save(user);
+            redirectAttributes.addFlashAttribute("message","Change Password Successfully");
+            return "login-form";
+        }
+        return "redirect:/users/forgot";
+    }
+
+
 
     @PostMapping("/users/save")
     public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid User users, BindingResult bindingResult, Model model) throws UserNotFoundException {

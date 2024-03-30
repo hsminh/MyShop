@@ -14,7 +14,6 @@ $('#closeBtn').click(function() {
 });
 
 $(document).ready(function() {
-    alert("come");
     $('#registerForm').submit(function(event) {
         let checkInforInForm = true;
         let username = $('#username').val();

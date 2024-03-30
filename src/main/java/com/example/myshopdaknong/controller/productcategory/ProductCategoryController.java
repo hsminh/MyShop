@@ -20,7 +20,9 @@ public class ProductCategoryController {
     @GetMapping("/category")
     public String listProduct(@RequestParam(value = "search",required = false) String serachValue, Model model) {
         model.addAttribute("pageTitle","Category");
+        model.addAttribute("isChoice", "Category");
         model.addAttribute("ListCate",this.productCategoriesSerVice.findAll(serachValue));
+
         return "category/category";
     }
 
@@ -88,7 +90,7 @@ public class ProductCategoryController {
             ProductCategory Category=this.productCategoriesSerVice.FindById(id);
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Edit Category");
-            model.addAttribute("Category",Category);
+            model.addAttribute("category",Category);
             return "category/add-form-category";
         } catch (ProductCategoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Category With Id " + id + " Not Found");

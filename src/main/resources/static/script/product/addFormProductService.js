@@ -41,7 +41,6 @@ $(document).ready(function () {
                 sku:sku
             },
             success: function(data) {
-                alert((data))
                 if (data !== "ok") {
                     ShowMessageErrr("Name or Sku!", "Exist Please choose another Name Or SKU.");
                     check = true;
