@@ -16,6 +16,9 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 
     ProductCategory findBySlug(String slug);
 
-
+//    List<ProductCategory> findAllByLiProductsIsNotNull();
+//    List<ProductCategory> findByLiProductsIsNotNull();
+@Query("SELECT DISTINCT pc FROM product_categories pc JOIN FETCH pc.LiProducts")
+List<ProductCategory> findAllCategoriesWithProducts();
     List<ProductCategory> findByNameContaining(String searchValue);
 }

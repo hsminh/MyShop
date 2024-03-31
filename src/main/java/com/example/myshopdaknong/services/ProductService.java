@@ -49,6 +49,10 @@ public class ProductService {
         return this.productCategoryRepository.findAll();
     }
 
+    public List<ProductCategory>findAllCategoryContainProduct()
+    {
+        return this.productCategoryRepository.findAllCategoriesWithProducts();
+    }
     public ProductCategory getCategoryById(Integer id) throws CategoryProductException {
         Optional<ProductCategory> productCategory= this.productCategoryRepository.findById(id);
         if(productCategory.isPresent())

@@ -21,8 +21,10 @@ public class MainController {
     @GetMapping("/main-page")
     public String MainFile(@RequestParam(value = "category", required = false) Integer id,
                            @RequestParam(value = "search", required = false) String search,
+                           @RequestParam(value = "isChoiceCategory", required = false) String isChoiceCategory,
                            Model model) throws CategoryProductException {
-        List<ProductCategory> listCategory = productSerVice.findAllCategory();
+        List<ProductCategory> listCategory = productSerVice.findAllCategoryContainProduct();
+        System.out.println("cc + "+isChoiceCategory);
         model.addAttribute("listCategory", listCategory);
         try {
             if (id != null) {
@@ -35,6 +37,8 @@ public class MainController {
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
             model.addAttribute("isChoice", "Shop");
+            model.addAttribute("isChoiceCategory", isChoiceCategory);
+
         } catch (CategoryProductException ex) {
             model.addAttribute("messageErr", ex.getMessage());
         }
