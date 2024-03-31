@@ -36,17 +36,11 @@ public class CartService {
         return productDetail.get();
     }
 
-    public Cart saveCart(Cart cart) throws ProductException {
-        return this.cartReposttory.save(cart);
-    }
 
     public User findUserById(Integer id) throws ProductException {
         return userRepository.findById(id).get();
     }
 
-    public CartLineItem saveCartLineItem(CartLineItem cartLineItems) throws ProductException {
-        return this.cartLineItemRepositoty.save(cartLineItems);
-    }
 
     public List<CartLineItem> getListCartItem(Cart cart) throws ProductException {
         return this.cartLineItemRepositoty.findByCartId(cart);
@@ -124,6 +118,14 @@ public class CartService {
         }
     }
 
+    public void clearCard(User Customer)
+    {
+        Cart cartClear=this.cartReposttory.findByUsersId(Customer);
+        if(cartClear!=null)
+        {
+            this.cartReposttory.delete(cartClear);
+        }
+    }
 
 
 }

@@ -37,33 +37,26 @@ public class OrderService {
             CartLineItem cartLineItemPayment = cartOptional.get();
             Float taxPerProduct = cartLineItemPayment.getTaxTotalAmount() / cartLineItemPayment.getQuantity();
 
-            // Lấy Order
             Order order = this.orderRepository.findByUsersId(customer);
             if (order == null) {
                 order = new Order();
                 order.setUsersId(customer);
-                order.setCountItems(0); // Đặt số lượng item ban đầu là 0
+                order.setCountItems(0);
             }
             order.setCountItems(order.getCountItems() + quantity);
 
-            // Lấy Product từ cơ sở dữ liệu để đảm bảo đối tượng được quản lý
             Product product = cartLineItemPayment.getProductId();
             product = this.productsRepository.findById(product.getId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
-            // Tính TotalAmount cho OrderLineItem
             Float totalAmount = (product.getDiscount_price() * quantity) + (taxPerProduct * quantity);
 
-            // Tính TaxAmount cho OrderLineItem (đã tính taxPerProduct cho mỗi sản phẩm)
             Float taxAmount = taxPerProduct * quantity;
 
-            // Tạo OrderLineItem
             OrderLineItem orderLineItem=this.setOrderLineItem(order,product,quantity,taxAmount,totalAmount);
 
-            // Cập nhật thông tin Order và lưu lại vào cơ sở dữ liệu
             order = updateOrder(order, totalAmount, taxAmount);
 
-            // Lấy Cart để cập nhật thông tin
             Cart updateCart = this.cartReposttory.findByUsersId(customer);
             updateCart.setTotal_amount(updateCart.getTotal_amount() - cartLineItemPayment.getTotalAmount());
             updateCart.setTax_amount(updateCart.getTax_amount() - cartLineItemPayment.getTaxTotalAmount());
@@ -96,7 +89,7 @@ public class OrderService {
         {
             OrderLineItem orderLineItem = new OrderLineItem();
             orderLineItem.setOrderId(order);
-            orderLineItem.setProductId(product); // Gán Product đã lấy từ cơ sở dữ liệu
+            orderLineItem.setProductId(product);
             orderLineItem.setQuantity(quantity);
             orderLineItem.setTaxTotalAmount(taxAmount);
             orderLineItem.setTotalAmount(totalAmount);
@@ -114,23 +107,17 @@ public class OrderService {
                     if (order == null) {
                         order = new Order();
                         order.setUsersId(customer);
-                        order.setCountItems(0); // Đặt số lượng item ban đầu là 0
+                        order.setCountItems(0);
                     }
                     order.setCountItems(order.getCountItems() + quantity);
 
-                    // Lấy Product từ cơ sở dữ liệu để đảm bảo đối tượng được quản lý
                     Float taxPerProduct=(productSelect.getDiscount_price()/100)*productSelect.getTax();
-                    // Tính TotalAmount cho OrderLineItem
                     Float totalAmount = (productSelect.getDiscount_price() * quantity) + (taxPerProduct * quantity);
 
-                    // Tính TaxAmount cho OrderLineItem (đã tính taxPerProduct cho mỗi sản phẩm)
                     Float taxAmount = taxPerProduct * quantity;
 
-                    // Tạo OrderLineItem
                     OrderLineItem orderLineItem=this.setOrderLineItem(order,productSelect,quantity,taxAmount,totalAmount);
 
-                    // Cập nhật Order
-                    // Cập nhật thông tin Order và lưu lại vào cơ sở dữ liệu
                     order = updateOrder(order, totalAmount, taxAmount);
 
                     this.orderLineItemRepository.save(orderLineItem);

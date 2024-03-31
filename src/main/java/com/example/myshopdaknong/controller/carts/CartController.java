@@ -35,6 +35,7 @@ public class CartController {
         }
     }
 
+
     @GetMapping("/cart/remove")
     public String removeCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer,
                                      @RequestParam("cartLineItemId") Integer cartLineItemId,

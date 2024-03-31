@@ -23,4 +23,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query("SELECT p FROM Product p where concat(p.name ,p.sku) like %:keyword%")
     List<Product> findAll(String keyword);
+
+
 }

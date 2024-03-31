@@ -6,11 +6,12 @@ import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
-import com.example.myshopdaknong.repository.CartLineItemRepositoty;
-import com.example.myshopdaknong.repository.CartReposttory;
-import com.example.myshopdaknong.repository.ProductRepository;
-import com.example.myshopdaknong.repository.ProductCategoryRepository;
+import com.example.myshopdaknong.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+    private static final Integer INT_PAGE_SIZE=5;
     @Autowired
     private ProductRepository producsRepository;
     @Autowired
@@ -26,6 +28,8 @@ public class ProductService {
 
     @Autowired
     private CartReposttory cartReposttory;
+    @Autowired
+    private OrderLineItemRepository orderLineItemRepository;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
     public List<Product> findAll(Integer id, String search)
@@ -123,4 +127,11 @@ public class ProductService {
         }
         return "ok";
     }
+
+    public List<Product> productOrderMost() {
+        Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
+        List<Product> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
+        return listProductOrderMost;
+    }
+
 }

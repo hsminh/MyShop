@@ -32,12 +32,15 @@ public class MainController {
                 model.addAttribute("selectCategory", productCategory);
             }
 
+            List<Product> productsOrderedMost = productSerVice.productOrderMost();
+
             List<Product> listProduct = productSerVice.findAll(id, search);
             model.addAttribute("search", search);
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
             model.addAttribute("isChoice", "Shop");
             model.addAttribute("isChoiceCategory", isChoiceCategory);
+            model.addAttribute("productsOrderedMost", productsOrderedMost);
 
         } catch (CategoryProductException ex) {
             model.addAttribute("messageErr", ex.getMessage());
