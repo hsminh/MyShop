@@ -14,13 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
-    private static final Integer INT_PAGE_SIZE=5;
+    private static final Integer INT_PAGE_SIZE=10;
     @Autowired
     private ProductRepository producsRepository;
     @Autowired
@@ -128,10 +126,25 @@ public class ProductService {
         return "ok";
     }
 
+    public Map<Product,Long> productOrderMost1() {
+        Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
+        List<Object[]> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost1(pageable);
+        Map<Product,Long> productMap = new HashMap<>();
+
+        for (Object[] obj : listProductOrderMost) {
+
+            Product product = (Product) obj[0];
+            Long quantityPurchase=(Long) obj[1];
+            productMap.put(product,quantityPurchase);
+
+        }
+        return productMap;
+    }
+
     public List<Product> productOrderMost() {
         Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
         List<Product> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
+
         return listProductOrderMost;
     }
-
 }

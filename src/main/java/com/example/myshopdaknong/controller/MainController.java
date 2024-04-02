@@ -24,7 +24,6 @@ public class MainController {
                            @RequestParam(value = "isChoiceCategory", required = false) String isChoiceCategory,
                            Model model) throws CategoryProductException {
         List<ProductCategory> listCategory = productSerVice.findAllCategoryContainProduct();
-        System.out.println("cc + "+isChoiceCategory);
         model.addAttribute("listCategory", listCategory);
         try {
             if (id != null) {
