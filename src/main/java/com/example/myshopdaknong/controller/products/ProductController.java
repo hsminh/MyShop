@@ -1,6 +1,7 @@
 package com.example.myshopdaknong.controller.products;
 
 import com.example.myshopdaknong.entity.Product;
+import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.services.ProductService;
 import com.example.myshopdaknong.util.FileUploadUltil;
@@ -75,51 +76,18 @@ public class ProductController {
             model.addAttribute("pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-            for(FieldError error : bindingResult.getFieldErrors())
-            {
-                System.out.println("come : "+error.getField());
-                System.out.println("come : "+error.getDefaultMessage());
-            }
             return "products/add-form-products";
         }
         try {
             if (Product.getId() != null) {
                 Product productInDb = productSerVice.findByid(Product.getId()).orElseThrow(() -> new ProductException("Product not found"));
-                productInDb.setUpdatedAt(new Date());
-                productInDb.setContent(Product.getContent());
-                productInDb.setSku(Product.getSku());
-                productInDb.setListProductCategories(Product.getListProductCategories());
-                productInDb.setPrice(Product.getPrice());
-                productInDb.setName(Product.getName());
-                productInDb.setDiscount_price(Product.getDiscount_price());
-                productInDb.setTax(Product.getTax());
-                productInDb.setIsActive(Product.getIsActive());
-                if (!multipartFile.isEmpty()) {
-                    String fileName = multipartFile.getOriginalFilename();
-                    fileName=fileName.replace(" ","_");
-                    productInDb.setImage(fileName);
-
-                    String directory = "public/images/" + productInDb.getId();
-                    FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
-                }
-
-                this.productSerVice.save(productInDb);
-
+                productInDb=this.setData(productInDb,Product);
+                productInDb=this.setImage(productInDb,multipartFile);
+                this.setImage(productInDb,multipartFile);
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
                 Product.setCreatedAt(new Date());
-                if (!multipartFile.isEmpty()) {
-                    String fileName = multipartFile.getOriginalFilename();
-                    fileName=fileName.replace(" ","_");
-                    Product.setImage(fileName);
-                    Product = productSerVice.save(Product);
-
-                    String directory = "public/images/" + Product.getId();
-                    FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
-                } else {
-                    Product = productSerVice.save(Product);
-                }
-
+                this.setImage(Product,multipartFile);
                 redirectAttributes.addFlashAttribute("Message", "Save Successful");
             }
         } catch (IOException | ProductException ex) {
@@ -127,5 +95,34 @@ public class ProductController {
         }
 
         return "redirect:/products";
+    }
+
+    public Product setData(Product product,Product productInForm) throws IOException {
+        product.setUpdatedAt(new Date());
+        product.setContent(productInForm.getContent());
+        product.setSku(productInForm.getSku());
+        product.setListProductCategories(productInForm.getListProductCategories());
+        product.setPrice(productInForm.getPrice());
+        product.setName(productInForm.getName());
+        product.setDiscount_price(productInForm.getDiscount_price());
+        product.setTax(productInForm.getTax());
+        product.setIsActive(productInForm.getIsActive());
+        return product;
+    }
+
+    public Product setImage(Product product,MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName=fileName.replace(" ","_");
+            product.setImage(fileName);
+            this.productSerVice.save(product);
+
+            String directory = "public/images/" + product.getId();
+            FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
+        }else
+        {
+            this.productSerVice.save(product);
+        }
+        return product;
     }
 }

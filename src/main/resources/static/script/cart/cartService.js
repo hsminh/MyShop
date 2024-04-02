@@ -29,6 +29,7 @@ function paymentCart() {
 }
 
 $(document).ready(function() {
+
     $('#addToCart').on('click', function() {
         var quantity = document.getElementById('quantity').value;
         var productId = document.getElementById('selectProduct').value;

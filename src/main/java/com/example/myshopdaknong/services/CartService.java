@@ -52,7 +52,6 @@ public class CartService {
     }
 
     public String updateCartAndCartLineItem(User customer, Product selectProduct, Integer quantity) throws ProductException {
-        //luu cart
         Cart Cart=this.cartReposttory.findByUsersId(customer);
         if(Cart==null)
         {

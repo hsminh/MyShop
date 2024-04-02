@@ -114,11 +114,11 @@
                                         <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discount_price}" />
                                         <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
 
-                                        <span th:id="'price'+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Price: $[[${CartLineItems.getProductId().price}]]</span>
+                                        <span th:id="'price'+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Price: $[[${CartLineItems.getProductId().price*CartLineItems.Quantity}]]</span>
                                     </div>
                                 </del>
                                 <div>
-                                    <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Discount Price: $[[${CartLineItems.getProductId().discount_price}]]</span>
+                                    <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Discount Price: $[[${CartLineItems.getProductId().discount_price*CartLineItems.Quantity}]]</span>
                                 </div>
                                 <div>
                                     <span th:id="'taxPrice'+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Tax: [[${CartLineItems.getProductId().tax}]]%</span>

@@ -18,31 +18,31 @@ public class UserRestController {
     private UserService userService;
     @Autowired
     private TokenService tokenService;
-        @GetMapping("/users/`check`-username-unique")
+        @GetMapping("/users/check-username-unique")
         public String checkUserNameUni(@RequestParam("username") String userName)
         {
             return this.userService.checkUserNameUni(userName);
         }
-        @GetMapping("/users/send-email")
-        public String senEmail(@RequestParam("email") String email)
-        {
-            User accountForgot=this.userService.findUserByUserName(email);
-            if(accountForgot!=null)
+            @GetMapping("/users/send-email")
+            public String senEmail(@RequestParam("email") String email)
             {
-                String token=GenarateRandomNumber.generateRandomNumberString();
-                String from = "kucantscute@gmail.com";
-                String password = "ugop edsx ieoo fecs";
-                String to = email;
-                //Content
-                String subject ="Your Verification Code";
-                String content = "Hello : "  + accountForgot.getFullName() + ", here is your verification code: " + token;
-                EmailSender.sendEmail(from,password,to,subject,content);
-                tokenService.deleteToken(accountForgot);
-                tokenService.createToken(accountForgot,token);
-                return "ok";
+                User accountForgot=this.userService.findUserByUserName(email);
+                if(accountForgot!=null)
+                {
+                    String token=GenarateRandomNumber.generateRandomNumberString();
+                    String from = "kucantscute@gmail.com";
+                    String password = "ugop edsx ieoo fecs";
+                    String to = email;
+                    //Content
+                    String subject ="Your Verification Code";
+                    String content = "Hello : "  + accountForgot.getFullName() + ", here is your verification code: " + token;
+                    EmailSender.sendEmail(from,password,to,subject,content);
+                    tokenService.deleteToken(accountForgot);
+                    tokenService.createToken(accountForgot,token);
+                    return "ok";
+                }
+                return "duplicated";
             }
-            return "duplicated";
-        }
         @GetMapping("/users/verify-verification-code")
         public String verifyVerificationCode(@RequestParam("digit1") String digit1,
                                              @RequestParam("digit2") String digit2,
@@ -54,7 +54,8 @@ public class UserRestController {
 
             String code = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
             User verifiedUser = this.userService.findUserByUserName(email);
-
+            System.out.println("cc  "+code);
+            System.out.println("cc  "+verifiedUser);
             Token token=this.tokenService.findByToken(code);
 
             if (this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser)) {

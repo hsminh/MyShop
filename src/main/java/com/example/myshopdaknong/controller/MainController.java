@@ -46,7 +46,6 @@ public class MainController {
             model.addAttribute("isChoice", "Shop");
             model.addAttribute("isChoiceCategory", isChoiceCategory);
             model.addAttribute("productsOrderedMost", productDTOS);
-
         } catch (CategoryProductException ex) {
             model.addAttribute("messageErr", ex.getMessage());
         }
