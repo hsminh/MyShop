@@ -83,7 +83,7 @@ public class OrderService {
         }
     }
     public Order updateOrder(Order order, Float totalAmount, Float taxAmount) {
-        // Cập nhật thông tin Order
+        // update infor order
         order.setTotalAmount(order.getTotalAmount() + totalAmount);
         order.setTaxAmount(order.getTaxAmount() + taxAmount);
         order.setUpdatedAt(new Date());

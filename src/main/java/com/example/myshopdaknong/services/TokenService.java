@@ -19,13 +19,11 @@ public class TokenService {
     private TokenRepository tokenRepository;
 
     public Token createToken(User user,String code) {
-        // Create new Token
         String tokenValue = code;
 
 
         LocalDateTime expirationDateTime = LocalDateTime.now().plusMinutes(5);
 
-        // Tạo đối tượng Token
         Token token = new Token();
         token.setCreatedAt(LocalDateTime.now());
         token.setToken(tokenValue);

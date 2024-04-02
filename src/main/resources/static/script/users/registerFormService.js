@@ -8,7 +8,6 @@ function ShowMessageErrr(title, message) {
         $('#AlerMessage').addClass('hidden');
     }, 10000);
 }
-// Close the alert when clicking on the "x" button
 $('#closeBtn').click(function() {
     $('#AlerMessage').addClass('hidden');
 });

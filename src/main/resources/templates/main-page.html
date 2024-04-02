@@ -84,7 +84,7 @@
                         <div class="border border-gray-500 border-solid rounded-lg shadow-lg">
                             <h1 class="mt-7 text-center text-4xl font-bold text-purple-600 mb-6" style="font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">Hot Product Trending</h1>
                             <div class="mt-6 mb-10 flex justify-center space-x-8" id="product-list-container">
-                                <button class=" bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                                <button class="hidden bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
                                 <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105">
                                     <a th:href="@{cart (productId=${product.getProduct().id})}">
                                         <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
@@ -108,10 +108,10 @@
                                         </div>
                                     </a>
                                 </div>
-                                <button class="" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                                <button class="hidden" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
                             </div>
                             <style>
-                               /* #previous-btn:hover, #next-btn:hover {
+                               #previous-btn:hover, #next-btn:hover {
                                     transform: scale(1.1);
                                 }
 
@@ -122,7 +122,7 @@
                                 #product-list-container:hover #previous-btn,
                                 #product-list-container:hover #next-btn {
                                     display: inline-block;
-                                }*/
+                                }
 
                                #previous-btn,
                                #next-btn {

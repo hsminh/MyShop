@@ -51,14 +51,12 @@
     $('#Title').text(title);
     $('#Message').text(message);
     $('#AlerMessage').removeClass('hidden');
-    // Hide the alert after 10 seconds
     setTimeout(function() {
       $('#AlerMessage').addClass('hidden');
     }, 10000);
   }
 
 
-  // Close the alert when clicking on the "x" button
   $('#closeBtn').click(function() {
     $('#AlerMessage').addClass('hidden');
   });
