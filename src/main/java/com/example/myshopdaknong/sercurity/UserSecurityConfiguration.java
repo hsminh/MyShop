@@ -35,7 +35,7 @@ public class UserSecurityConfiguration {
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")
-                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/public/**").permitAll()
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")

@@ -202,7 +202,6 @@ public class UsersController {
     public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
         // Check if the form is invalid
         if (bindingResult.hasErrors()) {
-            System.out.println("this fail");
             for(FieldError error: bindingResult.getFieldErrors())
             {
                 String fieldError=error.getField();
