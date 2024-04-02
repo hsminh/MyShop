@@ -140,6 +140,7 @@
                     <label for="active" class="ml-2">Active</label>
                 </div>
                 <button
+                        id="check"
                         type="submit"
                         class="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
                 >Create Product</button>
@@ -162,4 +163,16 @@
 
 
 </body>
+<script>
+    // Kiểm tra xem phần tử DOM có tồn tại không
+    var element = document.getElementById('check');
+    if (element) {
+        // Nếu phần tử tồn tại, thực hiện thao tác
+        var rect = element.getBoundingClientRect();
+        console.log(rect);
+    } else {
+        console.log('Phần tử DOM không tồn tại');
+    }
+
+</script>
 </html>

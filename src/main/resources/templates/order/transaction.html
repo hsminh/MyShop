@@ -24,8 +24,8 @@
                     <h3 class="text-center mt-5 text-lg font-medium text-gray mb-4"><b>[[${OrderLineItem.getProductId.name}]]  was purchased at  : [[${OrderLineItem.getCreatedAt}]]</b></h3>
 
                     <div class="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/public/images/Sony ZV-1 main.png}">
 
+                        <img alt="product-image" class="object-fill lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"  th:src="@{${OrderLineItem.getProductId().loadImages()}}">
                         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                             <h2 class="text-sm title-font text-gray-500 tracking-widest">[[${OrderLineItem.getProductId().ListProductCategories}]]</h2>
                             <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">[[${OrderLineItem.getProductId().name}]]</h1>

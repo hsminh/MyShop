@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,6 +72,7 @@ public class ProductController {
     @Transactional
     @PostMapping("/products/save")
     public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+        System.out.println("cc +"+ Product);
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle", "Add Product");
@@ -117,7 +119,8 @@ public class ProductController {
             product.setImage(fileName);
             this.productSerVice.save(product);
 
-            String directory = "public/images/" + product.getId();
+//            String directory = "public/images/" + product.getId();
+            String directory = "src/main/resources/static/images/" + product.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         }else
         {

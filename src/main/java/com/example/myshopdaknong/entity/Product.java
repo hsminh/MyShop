@@ -80,10 +80,10 @@ public class Product {
     {
         if(this.image==null||this.image.isEmpty())
         {
-            return "images/img.png";
+            return "/images/img.png";
         }else
         {
-            return "images/"+this.id+"/"+this.image;
+            return "/images/"+this.id+"/"+this.image;
         }
     }
 
