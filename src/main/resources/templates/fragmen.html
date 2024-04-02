@@ -73,7 +73,7 @@
                                     <a th:href="@{/users/edit}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
                                     <a th:href="@{/users/update_information}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Update Infor</a>
                                     <a th:href="@{/cart/shopping-cart}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" >Shopping cart</a>
-                                    <a th:href="@{/order/history}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Shopping history</a>
+                                    <a th:href="@{/order/history/1}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Shopping history</a>
                                     <form th:action="@{/logout}" method="post">
                                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                         <button type="submit" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sign out</button>

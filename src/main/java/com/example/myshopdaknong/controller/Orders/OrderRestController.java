@@ -23,7 +23,7 @@ public class OrderRestController {
     @GetMapping("/order")
     public String saveOrder(
             @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "cartLineItemId") Integer cartLineItemId,
+            @RequestParam(value = "cartLineItemId",required = false) Integer cartLineItemId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
             User customerUser = this.cartService.findUserById(customer.getUserId());
@@ -37,9 +37,10 @@ public class OrderRestController {
     @GetMapping("/order/buy-direct")
     public String buyDirect(
             @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "productId") Integer productId,
+            @RequestParam(value = "productId" ,required = false) Integer productId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
+
             User customerUser = this.cartService.findUserById(customer.getUserId());
             String notification = this.orderService.saveOrderDirect(productId, quantity, customerUser);
             return notification;

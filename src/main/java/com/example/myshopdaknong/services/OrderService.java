@@ -5,9 +5,14 @@ import com.example.myshopdaknong.exception.CardLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +31,8 @@ public class OrderService {
 
     @Autowired
     private ProductRepository productsRepository;
+
+    private static Integer PAGE_SIZE=3;
 
     public Order getOrderById(User users)
     {
@@ -127,5 +134,13 @@ public class OrderService {
                     throw new ProductException("Cannot Found Product With Id "+productId);
 
         }
+    }
+
+
+    public Page<OrderLineItem> findByOrderId(Order order, int pageNumber) {
+        Sort sort=Sort.by("created_at");
+        sort=sort.ascending();
+        Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
+        return this.orderLineItemRepository.findByOrderId(order,pageable);
     }
 }

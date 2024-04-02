@@ -10,15 +10,17 @@
     <body>
     <div th:replace="fragmen ::Navbar"></div>
 
-    <div th:if="${listCartLineItem.size()!=0}">
-        <h3 class="text-center mt-5 text-lg font-medium text-gray-900 mb-4">Your Shopping Cart</h3>
-    </div>
-    <div th:if="${listCartLineItem.size()==0}">
+
+    <div th:if="${listCartLineItem.size()==0}" class="mt-20">
         <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty</h3>
-        <img th:src="@{../../static/images/cute.png}" />
+    </div>
+    <div th:if="${listCartLineItem.size()!=0}" class="mt-24">
+        <div class="mt-16">
+            <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Shopping Cart</b></h1>
+        </div>
     </div>
 
-    <th:block th:each="CartLineItems : ${listCartLineItem}">
+    <th:block th:each="CartLineItems : ${listCartLineItem}" >
         <input type="hidden" id="selectProduct[[${CartLineItems.getProductId().id}]]" name="selectProduct" th:value="${CartLineItems.getProductId().id}" />
         <input type="hidden" id="selectCartLineItem[[${CartLineItems.getProductId().id}]]" name="selectCartLineItem" th:value="${CartLineItems.id}" />
 
@@ -95,6 +97,10 @@
                                         <i class="fa-solid fa-trash"></i>
                                         <span title="Click Here to Payment" class="ml-2">Remove</span>
                                     </a>
+                                    <button   onclick="clearAll()"  class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                        <i class="fa-solid fa-trash"></i>
+                                        <span title="Click Here to Payment" class="ml-2">Clear All</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

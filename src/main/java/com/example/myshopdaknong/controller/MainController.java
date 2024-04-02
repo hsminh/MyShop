@@ -2,6 +2,7 @@ package com.example.myshopdaknong.controller;
 
 import  com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
+import com.example.myshopdaknong.entity.ProductDTO;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.services.ProductService;
 import com.example.myshopdaknong.util.EmailSender;
@@ -11,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -30,8 +33,11 @@ public class MainController {
                 ProductCategory productCategory = this.productSerVice.getCategoryById(id);
                 model.addAttribute("selectCategory", productCategory);
             }
-
-            List<Product> productsOrderedMost = productSerVice.productOrderMost();
+            ArrayList<ProductDTO>productDTOS=null;
+            if(id==null&&search==null)
+            {
+                productDTOS=productSerVice.productOrderMost1();
+            }
 
             List<Product> listProduct = productSerVice.findAll(id, search);
             model.addAttribute("search", search);
@@ -39,7 +45,7 @@ public class MainController {
             model.addAttribute("listProduct", listProduct);
             model.addAttribute("isChoice", "Shop");
             model.addAttribute("isChoiceCategory", isChoiceCategory);
-            model.addAttribute("productsOrderedMost", productsOrderedMost);
+            model.addAttribute("productsOrderedMost", productDTOS);
 
         } catch (CategoryProductException ex) {
             model.addAttribute("messageErr", ex.getMessage());

@@ -12,17 +12,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.util.Date;
 
 public class ProductDTO {
-    private Integer id;
     private Product product;
     private Long quantiryPurchase;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Product getProduct() {
         return product;
@@ -40,8 +33,7 @@ public class ProductDTO {
         this.quantiryPurchase = quantiryPurchase;
     }
 
-    public ProductDTO(Integer id,Product product, Long quantiryPurchase) {
-        this.id=id;
+    public ProductDTO(Product product, Long quantiryPurchase) {
         this.product = product;
         this.quantiryPurchase = quantiryPurchase;
     }

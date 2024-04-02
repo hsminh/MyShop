@@ -13,6 +13,7 @@ import com.example.myshopdaknong.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +72,6 @@ public class CartService {
         Cart.setTotal_amount(Cart.getTotal_amount()+taxAmount+PriceBeforeTax);
 
 
-        //luu cart line item
             if(cartLineItems==null)
         {
             cartLineItems=new CartLineItem();
@@ -90,7 +90,6 @@ public class CartService {
         this.cartReposttory.save(Cart);
         return "ok";
     }
-
 
     public void deleteCardLineItem(Integer cardLineItemId, User customer) throws CardLineItemException {
         Optional<CartLineItem> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
@@ -123,6 +122,17 @@ public class CartService {
         Cart cartClear=this.cartReposttory.findByUsersId(Customer);
         if(cartClear!=null)
         {
+            List<CartLineItem>cartLineItemList=this.cartLineItemRepositoty.findByCartId(cartClear);
+            List<CartLineItem>deleteCartLineItem=new ArrayList<>();
+            for(CartLineItem cartLineItem : cartLineItemList)
+            {
+                cartLineItem.setCartId(null);
+                deleteCartLineItem.add(cartLineItem);
+            }
+            this.cartLineItemRepositoty.saveAll(deleteCartLineItem);
+            this.cartLineItemRepositoty.deleteAll(deleteCartLineItem);
+            cartClear.setUsersId(null);
+            this.cartReposttory.save(cartClear);
             this.cartReposttory.delete(cartClear);
         }
     }

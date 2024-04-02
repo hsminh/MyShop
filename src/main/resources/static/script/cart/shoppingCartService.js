@@ -1,8 +1,7 @@
 function paymentCart(productId) {
-    var quantity = parseInt($('#quantityInput' + productId).val())  ;
+    var quantity = parseInt($('#quantityInput' + productId).val());
     var confirmation = confirm("Are you sure you want to proceed with the payment?");
-    if(confirmation)
-    {
+    if (confirmation) {
         $.ajax({
             type: 'GET',
             url: '/order',
@@ -11,22 +10,33 @@ function paymentCart(productId) {
                 quantity: quantity
             },
             success: function(response) {
-
-                window.location.href = '/order/success'; // Chuyển hướng đến trang order_success.html
-
-                // Handle success response, if needed
+                window.location.href = '/order/success';
             },
             error: function(xhr, status, error) {
-                alert("Error updating quantity")
-
+                alert("Error updating quantity");
                 console.error('Error updating quantity:', error);
-                // Handle error response, if needed
             }
         });
     }
 }
 
-/*<![CDATA[*/
+function clearAll() {
+    var confirmation = confirm("Are you sure you want to Clear All Cart?");
+    if (confirmation) {
+        $.ajax({
+            type: 'GET',
+            url: '/cart/clear',
+            success: function(response) {
+                window.location.href = '/cart/shopping-cart';
+            },
+            error: function(xhr, status, error) {
+                alert("Error updating quantity");
+                console.error('Error clearing cart:', error);
+            }
+        });
+    }
+}
+
 function decrementQuantity(productId) {
     var quantityElement = $('#quantityInput' + productId);
     var quantity = parseInt(quantityElement.val());
@@ -57,11 +67,8 @@ function updatePriceDetails(productId, quantity) {
     $('#discountPrice' + productId).text("Discount Price: $" + totalDiscountPrice.toFixed(2));
     $('#taxPrice' + productId).text("Tax: " + taxPercentage + "% ($" + totalTax.toFixed(2) + ")");
 }
-/*]]>*/
 
-/*<![CDATA[*/
 $(document).ready(function() {
-    // Tính toán giá ban đầu khi tải trang
     $('.product').each(function() {
         var productId = $(this).attr('data-productId');
         var quantity = parseInt($('#quantityInput' + productId).val());

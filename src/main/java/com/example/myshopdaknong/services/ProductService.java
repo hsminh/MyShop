@@ -1,9 +1,6 @@
 package com.example.myshopdaknong.services;
 
-import com.example.myshopdaknong.entity.Cart;
-import com.example.myshopdaknong.entity.CartLineItem;
-import com.example.myshopdaknong.entity.Product;
-import com.example.myshopdaknong.entity.ProductCategory;
+import com.example.myshopdaknong.entity.*;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.*;
@@ -126,19 +123,20 @@ public class ProductService {
         return "ok";
     }
 
-    public Map<Product,Long> productOrderMost1() {
+    public ArrayList<ProductDTO> productOrderMost1() {
         Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
         List<Object[]> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost1(pageable);
-        Map<Product,Long> productMap = new HashMap<>();
+        ArrayList<ProductDTO>productDTOS=new ArrayList<>();
 
         for (Object[] obj : listProductOrderMost) {
 
             Product product = (Product) obj[0];
             Long quantityPurchase=(Long) obj[1];
-            productMap.put(product,quantityPurchase);
+            ProductDTO productDTO=new ProductDTO(product,quantityPurchase);
+            productDTOS.add(productDTO);
 
         }
-        return productMap;
+        return productDTOS;
     }
 
     public List<Product> productOrderMost() {

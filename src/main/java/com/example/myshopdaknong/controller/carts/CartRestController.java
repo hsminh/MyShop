@@ -40,4 +40,10 @@ public class CartRestController {
             return "Error updating cart: " + ex.getMessage();
         }
     }
+
+    @GetMapping("/cart/clear")
+    public void clearAllCardAndCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer) throws ProductException {
+        User customerUser = this.cartService.findUserById(customer.getUserId());
+        this.cartService.clearCard(customerUser);
+    }
 }
