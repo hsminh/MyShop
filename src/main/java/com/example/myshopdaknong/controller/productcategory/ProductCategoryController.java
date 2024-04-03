@@ -18,11 +18,28 @@ public class ProductCategoryController {
     @Autowired
     private ProductCategoriesService productCategoriesSerVice;
     @GetMapping("/category")
-    public String listProduct(@RequestParam(value = "search",required = false) String serachValue, Model model) {
+    public String listProduct(@RequestParam(value = "search",required = false) String serachValue,
+                              @RequestParam(value = "isHide" ,required = false)Boolean isHide,
+                              Model model) {
+
+        if(isHide==null)
+        {
+            isHide=true;
+        }
+        if(isHide==true)
+        {
+            model.addAttribute("hideAndShowButton", "Show Deleted Category");
+            model.addAttribute("ProductTitle", "Product Category");
+        }else
+        {
+            model.addAttribute("hideAndShowButton", "Hide Deleted Category");
+            model.addAttribute("ProductTitle", "Deleted Product Category");
+        }
         model.addAttribute("pageTitle","Category");
         model.addAttribute("isChoice", "Category");
-        model.addAttribute("ListCate",this.productCategoriesSerVice.findAll(serachValue));
-
+        model.addAttribute("ListCate",this.productCategoriesSerVice.findAll(serachValue,isHide));
+        isHide=(isHide==false)?true:false;
+        model.addAttribute("isHide", isHide);
         return "category/category";
     }
 
@@ -66,7 +83,7 @@ public class ProductCategoryController {
             category=this.SetCreateNewCategory(category);
         }else
         {
-            ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId());
+            ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId(),null);
             category=this.SetEditCategory(productCategory,category);
         }
         this.productCategoriesSerVice.save(category);
@@ -77,7 +94,17 @@ public class ProductCategoryController {
     public String DeleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             this.productCategoriesSerVice.DeleteCategory(id);
-            redirectAttributes.addFlashAttribute("Message", "Delete Successful Categoty With Id " + id);
+            redirectAttributes.addFlashAttribute("Message", "Delete Successful Category With Id " + id);
+        } catch (ProductCategoriesException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/category";
+    }
+    @GetMapping("/category/restore/{id}")
+    public String restoreCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            this.productCategoriesSerVice.restoreCategory(id);
+            redirectAttributes.addFlashAttribute("Message", "Restore Successful Category With Id " + id);
         } catch (ProductCategoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -87,7 +114,7 @@ public class ProductCategoryController {
     @GetMapping("/category/edit/{id}")
     public String update(@PathVariable Integer id, Model model,RedirectAttributes redirectAttributes) {
         try {
-            ProductCategory Category=this.productCategoriesSerVice.FindById(id);
+            ProductCategory Category=this.productCategoriesSerVice.FindById(id,true);
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Edit Category");
             model.addAttribute("category",Category);

@@ -21,13 +21,15 @@ public interface OrderLineItemRepository extends JpaRepository<OrderLineItem,Int
     @Query("SELECT p, SUM(oli.quantity) AS totalOrdered " +
             "FROM Product p " +
             "JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE p.isActive = true " +
             "GROUP BY p.id " +
             "ORDER BY totalOrdered DESC")
-    List<Object[]> findProductsOrderedMost1(Pageable pageable);
-    @Query("SELECT p FROM Product p " +
-            "JOIN OrderLineItem oli ON p.id = oli.productId.id " +
-            "GROUP BY p.id " +
-            "ORDER BY SUM(oli.quantity) DESC")
-    List<Product> findProductsOrderedMost(Pageable pageable);
+
+    List<Object[]> findProductsOrderedMost(Pageable pageable);
+//    @Query("SELECT p FROM Product p " +
+//            "JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+//            "GROUP BY p.id " +
+//            "ORDER BY SUM(oli.quantity) DESC")
+//    List<Product> findProductsOrderedMost(Pageable pageable);
 
 }

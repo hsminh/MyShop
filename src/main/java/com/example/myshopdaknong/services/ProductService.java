@@ -4,13 +4,16 @@ import com.example.myshopdaknong.entity.*;
 import com.example.myshopdaknong.exception.CategoryProductException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.*;
+import com.example.myshopdaknong.util.FileUploadUltil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -27,25 +30,25 @@ public class ProductService {
     private OrderLineItemRepository orderLineItemRepository;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
-    public List<Product> findAll(Integer id, String search)
+    public List<Product> findAll(Integer id, String search,Boolean isHide)
     {
         if(id!=null&&search!=null)
         {
-            return this.producsRepository.findAll(id,search);
+            return this.producsRepository.findAll(id,search,isHide);
         }else if(id!=null)
         {
-            return this.producsRepository.findAll(id);
+            return this.producsRepository.findAll(id,isHide);
         }else if(search!=null&&!search.trim().isEmpty())
         {
-            return this.producsRepository.findAll(search);
+            return this.producsRepository.findAll(search,isHide);
 
         }
-        return this.producsRepository.findAll();
+        return this.producsRepository.findAll(isHide);
     }
 
     public List<ProductCategory>findAllCategory()
     {
-        return this.productCategoryRepository.findAll();
+        return this.productCategoryRepository.findAll(true);
     }
 
     public List<ProductCategory>findAllCategoryContainProduct()
@@ -70,24 +73,40 @@ public class ProductService {
         if(productOption.isPresent())
         {
             Product product=productOption.get();
-            for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
-            {
-                Cart setCart=cartLineItem.getCartId();
-                setCart.setTax_amount(setCart.getTax_amount()-cartLineItem.getTaxTotalAmount());
-                setCart.setCount_items(setCart.getCount_items()-cartLineItem.getQuantity());
-                setCart.setTotal_amount(setCart.getTotal_amount()-cartLineItem.getTotalAmount());
-                setCart.setCreatedAt(new Date());
-                cartLineItem.setCartId(null);
-                this.cartLineItemRepositoty.save(cartLineItem);
-                this.cartReposttory.save(setCart);
-                this.cartLineItemRepositoty.delete(cartLineItem);
-            }
-            this.producsRepository.delete(productOption.get());
+            product.setIsActive(false);
+            this.producsRepository.save(product);
         }else {
             throw new ProductException("Cannot Found Product With Id : "+id);
         }
     }
 
+    public void restoreProduct(Integer id) throws ProductException {
+        Optional<Product> productOption=this.producsRepository.findProductByIsActiveIsFalse(id);
+        if(productOption.isPresent())
+        {
+            Product product=productOption.get();
+            this.setCartLineItemAndCartToDelete(product);
+            product.setIsActive(true);
+            this.producsRepository.save(productOption.get());
+        }else {
+            throw new ProductException("Cannot Found Product With Id : "+id);
+        }
+    }
+    public void setCartLineItemAndCartToDelete(Product product)
+    {
+        for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
+        {
+            Cart setCart=cartLineItem.getCartId();
+            setCart.setTax_amount(setCart.getTax_amount()-cartLineItem.getTaxTotalAmount());
+            setCart.setCount_items(setCart.getCount_items()-cartLineItem.getQuantity());
+            setCart.setTotal_amount(setCart.getTotal_amount()-cartLineItem.getTotalAmount());
+            setCart.setCreatedAt(new Date());
+            cartLineItem.setCartId(null);
+            this.cartLineItemRepositoty.save(cartLineItem);
+            this.cartReposttory.save(setCart);
+            this.cartLineItemRepositoty.delete(cartLineItem);
+        }
+    }
     public Optional<Product> findByid(Integer id) throws ProductException {
         Optional<Product> productOption=this.producsRepository.findById(id);
         if(productOption.isPresent())
@@ -123,9 +142,9 @@ public class ProductService {
         return "ok";
     }
 
-    public ArrayList<ProductDTO> productOrderMost1() {
+    public ArrayList<ProductDTO> productOrderMost() {
         Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
-        List<Object[]> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost1(pageable);
+        List<Object[]> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
         ArrayList<ProductDTO>productDTOS=new ArrayList<>();
 
         for (Object[] obj : listProductOrderMost) {
@@ -139,10 +158,38 @@ public class ProductService {
         return productDTOS;
     }
 
-    public List<Product> productOrderMost() {
-        Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
-        List<Product> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
+//    public List<Product> productOrderMost() {
+//        Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
+//        List<Product> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
+//
+//        return listProductOrderMost;
+//    }
 
-        return listProductOrderMost;
+    public Product setData(Product product,Product productInForm) throws IOException {
+        product.setUpdatedAt(new Date());
+        product.setContent(productInForm.getContent());
+        product.setSku(productInForm.getSku());
+        product.setListProductCategories(productInForm.getListProductCategories());
+        product.setPrice(productInForm.getPrice());
+        product.setName(productInForm.getName());
+        product.setDiscount_price(productInForm.getDiscount_price());
+        product.setTax(productInForm.getTax());
+        product.setIsActive(productInForm.getIsActive());
+        return product;
+    }
+
+    public Product setImage(Product product,MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            String fileName = multipartFile.getOriginalFilename();
+            product.setImage(fileName);
+            this.save(product);
+
+            String directory = "public/images/" + product.getId();
+            FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
+        }else
+        {
+            this.save(product);
+        }
+        return product;
     }
 }

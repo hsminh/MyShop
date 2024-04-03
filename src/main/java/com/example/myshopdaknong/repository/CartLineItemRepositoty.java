@@ -4,6 +4,7 @@ import com.example.myshopdaknong.entity.Cart;
 import com.example.myshopdaknong.entity.CartLineItem;
 import com.example.myshopdaknong.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.List;
 public interface CartLineItemRepositoty extends JpaRepository<CartLineItem,Integer> {
     public CartLineItem findByCartIdAndProductId(Cart cartId, Product productId);
 
-    public List<CartLineItem> findByCartId(Cart cartId);
-
+//    @Query("select c.* from CartLineItem c where c.productId =:productId and c.productId.isActive=true")
+    @Query("SELECT c FROM CartLineItem c WHERE c.productId = :productId AND c.productId.isActive = true")
     public List<CartLineItem> findByProductId(Product productId);
-
+    @Query("SELECT c FROM CartLineItem c WHERE c.cartId = :cartId AND c.productId.isActive = true")
+    public List<CartLineItem> findByCartId(Cart cartId);
 
 }

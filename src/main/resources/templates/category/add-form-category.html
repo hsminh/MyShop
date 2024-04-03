@@ -2,11 +2,10 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <div th:replace="fragmen ::header"></div>
-
     <title>[[${pageTitle}]]</title>
+    <script th:src="@{/script/category/addFormCategoryServic.js}" type="text/javascript"></script>
 </head>
 <body>
-<script th:src="@{/script/category/addFormCategoryServic.js}" type="text/javascript"></script>
 
 <div th:replace="fragmen ::Navbar"></div>
 <div class="bg-grey-lighter min-h-screen flex flex-col">
@@ -74,7 +73,7 @@
                 <button
                         type="submit"
                         class="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
-                >Create <Category></Category></button>
+                >Create Category</button>
 
             <div class="text-center text-sm text-grey-dark mt-4">
                 By signing up, you agree to the
@@ -88,8 +87,5 @@
         </div>
     </div>
 </div>
-<script>
-
-</script>
 </body>
 </html>

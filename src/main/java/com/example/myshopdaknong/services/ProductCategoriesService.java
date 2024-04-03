@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,11 @@ public class ProductCategoriesService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
-    public List<ProductCategory> findAll(String searchValue) {
+    public List<ProductCategory> findAll(String searchValue,Boolean isHide) {
         if(searchValue != null && !searchValue.trim().isEmpty()) {
-            return productCategoryRepository.findByNameContaining(searchValue);
+            return productCategoryRepository.findByNameContaining(searchValue,isHide);
         }
-        return productCategoryRepository.findAll();
+        return productCategoryRepository.findAll(isHide);
     }
 
 
@@ -31,19 +32,30 @@ public class ProductCategoriesService {
         Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(id);
         if (categoryOptional.isPresent()) {
             ProductCategory category = categoryOptional.get();
-            if(category.getLiProducts().size()!=0)
-            {
-                    throw new ProductCategoriesException("Category with ID " + id + "contains products, cannot delete.");
-            }
-            this.productCategoryRepository.delete(category);
+            category.setDeletedAt(new Date());
+            category.setIsActive(false);
+            this.productCategoryRepository.save(category);
             return category;
         } else {
             throw new ProductCategoriesException("Category with ID " + id + " not found");
         }
     }
 
-    public ProductCategory FindById(Integer id) throws ProductCategoriesException {
-        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(id);
+    public ProductCategory FindById(Integer id,Boolean isHide) throws ProductCategoriesException {
+        System.out.println("come this1");
+        Optional<ProductCategory> categoryOptional=null;
+        System.out.println("come this2");
+
+        if(isHide==null)
+        {
+            System.out.println("come this3");
+            categoryOptional = this.productCategoryRepository.findById(id);
+        }else
+        {
+            System.out.println("come this4");
+            categoryOptional = this.productCategoryRepository.findById(id,isHide);
+        }
+        System.out.println("come this5");
         if (categoryOptional.isPresent()) {
             ProductCategory category = categoryOptional.get();
             return category;
@@ -52,9 +64,10 @@ public class ProductCategoriesService {
         }
     }
 
+
     public String CheckNameAndSlugUnique(Integer id, String name, String slug) throws ProductCategoriesException {
+        System.out.println("come here baby");
         if (id == null || id == 0) {
-            // Check
             ProductCategory productCategories = this.productCategoryRepository.findByNameOrSlug(name, slug);
             if (productCategories != null) {
                 return "duplicated";
@@ -62,8 +75,8 @@ public class ProductCategoriesService {
         } else {
             ProductCategory existingCategoryByName = this.productCategoryRepository.findByName(name);
             ProductCategory existingCategoryBySlug = this.productCategoryRepository.findBySlug(slug);
-
-            ProductCategory currentCategory = this.FindById(id);
+                ProductCategory currentCategory = this.FindById(id,false);
+            System.out.println("existingCategoryByName "+" existingCategoryBySlug "+" currentCategory");
             if (currentCategory == null) {
                 throw new ProductCategoriesException("Category with ID " + id + " not found");
             }
@@ -81,4 +94,10 @@ public class ProductCategoriesService {
     }
 
 
+    public void restoreCategory(Integer id) throws ProductCategoriesException {
+        ProductCategory categoryRestore=this.FindById(id,null);
+        categoryRestore.setIsActive(true);
+        categoryRestore.setDeletedAt(new Date());
+        this.productCategoryRepository.save(categoryRestore);
+    }
 }

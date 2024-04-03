@@ -27,10 +27,27 @@ public class ProductController {
     @Autowired
     private ProductService productSerVice;
     @GetMapping("/products")
-    public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord, Model model) {
-        model.addAttribute("pageTitle", "Products");
+    public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord,
+                              @RequestParam(value = "isHide" ,required = false)Boolean isHide,
+                              Model model) {
+        if(isHide==null)
+        {
+            isHide=true;
+        }
+        if(isHide==true)
+        {
+            model.addAttribute("hideAndShowButton", "Show Deleted Product");
+            model.addAttribute("ProductTitle", "Product");
+        }else
+        {
+            model.addAttribute("hideAndShowButton", "Hide Deleted Product");
+            model.addAttribute("ProductTitle", "Deleted Product");
+        }
+
         model.addAttribute("isChoice", "Products");
-        model.addAttribute("ListProduct", productSerVice.findAll(null, keyWord));
+        model.addAttribute("ListProduct", productSerVice.findAll(null, keyWord,isHide));
+        isHide=(isHide==false)?true:false;
+        model.addAttribute("isHide", isHide);
         return "products/products";
     }
 
@@ -54,6 +71,16 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    @GetMapping("/products/restore/{id}")
+    public String restoreProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            productSerVice.restoreProduct(id);
+            redirectAttributes.addFlashAttribute("Message", "Restore Successful Product With Id " + id);
+        } catch (ProductException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/products";
+    }
     @GetMapping("/products/edit/{id}")
     public String editProducts(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
@@ -83,13 +110,13 @@ public class ProductController {
         try {
             if (Product.getId() != null) {
                 Product productInDb = productSerVice.findByid(Product.getId()).orElseThrow(() -> new ProductException("Product not found"));
-                productInDb=this.setData(productInDb,Product);
-                productInDb=this.setImage(productInDb,multipartFile);
-                this.setImage(productInDb,multipartFile);
+                productInDb=this.productSerVice.setData(productInDb,Product);
+                productInDb=this.productSerVice.setImage(productInDb,multipartFile);
+                this.productSerVice.setImage(productInDb,multipartFile);
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
                 Product.setCreatedAt(new Date());
-                this.setImage(Product,multipartFile);
+                this.productSerVice.setImage(Product,multipartFile);
                 redirectAttributes.addFlashAttribute("Message", "Save Successful");
             }
         } catch (IOException | ProductException ex) {
@@ -99,33 +126,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    public Product setData(Product product,Product productInForm) throws IOException {
-        product.setUpdatedAt(new Date());
-        product.setContent(productInForm.getContent());
-        product.setSku(productInForm.getSku());
-        product.setListProductCategories(productInForm.getListProductCategories());
-        product.setPrice(productInForm.getPrice());
-        product.setName(productInForm.getName());
-        product.setDiscount_price(productInForm.getDiscount_price());
-        product.setTax(productInForm.getTax());
-        product.setIsActive(productInForm.getIsActive());
-        return product;
-    }
 
-    public Product setImage(Product product,MultipartFile multipartFile) throws IOException {
-        if (!multipartFile.isEmpty()) {
-            String fileName = multipartFile.getOriginalFilename();
-//            fileName=fileName.replace(" ","_");
-            product.setImage(fileName);
-            this.productSerVice.save(product);
 
-            String directory = "public/images/" + product.getId();
-//            String directory = "src/main/resources/static/images/" + product.getId();
-            FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
-        }else
-        {
-            this.productSerVice.save(product);
-        }
-        return product;
-    }
+
 }

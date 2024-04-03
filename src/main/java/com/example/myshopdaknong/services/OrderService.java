@@ -109,7 +109,6 @@ public class OrderService {
                 if(selectProduct.isPresent())
                 {
                     Product productSelect=selectProduct.get();
-                    // Lấy Order
                     Order order = this.orderRepository.findByUsersId(customer);
                     if (order == null) {
                         order = new Order();

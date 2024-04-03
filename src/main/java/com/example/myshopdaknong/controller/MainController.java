@@ -36,10 +36,10 @@ public class MainController {
             ArrayList<ProductDTO>productDTOS=null;
             if(id==null&&search==null)
             {
-                productDTOS=productSerVice.productOrderMost1();
+                productDTOS=productSerVice.productOrderMost();
             }
 
-            List<Product> listProduct = productSerVice.findAll(id, search);
+            List<Product> listProduct = productSerVice.findAll(id, search,true);
             model.addAttribute("search", search);
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
