@@ -115,12 +115,12 @@ public class ProductController {
     public Product setImage(Product product,MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()) {
             String fileName = multipartFile.getOriginalFilename();
-            fileName=fileName.replace(" ","_");
+//            fileName=fileName.replace(" ","_");
             product.setImage(fileName);
             this.productSerVice.save(product);
 
-//            String directory = "public/images/" + product.getId();
-            String directory = "src/main/resources/static/images/" + product.getId();
+            String directory = "public/images/" + product.getId();
+//            String directory = "src/main/resources/static/images/" + product.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         }else
         {
