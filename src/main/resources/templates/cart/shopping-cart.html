@@ -29,7 +29,7 @@
 
         <!-- component -->
         <section class="text-gray-700 body-font overflow-hidden bg-white">
-            <div class="container px-5 py-24 mx-auto">
+            <div class="border border-gray-270 container px-5 py-24 mx-auto">
                 <h3 class="text-center mt-5 text-lg font-medium text-gray mb-4">Add [[${CartLineItems.getProductId.name}]] Item In Shopping Cart At : [[${CartLineItems.getCreatedAt}]]</h3>
 
                 <div class="lg:w-4/5 mx-auto flex flex-wrap">
@@ -79,8 +79,7 @@
               </span>
                         </div>
                         <div class="mt-5">
-                            <div class="leading-relaxed">[[${CartLineItems.getProductId().content}]]</div>
-                            <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
+                            <div class="leading-relaxed"><p class="text-xl">Description :[[${CartLineItems.getProductId.content}]]</p></div>                            <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
                                 <div class="flex mr-4">
                                     <span class="mr-3">Quantity</span>
                                     <input type="hidden" id="quantity[[${CartLineItems.getProductId().id}]]" name="quantity" value="${CartLineItems.quantity}">

@@ -6,38 +6,7 @@
 </head>
 <script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
 <body>
-<style>
-    #previous-btn:hover, #next-btn:hover {
-        transform: scale(1.1);
-    }
-
-    .product-item img {
-        max-width: 100%;
-        max-height: 200px;
-    }
-    #product-list-container:hover #previous-btn,
-    #product-list-container:hover #next-btn {
-        display: inline-block;
-    }
-
-    #previous-btn,
-    #next-btn {
-        padding: 1rem;
-        background-color: #e5e7eb;
-        height: 200px;
-        position: absolute;
-        z-index: 10;
-        top: 13.5%;
-    }
-
-    #previous-btn {
-        left: -1.5%;
-    }
-
-    #next-btn {
-        right: -1.5%;
-    }
-</style>
+<link th:href="@{css/button.css}" rel="stylesheet">
 <div th:replace="fragmen ::header"></div>
 <div th:replace="fragmen ::Navbar"></div>
 

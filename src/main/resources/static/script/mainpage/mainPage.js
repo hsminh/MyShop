@@ -6,9 +6,6 @@ searchButton.addEventListener('click', function() {
     window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
 });
 
-function clearSearch() {
-    document.getElementById('default-search').value = '';
-}
 
 document.addEventListener("DOMContentLoaded", function() {
     var successMessage = document.getElementById("successMessage");
@@ -18,3 +15,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 3000);
     }
 });
+
