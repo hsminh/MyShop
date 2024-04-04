@@ -2,6 +2,7 @@ package com.example.myshopdaknong.controller.productcategory;
 
 import com.example.myshopdaknong.entity.ProductCategory;
 import com.example.myshopdaknong.exception.ProductCategoriesException;
+import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.services.ProductCategoriesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,32 +44,16 @@ public class ProductCategoryController {
         return "category/category";
     }
 
-    public void setCategoryAddForm(Model model)
-    {
-        model.addAttribute("pageTitle","Category");
-        model.addAttribute("TitleForm", "Add Category");
-        model.addAttribute("isNewUser", true);
-    }
+
     @GetMapping("/category/add")
     public String formAddCategory(Model model) {
 
         model.addAttribute("category",new ProductCategory());
-        this.setCategoryAddForm(model);
+        this.productCategoriesSerVice.setCategoryAddForm(model);
         return "category/add-form-category";
     }
-    public ProductCategory SetEditCategory(ProductCategory productCategories, ProductCategory EditCategory)
-    {
-        productCategories.setName(EditCategory.getName());
-        productCategories.setSlug(EditCategory.getSlug());
-        productCategories.setDescription(EditCategory.getDescription());
-        productCategories.setUpdatedAt(new Date());
-        return productCategories;
-    }
-    public ProductCategory SetCreateNewCategory(ProductCategory productCategories)
-    {
-        productCategories.setCreatedAt(new Date());
-        return productCategories;
-    }
+
+
     @PostMapping("/category/save")
     public String saveCategory(@Valid  @ModelAttribute("category")  ProductCategory category, BindingResult bindingResult, Model model) throws ProductCategoriesException {
         if(bindingResult.hasErrors())
@@ -80,11 +65,11 @@ public class ProductCategoryController {
         }
         if(category.getId()==null||category.getId()==0)
         {
-            category=this.SetCreateNewCategory(category);
+            category=this.productCategoriesSerVice.SetCreateNewCategory(category);
         }else
         {
             ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId(),null);
-            category=this.SetEditCategory(productCategory,category);
+            category=this.productCategoriesSerVice.SetEditCategory(productCategory,category);
         }
         this.productCategoriesSerVice.save(category);
         return "redirect:/category";
@@ -97,6 +82,8 @@ public class ProductCategoryController {
             redirectAttributes.addFlashAttribute("Message", "Delete Successful Category With Id " + id);
         } catch (ProductCategoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (ProductException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/category";
     }

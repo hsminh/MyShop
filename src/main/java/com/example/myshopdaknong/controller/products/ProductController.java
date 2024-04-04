@@ -98,25 +98,31 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
-        System.out.println("cc +"+ Product);
+    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult,@RequestParam(value = "imageFile",required = false)String imageFile, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
+            String imageURL=null;
+            if(!multipartFile.isEmpty()&&multipartFile!=null)
+            {
+                imageURL=this.productSerVice.getImageURL(multipartFile);
+            }else
+            {
+                imageURL=imageFile;
+            }
+
+            model.addAttribute("imageURL", imageURL);
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
             return "products/add-form-products";
         }
         try {
-            if (Product.getId() != null) {
-                Product productInDb = productSerVice.findByid(Product.getId()).orElseThrow(() -> new ProductException("Product not found"));
-                productInDb=this.productSerVice.setData(productInDb,Product);
-                productInDb=this.productSerVice.setImage(productInDb,multipartFile);
-                this.productSerVice.setImage(productInDb,multipartFile);
+            System.out.println("Xem anh "+multipartFile.getOriginalFilename());
+            Integer idBeforeSaved=Product.getId();
+            this.productSerVice.saveProduct(Product, multipartFile);
+            if (idBeforeSaved != null) {
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {
-                Product.setCreatedAt(new Date());
-                this.productSerVice.setImage(Product,multipartFile);
                 redirectAttributes.addFlashAttribute("Message", "Save Successful");
             }
         } catch (IOException | ProductException ex) {

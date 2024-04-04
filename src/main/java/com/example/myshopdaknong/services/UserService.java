@@ -25,6 +25,7 @@ public class UserService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+
     public String checkUserNameUni(String userName)
     {
         User users=this.userRepository.findUsersByUserName(userName);
@@ -96,5 +97,25 @@ public class UserService {
 
     public Optional<UserProfile> getUserProfileById(Integer id) {
         return this.userProfileRepository.findById(id);
+    }
+
+    public User createNewUser(User newUser) {
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        newUser.setCreatedAt(new Date());
+        return newUser;
+    }
+
+    public User updateUser(String editPassword, User editedUser) throws UserNotFoundException {
+        User user = this.findUserById(editedUser.getId());
+        user.setActive(editedUser.getActive());
+        user.setUpdatedAt(new Date());
+        user.setFirstName(editedUser.getFirstName());
+        user.setLastName(editedUser.getLastName());
+        if (editPassword != null && !editPassword.isEmpty()) {
+            user.setPassword(this.bCryptPasswordEncoder.encode(editPassword));
+        } else {
+            user.setPassword(user.getPassword());
+        }
+        return user;
     }
 }

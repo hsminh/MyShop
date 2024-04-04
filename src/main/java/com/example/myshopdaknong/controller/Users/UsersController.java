@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -115,25 +114,9 @@ public class UsersController {
         }
     }
 
-    public User updateUser(String editPassword, User editedUser) throws UserNotFoundException {
-        User user = this.userService.findUserById(editedUser.getId());
-        user.setActive(editedUser.getActive());
-        user.setUpdatedAt(new Date());
-        user.setFirstName(editedUser.getFirstName());
-        user.setLastName(editedUser.getLastName());
-        if (editPassword != null && !editPassword.isEmpty()) {
-            user.setPassword(this.passwordEncoder.encode(editPassword));
-        } else {
-            user.setPassword(user.getPassword());
-        }
-        return user;
-    }
 
-    public User createNewUser(User newUser) {
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        newUser.setCreatedAt(new Date());
-        return newUser;
-    }
+
+
 
     @GetMapping("/users/forgot")
     public String showForgotPassWordForm(Model model)
@@ -175,13 +158,10 @@ public class UsersController {
         return "users/update-password";
     }
 
-
     @PostMapping("/user/save-update-password")
-    public String saveUpdatePasswrord(@RequestParam("email")String email
-                                      ,@RequestParam("password")String newPassword
-                                      ,@RequestParam("token")String token
-
-
+    public String saveUpdatePassword(@RequestParam("email")String email
+                                      , @RequestParam("password")String newPassword
+                                      , @RequestParam("token")String token
                                      , RedirectAttributes redirectAttributes) {
 
         User user=this.userService.findUserByUserName(email);
@@ -200,28 +180,19 @@ public class UsersController {
 
     @PostMapping("/users/save")
     public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
-        // Check if the form is invalid
         if (bindingResult.hasErrors()) {
-            for(FieldError error: bindingResult.getFieldErrors())
-            {
-                String fieldError=error.getField();
-                String Message=error.getDefaultMessage();
-                System.out.println(fieldError +" Has "+Message);
-            }
-            // Check if editing user
             if (users.getId() != null) {
                 this.prepareFormModel(model, "Edit User", false);
             } else {
-                // Check if creating new user
                 this.prepareFormModel(model, "Sign Up", true);
             }
             return "users/register-form";
         }
         User userToSave;
         if (users.getId() != null && users.getId() != 0) {
-            userToSave = this.updateUser(editPassword, users);
+            userToSave = this.userService.updateUser(editPassword, users);
         } else {
-            userToSave = this.createNewUser(users);
+            userToSave = this.userService.createNewUser(users);
         }
         this.userService.save(userToSave);
         return "redirect:/login-form";

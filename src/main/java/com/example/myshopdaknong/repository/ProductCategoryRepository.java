@@ -1,5 +1,6 @@
 package com.example.myshopdaknong.repository;
 
+import com.example.myshopdaknong.entity.Product;
 import com.example.myshopdaknong.entity.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,5 @@ List<ProductCategory> findAllCategoriesWithProducts();
     List<ProductCategory> findByNameContaining(String searchValue,Boolean isHide);
     @Query("SELECT pc FROM product_categories pc WHERE pc.isActive=:isHide ")
     List<ProductCategory> findAll(Boolean isHide);
+
 }

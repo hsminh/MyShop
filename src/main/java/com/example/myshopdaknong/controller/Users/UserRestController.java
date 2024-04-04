@@ -54,8 +54,6 @@ public class UserRestController {
 
             String code = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
             User verifiedUser = this.userService.findUserByUserName(email);
-            System.out.println("cc  "+code);
-            System.out.println("cc  "+verifiedUser);
             Token token=this.tokenService.findByToken(code);
 
             if (this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser)) {

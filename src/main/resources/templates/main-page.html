@@ -130,8 +130,8 @@
                                    background-color: #e5e7eb;
                                    height: 200px;
                                    position: absolute;
-                                   z-index: 999;
-                                   top: 5.5%;
+                                   z-index: 10;
+                                   top: 13.5%;
                                }
 
                                #previous-btn {
@@ -211,7 +211,6 @@
         window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
     });
     function saveSearchValue(value) {
-        // Lưu giá trị tìm kiếm vào Local Storage
         localStorage.setItem('previousSearch', value);
     }
 

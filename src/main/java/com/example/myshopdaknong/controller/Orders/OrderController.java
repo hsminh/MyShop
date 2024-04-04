@@ -41,7 +41,6 @@
         public String viewPurchaseHistory(@PathVariable("pageNum") Integer pageNum, Model model, @AuthenticationPrincipal ShopMeUserDetail user) throws UserNotFoundException {
             User customerLogin = this.userService.findUserById(user.getUserId());
             Order order = this.orderService.getOrderById(customerLogin);
-
             Page<OrderLineItem> listOrderLineItemPage = this.orderService.findByOrderId(order, 0);
             int totalPage = listOrderLineItemPage.getTotalPages();
 
@@ -51,7 +50,6 @@
             if (pageNum < 1) {
                 pageNum = 1;
             }
-
             Page<OrderLineItem> listOrderLineItem = this.orderService.findByOrderId(order, pageNum - 1);
             model.addAttribute("pageNum", pageNum);
             model.addAttribute("order", order);

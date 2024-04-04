@@ -45,7 +45,17 @@ public class ProductService {
         }
         return this.producsRepository.findAll(isHide);
     }
-
+    public String getImageURL(MultipartFile multipartFile) {
+        try {
+            byte[] imageData = multipartFile.getBytes();
+            String base64Image = Base64.getEncoder().encodeToString(imageData);
+            String imageURL = "data:image/png;base64," + base64Image;
+            return imageURL;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public List<ProductCategory>findAllCategory()
     {
         return this.productCategoryRepository.findAll(true);
@@ -73,6 +83,18 @@ public class ProductService {
         if(productOption.isPresent())
         {
             Product product=productOption.get();
+            for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
+            {
+                Cart setCart=cartLineItem.getCartId();
+                setCart.setTax_amount(setCart.getTax_amount()-cartLineItem.getTaxTotalAmount());
+                setCart.setCount_items(setCart.getCount_items()-cartLineItem.getQuantity());
+                setCart.setTotal_amount(setCart.getTotal_amount()-cartLineItem.getTotalAmount());
+                setCart.setCreatedAt(new Date());
+                cartLineItem.setCartId(null);
+                this.cartLineItemRepositoty.save(cartLineItem);
+                this.cartReposttory.save(setCart);
+                this.cartLineItemRepositoty.delete(cartLineItem);
+            }
             product.setIsActive(false);
             this.producsRepository.save(product);
         }else {
@@ -85,6 +107,13 @@ public class ProductService {
         if(productOption.isPresent())
         {
             Product product=productOption.get();
+            for(ProductCategory productCategory : product.getListProductCategories())
+            {
+                if(!productCategory.getIsActive())
+                {
+                    throw new ProductException("Cannot Restore "+productCategory.getName() + "Because it not exist");
+                }
+            }
             this.setCartLineItemAndCartToDelete(product);
             product.setIsActive(true);
             this.producsRepository.save(productOption.get());
@@ -191,5 +220,17 @@ public class ProductService {
             this.save(product);
         }
         return product;
+    }
+
+    public void saveProduct(Product product, MultipartFile multipartFile) throws IOException, ProductException {
+        if (product.getId() != null) {
+            Product productInDb = this.findByid(product.getId()).orElseThrow(() -> new ProductException("Product not found"));
+            productInDb=this.setData(productInDb,product);
+            productInDb=this.setImage(productInDb,multipartFile);
+            this.setImage(productInDb,multipartFile);
+        } else {
+            product.setCreatedAt(new Date());
+            this.setImage(product,multipartFile);
+        }
     }
 }
