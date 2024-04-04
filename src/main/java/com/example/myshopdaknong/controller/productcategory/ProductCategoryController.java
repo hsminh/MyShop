@@ -55,7 +55,7 @@ public class ProductCategoryController {
 
 
     @PostMapping("/category/save")
-    public String saveCategory(@Valid  @ModelAttribute("category")  ProductCategory category, BindingResult bindingResult, Model model) throws ProductCategoriesException {
+    public String saveCategory(@Valid  @ModelAttribute("category")  ProductCategory category, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws ProductCategoriesException {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle","Category");
@@ -65,9 +65,11 @@ public class ProductCategoryController {
         }
         if(category.getId()==null||category.getId()==0)
         {
+            redirectAttributes.addFlashAttribute("Message","Save Successfully Category "+category.getName());
             category=this.productCategoriesSerVice.SetCreateNewCategory(category);
         }else
         {
+            redirectAttributes.addFlashAttribute("Message","Updated Successfully Category "+category.getName());
             ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId(),null);
             category=this.productCategoriesSerVice.SetEditCategory(productCategory,category);
         }
@@ -79,7 +81,7 @@ public class ProductCategoryController {
     public String DeleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             this.productCategoriesSerVice.DeleteCategory(id);
-            redirectAttributes.addFlashAttribute("Message", "Delete Successful Category With Id " + id);
+            redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
         } catch (ProductCategoriesException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         } catch (ProductException e) {

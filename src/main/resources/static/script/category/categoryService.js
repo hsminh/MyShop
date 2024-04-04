@@ -2,7 +2,7 @@ $(document).ready(function ()
 {
     $('#searchButton').on('click',function ()
     {
-        var keyword = document.getElementById("valueSearch").value;
+        var keyword = document.getElementById("valueSearch").value.trim();
         var isHideStr = document.getElementById("isHide").value;
         var isHide = (isHideStr === "true");
         isHide = !isHide;

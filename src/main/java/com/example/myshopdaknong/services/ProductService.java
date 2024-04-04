@@ -95,6 +95,7 @@ public class ProductService {
                 this.cartReposttory.save(setCart);
                 this.cartLineItemRepositoty.delete(cartLineItem);
             }
+            product.setDeletedAt(new Date());
             product.setIsActive(false);
             this.producsRepository.save(product);
         }else {

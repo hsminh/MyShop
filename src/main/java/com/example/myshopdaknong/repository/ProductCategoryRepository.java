@@ -23,7 +23,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 //    List<ProductCategory> findByLiProductsIsNotNull();
 @Query("SELECT DISTINCT pc FROM product_categories pc JOIN FETCH pc.LiProducts p WHERE p.isActive = true")
 List<ProductCategory> findAllCategoriesWithProducts();
-    @Query("SELECT pc FROM product_categories pc WHERE pc.name LIKE %:searchValue% and pc.isActive=:isHide ")
+    @Query("SELECT pc FROM product_categories pc WHERE concat(pc.name,pc.slug) LIKE %:searchValue% and pc.isActive=:isHide ")
     List<ProductCategory> findByNameContaining(String searchValue,Boolean isHide);
     @Query("SELECT pc FROM product_categories pc WHERE pc.isActive=:isHide ")
     List<ProductCategory> findAll(Boolean isHide);

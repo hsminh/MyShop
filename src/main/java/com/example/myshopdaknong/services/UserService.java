@@ -8,8 +8,10 @@ import com.example.myshopdaknong.repository.UserProfileRepository;
 import com.example.myshopdaknong.repository.UserRepository;
 import com.example.myshopdaknong.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.Date;
 import java.util.Optional;
@@ -117,5 +119,33 @@ public class UserService {
             user.setPassword(user.getPassword());
         }
         return user;
+    }
+
+    public void updateProfile(UserProfile userProfile, UserDetails userDetails) {
+        if (userProfile.getUsers() == null) {
+            User loggedInUser = this.findUserByUserName(userDetails.getUsername());
+            userProfile.setUsers(loggedInUser);
+        }
+        if (userProfile.getId() == null || userProfile.getId() == 0) {
+            userProfile.setCreatedAt(new Date());
+            this.saveUserProfile(userProfile);
+        } else {
+            UserProfile userProfileInData = this.getUserProfileById(userProfile.getId()).orElse(null);
+            if (userProfileInData != null) {
+                userProfileInData.setUpdatedAt(new Date());
+                userProfileInData.setGender(userProfile.isGender());
+                userProfileInData.setPhoneNumber(userProfile.getPhoneNumber());
+                userProfileInData.setAddress(userProfile.getAddress());
+                userProfileInData.setBio(userProfile.getBio());
+                this.saveUserProfile(userProfileInData);
+            }
+        }
+    }
+
+    public void prepareFormModel(Model model, String pageTitle, boolean isNewUser) {
+        model.addAttribute("isUpdateUser", true);
+        model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("titleForm", pageTitle);
+        model.addAttribute("isNewUser", isNewUser);
     }
 }

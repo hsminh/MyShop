@@ -84,19 +84,7 @@
                     </div>
                 </div>
             </nav>
-            <script>
-                window.addEventListener('scroll', function() {
-                    var navbar = document.getElementById('navbar');
-                    var aside = document.getElementById('sidebar-multi-level-sidebar');
-                    var distance = aside.getBoundingClientRect().top;
 
-                    if (window.pageYOffset >= distance) {
-                        navbar.classList.add('fixed', 'top-0', 'left-0', 'shadow-md');
-                    } else {
-                        navbar.classList.remove('fixed', 'top-0', 'left-0', 'shadow-md');
-                    }
-                });
-            </script>
         </div>
     <div th:fragment="header">
         <head>
@@ -107,7 +95,8 @@
             <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
+            <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+            <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
         </head>
     </div>
     </body>

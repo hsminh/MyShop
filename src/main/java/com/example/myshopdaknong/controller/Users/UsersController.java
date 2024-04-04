@@ -66,45 +66,24 @@ public class UsersController {
     }
 
     @PostMapping("/users/update_information/save")
-    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid UserProfile userProfile, BindingResult bindingResult,Model model) {
+    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid UserProfile userProfile, BindingResult bindingResult,Model model,RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             this.setUpToUpdateForm(model,userProfile);
             return "users/update-information-user";
         }
-        if (userProfile.getUsers() == null) {
-            User loggedInUser = userService.findUserByUserName(userDetails.getUsername());
-            userProfile.setUsers(loggedInUser);
-        }
-        if (userProfile.getId() == null || userProfile.getId() == 0) {
-            userProfile.setCreatedAt(new Date());
-            this.userService.saveUserProfile(userProfile);
-        } else {
-            UserProfile userProfileInData = this.userService.getUserProfileById(userProfile.getId()).orElse(null);
-            if (userProfileInData != null) {
-                userProfileInData.setUpdatedAt(new Date());
-                userProfileInData.setGender(userProfile.isGender());
-                userProfileInData.setPhoneNumber(userProfile.getPhoneNumber());
-                userProfileInData.setAddress(userProfile.getAddress());
-                userProfileInData.setBio(userProfile.getBio());
-                this.userService.saveUserProfile(userProfileInData);
-            }
-        }
+        this.userService.updateProfile(userProfile,userDetails);
+        redirectAttributes.addFlashAttribute("messageSuccessfully","update Profile Successfully");
         return "redirect:/main-page";
     }
 
-    public void prepareFormModel(Model model, String pageTitle, boolean isNewUser) {
-        model.addAttribute("isUpdateUser", true);
-        model.addAttribute("pageTitle", pageTitle);
-        model.addAttribute("titleForm", pageTitle);
-        model.addAttribute("isNewUser", isNewUser);
-    }
+
 
     @GetMapping("/users/edit")
     public String showEditForm(@AuthenticationPrincipal ShopMeUserDetail userDetails, Model model) {
         if (userDetails != null) {
             User user = userService.findUserByUserName(userDetails.getUsername());
-            this.prepareFormModel(model, "Edit User", false);
+            this.userService.prepareFormModel(model, "Edit User", false);
             model.addAttribute("pageTitle", "Edit User");
             model.addAttribute("titleForm", "Edit User");
             model.addAttribute("users", user);
@@ -113,10 +92,6 @@ public class UsersController {
             return "redirect:/login";
         }
     }
-
-
-
-
 
     @GetMapping("/users/forgot")
     public String showForgotPassWordForm(Model model)
@@ -182,9 +157,9 @@ public class UsersController {
     public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
         if (bindingResult.hasErrors()) {
             if (users.getId() != null) {
-                this.prepareFormModel(model, "Edit User", false);
+                this.userService.prepareFormModel(model, "Edit User", false);
             } else {
-                this.prepareFormModel(model, "Sign Up", true);
+                this.userService.prepareFormModel(model, "Sign Up", true);
             }
             return "users/register-form";
         }

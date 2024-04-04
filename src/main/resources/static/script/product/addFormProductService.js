@@ -1,15 +1,8 @@
     $(document).ready(function () {
-        // Lấy giá trị URL hình ảnh từ thẻ img có id là "thumbnail2"
-        var imageURL = document.getElementById("thumbnail2").getAttribute("src");
-
-        // Kiểm tra xem trường input có id là "checkError" có tồn tại không
         var checkError = document.getElementById("checkError");
         if (checkError) {
-            // Nếu tồn tại, thực hiện các hành động cần thiết
-            alert(imageURL);
             $('#thumbnail2').removeClass('hidden');
             $('#thumbnail').addClass('hidden');
-            document.getElementById("image").value(imageURL);
         }
 
         function ShowMessageErrr(title, message) {

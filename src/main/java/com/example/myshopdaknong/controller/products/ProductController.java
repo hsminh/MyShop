@@ -101,7 +101,7 @@ public class ProductController {
     public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult,@RequestParam(value = "imageFile",required = false)String imageFile, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
-            model.addAttribute("pageTitle", "Add Product");
+            model.addAttribute( "pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
             String imageURL=null;
             if(!multipartFile.isEmpty()&&multipartFile!=null)
@@ -111,13 +111,11 @@ public class ProductController {
             {
                 imageURL=imageFile;
             }
-
             model.addAttribute("imageURL", imageURL);
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
             return "products/add-form-products";
         }
         try {
-            System.out.println("Xem anh "+multipartFile.getOriginalFilename());
             Integer idBeforeSaved=Product.getId();
             this.productSerVice.saveProduct(Product, multipartFile);
             if (idBeforeSaved != null) {
