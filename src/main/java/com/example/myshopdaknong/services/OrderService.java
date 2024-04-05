@@ -2,6 +2,7 @@ package com.example.myshopdaknong.services;
 
 import com.example.myshopdaknong.entity.*;
 import com.example.myshopdaknong.exception.CardLineItemException;
+import com.example.myshopdaknong.exception.OrderLineItemException;
 import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class OrderService {
     @Autowired
     private ProductRepository productsRepository;
 
-    private static Integer PAGE_SIZE=3;
+    private static Integer PAGE_SIZE=5;
 
     public Order getOrderById(User users)
     {
@@ -141,5 +142,16 @@ public class OrderService {
         sort=sort.ascending();
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         return this.orderLineItemRepository.findByOrderId(order,pageable);
+    }
+
+    public OrderLineItem findOrderLineItemById(Integer oderLineItemId) throws OrderLineItemException {
+        Optional<OrderLineItem>OderLineItem=this.orderLineItemRepository.findById(oderLineItemId);
+        if(OderLineItem.isPresent())
+        {
+            return OderLineItem.get();
+        }else
+        {
+            throw new OrderLineItemException("Cannot Found Oder Line Item With Id "+oderLineItemId);
+        }
     }
 }

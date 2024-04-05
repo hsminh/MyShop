@@ -46,7 +46,6 @@ public class MainController {
             model.addAttribute("isChoice", "Shop");
             model.addAttribute("isChoiceCategory", isChoiceCategory);
             model.addAttribute("productsOrderedMost", productDTOS);
-
         } catch (CategoryProductException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
         }
@@ -59,7 +58,7 @@ public class MainController {
     {
         if(error!=null)
         {
-            model.addAttribute("errorMessage","Account or password is incorrect");
+            model.addAttribute("errorMessage","UserName or password is incorrect");
         }
         return "login-form";
     }

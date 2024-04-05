@@ -1,6 +1,7 @@
 function paymentCart(productId) {
-    var quantity = parseInt($('#quantityInput' + productId).val());
-    var confirmation = confirm("Are you sure you want to proceed with the payment?");
+    let quantity = parseInt($('#quantityInput' + productId).val());
+    let confirmation = confirm("Are you sure you want to proceed with the payment?");
+    alert(quantity)
     if (confirmation) {
         $.ajax({
             type: 'GET',
@@ -19,9 +20,11 @@ function paymentCart(productId) {
         });
     }
 }
-
+function updateHiddenQuantity(productId, value) {
+    $('#quantityInputHidden' + productId).val(value);
+}
 function clearAll() {
-    var confirmation = confirm("Are you sure you want to Clear All Cart?");
+    let confirmation = confirm("Are you sure you want to Clear All Cart?");
     if (confirmation) {
         $.ajax({
             type: 'GET',
@@ -37,9 +40,14 @@ function clearAll() {
     }
 }
 
+
+    function updateHiddenQuantity(productId, value) {
+        $('#quantityInputHidden' + productId).val(value);
+    }
+
 function decrementQuantity(productId) {
-    var quantityElement = $('#quantityInput' + productId);
-    var quantity = parseInt(quantityElement.val());
+    let quantityElement = $('#quantityInput' + productId);
+    let quantity = parseInt(quantityElement.val());
     quantity--;
     if (quantity < 1) quantity = 1;
     quantityElement.val(quantity);
@@ -47,31 +55,44 @@ function decrementQuantity(productId) {
 }
 
 function incrementQuantity(productId) {
-    var quantityElement = $('#quantityInput' + productId);
-    var quantity = parseInt(quantityElement.val());
+    let quantityElement = $('#quantityInput' + productId);
+    let quantity = parseInt(quantityElement.val());
     quantity++;
     quantityElement.val(quantity);
     updatePriceDetails(productId, quantity);
 }
 
 function updatePriceDetails(productId, quantity) {
-    var originalProductPrice = parseFloat($('#originalProductPrice' + productId).val());
-    var originalDiscountPrice = parseFloat($('#originalDiscountProductPrice' + productId).val());
-    var taxPercentage = parseFloat($('#taxPrice' + productId).text().replace('Tax: ', '').replace('%', ''));
+    let originalDiscountPrice = parseFloat($('#originalDiscountProductPrice' + productId).val());
+    let taxPercentage = parseFloat($('#taxPrice' + productId).val());
+    let subTotal = parseFloat($('#subTotal').text().replace('$', ''));
+    let taxTotal = parseFloat($('#taxTotal').text().replace('$', ''));
+    let totalAmount = parseFloat($('#totalAmount').text().replace('$', ''));
+    let quantityInputHidden = parseFloat($('#quantityInputHidden' + productId).val());
+    let totalDiscountPrice = originalDiscountPrice * quantity;
+    taxPercentage=(originalDiscountPrice*taxPercentage)/100;
 
-    var totalPrice = originalProductPrice * quantity;
-    var totalDiscountPrice = originalDiscountPrice * quantity;
-    var totalTax = (totalPrice - totalDiscountPrice) * (taxPercentage / 100);
-
-    $('#price' + productId).text("Price: $" + totalPrice.toFixed(2));
-    $('#discountPrice' + productId).text("Discount Price: $" + totalDiscountPrice.toFixed(2));
-    $('#taxPrice' + productId).text("Tax: " + taxPercentage + "% ($" + totalTax.toFixed(2) + ")");
+    if (quantityInputHidden < quantity) {
+        subTotal+=originalDiscountPrice;
+        taxTotal+=taxPercentage;
+        totalAmount+=(originalDiscountPrice+taxPercentage)
+    }else
+    {
+        subTotal-=originalDiscountPrice;
+        taxTotal-=taxPercentage;
+        totalAmount-=(originalDiscountPrice+taxPercentage)
+    }
+    updateHiddenQuantity(productId, quantity);
+    $('#discountPrice' + productId).text("$" + totalDiscountPrice.toFixed(2));
+    $('#subTotal').text("$" + subTotal.toFixed(2));
+    $('#taxTotal').text("$" + taxTotal.toFixed(2));
+    $('#totalAmount').text("$" + totalAmount.toFixed(2));
 }
 
 $(document).ready(function() {
     $('.product').each(function() {
-        var productId = $(this).attr('data-productId');
-        var quantity = parseInt($('#quantityInput' + productId).val());
+        let productId = $(this).attr('data-productId');
+        let quantity = parseInt($('#quantityInput' + productId).val());
         updatePriceDetails(productId, quantity);
     });
 });

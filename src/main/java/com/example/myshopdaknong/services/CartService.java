@@ -10,6 +10,7 @@ import com.example.myshopdaknong.repository.CartLineItemRepositoty;
 import com.example.myshopdaknong.repository.CartReposttory;
 import com.example.myshopdaknong.repository.ProductRepository;
 import com.example.myshopdaknong.repository.UserRepository;
+import com.example.myshopdaknong.sercurity.ShopMeUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,8 @@ public class CartService {
     private CartLineItemRepositoty cartLineItemRepositoty;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderService orderService;
     public Product getProductById(Integer id) throws ProductException {
         Optional<Product> productDetail=this.productsRepository.findById(id);
         if(!productDetail.isPresent())
@@ -137,4 +140,13 @@ public class CartService {
     }
 
 
+    public void checkOutAll(User customer, List<String> productIds, List<String> quantities) throws ProductException, CardLineItemException {
+        int index=0;
+        for(String s : productIds)
+        {
+            Integer quantity=Integer.parseInt(quantities.get(index++).replace(".0",""));
+            this.orderService.saveOrderDirect(Integer.parseInt(s), quantity,customer);
+            this.clearCard(customer);
+        }
+    }
 }

@@ -2,21 +2,13 @@
 <html lang="en">
 <head>
     <div th:replace="fragmen ::header"></div>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Flowbite CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
-
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 <section class="h-screen">
     <div class="container h-full px-6 py-24">
         <div
                 class="flex h-full flex-wrap items-center justify-center lg:justify-between">
-            <!-- Left column container with background-->
             <div class="mb-12 md:mb-0 md:w-8/12 lg:w-6/12">
                 <img
                         src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
@@ -24,18 +16,8 @@
                         alt="Phone image" />
             </div>
 
-            <!-- Right column container with form -->
             <div class="md:w-8/12 lg:ms-6 lg:w-5/12">
-                <!-- Hiển thị thông điệp lỗi nếu có -->
-                <div th:if="${messageErr}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <strong class="font-bold">Error!</strong>
-                    <span class="block sm:inline" th:text="${messageErr}"></span>
-                </div>
-                <div th:if="${message}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <strong class="font-bold">Success!</strong>
-                    <span class="block sm:inline" th:text="${message}"></span>
-                </div>
-
+                <div th:replace="notification::announcement"></div>
                 <form method="post" th:action="@{/authenticateTheUser}">
                     <!-- Email input -->
                     <div class="relative mb-6">
@@ -48,7 +30,7 @@
                                 placeholder="Username"
                         />
                     </div>
-                    <label for="exampleFormControlInput4" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="exampleFormControlInput4" class="block text-sm font-medium text-gray-700">Password</label>
                     <!-- Password input -->
                     <div class="relative mb-6" data-twe-input-wrapper-init>
                         <input

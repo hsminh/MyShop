@@ -3,6 +3,7 @@
     import com.example.myshopdaknong.entity.Order;
     import com.example.myshopdaknong.entity.OrderLineItem;
     import com.example.myshopdaknong.entity.User;
+    import com.example.myshopdaknong.exception.OrderLineItemException;
     import com.example.myshopdaknong.exception.UserNotFoundException;
     import com.example.myshopdaknong.repository.OrderLineItemRepository;
     import com.example.myshopdaknong.repository.UserRepository;
@@ -17,6 +18,7 @@
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.GetMapping;
     import org.springframework.web.bind.annotation.PathVariable;
+    import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
     import java.util.List;
@@ -35,6 +37,18 @@
         public String orderSuccess(RedirectAttributes redirectAttributes) {
             redirectAttributes.addFlashAttribute("messageSuccessfully", "Congratulations on your successful purchase");
             return "redirect:/main-page";
+        }
+        @GetMapping("/order/detail")
+        public String viewOrderDetail(@RequestParam("oder-line-item-id")Integer oderLineItemId,Model model, RedirectAttributes redirectAttributes) throws OrderLineItemException {
+            try
+            {
+                model.addAttribute("OderLineItem",this.orderService.findOrderLineItemById(oderLineItemId));
+                return "order/order-detail";
+            }catch (OrderLineItemException ex)
+            {
+                redirectAttributes.addFlashAttribute("errorMessage","Cannot Find Order With Id "+oderLineItemId);
+                return "redirect:/order/history/1";
+            }
         }
 
         @GetMapping("/order/history/{pageNum}")

@@ -107,7 +107,9 @@
                     </div>
                 </div>
 
-                <h1 class="mt-7 text-center text-4xl font-bold text-purple-600 mb-6" style="font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">[[${isChoiceCategory}]]</h1>
+                <h1 th:if="${isChoiceCategory}" class="mt-7 text-center text-4xl font-bold text-black-600 mb-6 shadow-lg">[[${isChoiceCategory}]]</h1>
+                <h1 th:if="${isChoiceCategory==null}" class="mt-7 text-center text-4xl font-bold text-black-600 mb-6 shadow-lg">All Products</h1>
+
 
                 <div class="border border-gray-500 border-solid rounded-lg shadow-lg  mt-12 grid grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2">
                     <th:block th:each="Product : ${listProduct}">
@@ -159,6 +161,7 @@
             </div>
         </div>
     </div>
+
     <div th:if="${listProduct==0}">
         <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Product is Empty</h3>
     </div>

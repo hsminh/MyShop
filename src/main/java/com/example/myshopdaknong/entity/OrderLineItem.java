@@ -18,7 +18,7 @@ public class OrderLineItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer   quantity ;
+    private Integer quantity ;
 
     private Float totalAmount;
 

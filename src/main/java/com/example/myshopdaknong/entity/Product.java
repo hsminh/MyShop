@@ -119,7 +119,11 @@ public class Product {
         this.ListProductCategories.add(productCategories);
     }
 
-    public Product() {
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Product() {
     }
 }

@@ -1,147 +1,112 @@
-    <!DOCTYPE html>
-    <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
-    <head>
-        <div th:replace="fragmen ::header"></div>
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="fragmen ::header"></div>
+</head>
+<script th:src="@{/script/cart/shoppingCartService.js}" type="text/javascript"></script>
+<body>
+<div th:replace="fragmen ::Navbar"></div>
 
 
-    </head>
-    <script th:src="@{/script/cart/shoppingCartService.js}" type="text/javascript"></script>
-
-    <body>
-    <div th:replace="fragmen ::Navbar"></div>
-
-
-    <div th:if="${listCartLineItem.size()==0}" class="mt-20">
-        <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty</h3>
-        <div class="flex justify-center items-center">
-            <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/images/cute.png}">
-        </div>
+<div th:if="${listCartLineItem.size()==0}" class="mt-20">
+    <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty Click Here to Come to Shop <b><a th:href="@{/main-page}">Click Here</a></b></h3>
+    <div class="flex justify-center items-center">
+        <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/images/cute.png}">
     </div>
-    <div th:if="${listCartLineItem.size()!=0}" class="mt-24">
-        <div class="mt-16">
-            <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Shopping Cart</b></h1>
-        </div>
+</div>
+<div th:if="${listCartLineItem.size()!=0}" class="mt-24">
+    <div class="mt-16">
+        <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Shopping Cart</b></h1>
     </div>
+</div>
+<form th:action="@{/cart/checkout}" method="post">
+    <div th:if="${listCartLineItem.size()!=0}" class="bg-gray-100 h-screen py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-2xl font-semibold mb-4">Shopping Cart</h1>
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="md:w-3/4">
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+                        <table class="w-full">
+                            <thead>
+                            <tr>
+                                <th class="text-left font-semibold">Product</th>
+                                <th class="text-left font-semibold">Price</th>
+                                <th class="text-left font-semibold">Quantity</th>
+                                <th class="text-left font-semibold">Total</th>
+                                <th class="text-left font-semibold">Actions</th>
 
-    <th:block th:each="CartLineItems : ${listCartLineItem}" >
-        <input type="hidden" id="selectProduct[[${CartLineItems.getProductId().id}]]" name="selectProduct" th:value="${CartLineItems.getProductId().id}" />
-        <input type="hidden" id="selectCartLineItem[[${CartLineItems.getProductId().id}]]" name="selectCartLineItem" th:value="${CartLineItems.id}" />
-
-        <!-- component -->
-        <section class="text-gray-700 body-font overflow-hidden bg-white">
-            <div class="border border-gray-270 container px-5 py-24 mx-auto">
-                <h3 class="text-center mt-5 text-lg font-medium text-gray mb-4">Add [[${CartLineItems.getProductId.name}]] Item In Shopping Cart At : [[${CartLineItems.getCreatedAt}]]</h3>
-
-                <div class="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"  th:src="@{${CartLineItems.getProductId().loadImages()}}">
-
-
-                    <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                        <h2 class="text-sm title-font text-gray-500 tracking-widest">[[${CartLineItems.getProductId().ListProductCategories}]]</h2>
-                        <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">[[${CartLineItems.getProductId().name}]]</h1>
-                        <div class="flex mb-4">
-              <span class="flex items-center">
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <span class="text-gray-600 ml-3">4 Reviews</span>
-              </span>
-                            <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-200">
-                <a class="text-gray-500">
-                  <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-                  </svg>
-                </a>
-                <a class="ml-2 text-gray-500">
-                  <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                    <path d="M23 3a10.9 10.9 0 01-3.14
-
-    .53 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-                  </svg>
-                </a>
-                <a class="ml-2 text-gray-500">
-                  <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
-                  </svg>
-                </a>
-              </span>
-                        </div>
-                        <div class="mt-5">
-                            <div class="leading-relaxed"><p class="text-xl">Description :[[${CartLineItems.getProductId.content}]]</p></div>                            <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
-                                <div class="flex mr-4">
-                                    <span class="mr-3">Quantity</span>
-                                    <input type="hidden" id="quantity[[${CartLineItems.getProductId().id}]]" name="quantity" value="${CartLineItems.quantity}">
-                                    <div class="flex items-center border border-gray-300 rounded">
-                                        <button type="button" class="h-6 w-6 flex items-center justify-center rounded-l cursor-pointer" th:onclick="decrementQuantity([[${CartLineItems.getId}]])">-</button>
-                                        <input type="number" class="outline-none text-center w-16 h-6 border-r border-l border-gray-300" th:id="'quantityInput'+${CartLineItems.getId()}" name="quantity" th:value="${CartLineItems.quantity}">
-                                        <button type="button" class="h-6 w-6 flex items-center justify-center rounded-r cursor-pointer" th:onclick="incrementQuantity([[${CartLineItems.getId()}]])">+</button>
-                                    </div>
-                                </div>
-                                <div class="flex">
-                                    <button  type="button" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" th:onclick="paymentCart([[${CartLineItems.id}]])">
-                                        <a >
-                                            <i class="fas fa-shopping-cart fa-1x"></i>
-                                            <span title="Click Here to Payment" class="ml-2">Payment</span>
-                                        </a>
-                                    </button>
-                                    <a  th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                        <i class="fa-solid fa-trash"></i>
-                                        <span title="Click Here to Payment" class="ml-2">Remove</span>
-                                    </a>
-                                    <button   onclick="clearAll()"  class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                        <i class="fa-solid fa-trash"></i>
-                                        <span title="Click Here to Payment" class="ml-2">Clear All</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex">
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                <del style="color: red">
-                                    <div>
-
-                                        <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
-                                        <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discount_price}" />
-                                        <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
-
-                                        <span th:id="'price'+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Price: $[[${CartLineItems.getProductId().price*CartLineItems.Quantity}]]</span>
-                                    </div>
-                                </del>
-                                <div>
-                                    <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Discount Price: $[[${CartLineItems.getProductId().discount_price*CartLineItems.Quantity}]]</span>
-                                </div>
-                                <div>
-                                    <span th:id="'taxPrice'+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">Tax: [[${CartLineItems.getProductId().tax}]]%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 00-7.78-7.78l-1.06 1.06-7.78 7.78a5.5 5.5 0 007.78 7.78l1.06-1.06L12 18.17l-7.78 7.78-1.06 1.06a5.5 5.5 0 007.78 7.78l1.06-1.06L12 15.11l-7.78 7.78-1.06 1.06a5.5 5.5 0 007.78 7.78l1.06-1.06L12 11.06l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                            </svg>
-                        </button>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="CartLineItems : ${listCartLineItem}" >
+                                    <input type="hidden" name="productIds" th:value="${CartLineItems.getProductId().getId()}" />
+                                    <!-- Các cột khác của bảng -->
+                                    <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
+                                    <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discount_price}" />
+                                    <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
+                                    <tr>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <img class="h-16 w-16 mr-4" th:src="${CartLineItems.getProductId().loadImages()}" alt="Product image">
+                                                <span class="font-semibold" >[[${CartLineItems.getProductId().getName()}]]</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <span  class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discount_price}]]</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <button class="border rounded-md py-2 px-4 mr-2" type="button" th:onclick="decrementQuantity([[${CartLineItems.getId}]])">-</button>
+                                                <input class="text-center w-8" th:id="'quantityInput'+${CartLineItems.getId()}" name="quantities" th:value="${CartLineItems.quantity}" oninput="updateHiddenQuantity(${CartLineItems.getId()}, this.value)"></input>
+                                                <input type="hidden" class="text-center w-8" th:id="'quantityInputHidden'+${CartLineItems.getId()}"  th:value="${CartLineItems.quantity}" ></input>
+                                                <button class="border rounded-md py-2 px-4 ml-2" type="button" th:onclick="incrementQuantity([[${CartLineItems.getId()}]])">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discount_price*CartLineItems.Quantity}]]</span>
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            <div class="flex items-center space-x-2">
+                                                <a th:href="@{/cart(productId=${CartLineItems.getProductId().getId()})}" class="text-blue-500"><i class="fas fa-eye"></i></a>
+                                                <a th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="text-red-500"><i class="fas fa-trash-alt"></i></a>
+                                                <a class="text-green-500" th:onclick="paymentCart([[${CartLineItems.id}]])"><i class="fab fa-cc-paypal"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </a>
+                            </th:block>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>z
-        </section>
-    </th:block>
-    </body>
+                <div class="md:w-1/4">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h2 class="text-lg font-semibold mb-4">Summary</h2>
+                        <div class="flex justify-between mb-2">
+                            <span>Subtotal</span>
+                            <input type="hidden" id="subTotalHidden" th:value="${Cart.getTotal_amount() - Cart.getTax_amount()}"></input>
+                            <span id="subTotal" th:text="'$'+${Cart.getTotal_amount() - Cart.getTax_amount()}"></span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>Taxes</span>
+                            <input type="hidden" id="taxTotalHidden" th:value="${Cart.getTax_amount()}"></input>
+                            <span id="taxTotal" th:text="'$'+${Cart.getTax_amount()}"></span>
+                        </div>
+                        <hr class="my-2">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold">Total</span>
+                            <span class="font-semibold" id="totalAmount" th:text="'$'+${Cart.getTotal_amount()}"></span>
+                        </div>
+                        <button class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full" type="submit">Checkout</button>
+                        <button class="bg-red-500 text-white py-2 px-4 rounded-lg mt-4 w-full" onclick="clearAll()">Clear All</button>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
+</body>
 
-
-    </html>
+</html>
