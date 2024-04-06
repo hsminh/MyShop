@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Date;
 
 @Controller
-public class ProductController {
+public class    ProductController {
 
     @Autowired
     private ProductService productSerVice;
