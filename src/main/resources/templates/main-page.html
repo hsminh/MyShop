@@ -1,241 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragmen::header">
-    <
-    <script th:src="@{/script/Dropdown.js}" type="text/javascript"></script>
+
+<head>
+    <div th:replace="fragmen::header"></div>
+
+    <link rel="stylesheet" href="css/slide.css">
+    <link rel="stylesheet" href="css/button.css">
+    <script th:src="@{/script/fragment/navigation.js}" type="text/javascript"></script>
+    <script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
+
 </head>
-<script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
-<body>
-<link th:href="@{css/button.css}" rel="stylesheet">
-<div th:replace="fragmen ::header"></div>
-<div th:replace="fragmen ::Navbar"></div>
 
-<button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-    <span class="sr-only">Open sidebar</span>
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-    </svg>
-</button>
 
-<aside id="sidebar-multi-level-sidebar" class="border border-gray-400 fixed top-16 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
-        <ul class="space-y-2 font-medium">
-            <li class="">
-                <a th:href="@{main-page}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                        <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                    </svg>
-                    <span class="ms-3 text-lg font-bold text-center">Category</span>
-                </a>
-            </li>
+<input type="hidden" id="categoryId" th:value="${category}" />
+<body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
+<div th:replace="fragmen::#navbar"></div>
+<div th:replace="slide"></div>
 
-            <th:block th:each="ProductCategory, rowStat : ${listCategory}">
-                <li class="mt-2 border border-gray-300 rounded-md hover:bg-gray-100 transition duration-300">
-                    <a th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" th:classappend="${ProductCategory.name == isChoiceCategory ? 'bg-blue-700' : ''}">
-                        <!-- Sử dụng thẻ <svg> để chứa biểu tượng từ Font Awesome -->
-                        <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                            <path d="M15.8 4.5c-.1-.1-.2-.1-.3 0L12 7.2 8.3 3.4c-.1-.1-.2-.1-.3 0l-7 7c-.1.1-.1.2 0 .3l3 3c.1.1.2.1.3 0l3.7-3.7 3.7 3.7c.1.1.2.1.3 0l7-7c.1-.1.1-.2 0-.3l-3-3z" fill="currentColor"/>
-                        </svg>
-                        <span class="flex-1 ms-3 whitespace-nowrap" th:text="${ProductCategory.name}"></span>
-                    </a>
-                </li>
-            </th:block>
-        </ul>
+
+<div class="mb-8 mt-10 max-w-md mx-auto">
+    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+        </div>
+        <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search By Name Or SKU....." required onchange="saveSearchValue(this.value)" />
+        <button id="searchButton" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
-</aside>
-<div th:if="${listProduct.size()!=0}">
-    <div class="mt-10 p-4 sm:ml-64">
-        <div class="mb-8 mt-10 max-w-md mx-auto">
-            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
+</div>
+
+<div th:if="${listCategory != null and listCategory.size() != 0}" class="flex flex-col justify-center items-center my-8">
+    <a style="display: inline-block;" class="font-bold text-4xl">List Category</a>
+    <nav class="flex justify-center space-x-4">
+        <div class="category-wrapper flex flex-wrap justify-center">
+            <a th:each="ProductCategory, rowStat : ${listCategory}"
+               th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
+               class="category-item-container inline-block m-2 hover:shadow-lg transform transition-all duration-300"
+               th:classappend="${ProductCategory.name == isChoiceCategory ? 'bg-yellow-700' : ''}">
+                <div class="category-item p-4 border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white">
+                    <span th:text="${ProductCategory.name}"></span>
                 </div>
-                <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search By Name Or SKU....." required onchange="saveSearchValue(this.value)" />
-                <button id="searchButton" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
-            </div>
+            </a>
         </div>
-        <input type="hidden" id="categoryId" th:value="${category}" />
-        <div th:if="${messageErr}" class="text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong class="font-bold">Error!</strong>
-            <span class="block sm:inline" th:text="${messageErr}"></span>
-        </div>
-        <div th:if="${messageSuccessfully}" class="mt-4 text-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert" id="successMessage">
-            <strong class="font-bold">Congratulations!</strong>
-            <span class="block sm:inline" th:text="${messageSuccessfully}"></span>
-        </div>
-
-        <div class="p-4 border-7 border-gray-200 border-dashed rounded-lg dark:border-gray-700 ">
-
-            <div class="border-2 bg-white mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 relative">
-                <h2 class="sr-only">Products</h2>
+    </nav>
+</div>
 
 
-                <div th:if="${category==null&&search==null&&productsOrderedMost.size()!=0}">
-                    <div class="border border-gray-500 border-solid rounded-lg shadow-lg">
-                        <h1 class="mt-7 text-center text-4xl font-bold text-purple-600 mb-6" style="font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">Hot Product Trending</h1>
-                        <div class="mt-6 mb-10 flex justify-center space-x-8" id="product-list-container">
-                            <button class="hidden bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
-                            <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105">
-                                <a th:href="@{cart (productId=${product.getProduct().id})}">
-                                    <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
-                                    <div class="px-5 pb-5">
-                                        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
-                                        <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
-                                            <p><b>Description :</b> [[${product.getProduct().content}]]</p>
-                                        </div>
-                                        <b>Price :</b>
-                                        <del class="text-red-500">[[${product.getProduct().price}]]</del>
-                                        <span>[[${product.getProduct().discount_price}]]</span>
-                                        <div>
-                                            <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                                <i class="fas fa-shopping-cart fa-1x"></i>
-                                                <span class="ml-2">Add to Cart</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </a>
+
+
+<div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}" style="text-align: center;" class="mt-14 flex justify-center items-center">
+    <a style="display: inline-block;" class="font-bold text-4xl">Top Product Trending</a>
+</div>
+<section class="bg-white py-8">
+    <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+        <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
+        <div class="pagination-buttons flex justify-between items-center">
+            <button class="bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+            <div class="grid grid-cols-5 gap-4 p-4">
+                <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
+                    <a th:href="@{cart (productId=${product.getProduct().id})}">
+                        <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
+                        <div class="px-5 pb-5">
+                            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
+                            <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
+                                <p><b>Description :</b> [[${product.getProduct().content}]]</p>
                             </div>
-                            <button class="hidden" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                            <b>Price :</b>
+                            <del class="text-red-500">[[${product.getProduct().price}]]</del>
+                            <span>[[${product.getProduct().discount_price}]]</span>
+                            <div>
+                                <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                    <i class="fas fa-shopping-cart fa-1x"></i>
+                                    <span class="ml-2">Add to Cart</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+            </div>
+            <button class="bg-zinc-50 p-1" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+        </div>
+        </div>
 
-                <h1 th:if="${isChoiceCategory}" class="mt-7 text-center text-4xl font-bold text-black-600 mb-6 shadow-lg">[[${isChoiceCategory}]]</h1>
-                <h1 th:if="${isChoiceCategory==null}" class="mt-7 text-center text-4xl font-bold text-black-600 mb-6 shadow-lg">All Products</h1>
-
-
-                <div class="border border-gray-500 border-solid rounded-lg shadow-lg  mt-12 grid grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2">
-                    <th:block th:each="Product : ${listProduct}">
-                        <a th:href="@{cart (productId=${Product.id})}">
-                            <div class="w-full px-4">
-                                <div class="mt-5 p-3 bg-white rounded shadow-md border border-gray-100 transform transition duration-300 hover:scale-110">
-                                    <div class="relative w-full mb-3 h-96">
-                                        <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-cover w-full h-full rounded">
+        <div th:if="${isChoiceCategory!=null}" style="text-align: center;" class="flex justify-center items-center">
+            <a style="display: inline-block;" class="font-bold text-4xl">[[${isChoiceCategory}]]</a>
+        </div>
+        <div th:if="${isChoiceCategory==null}" style="text-align: center;" class="flex justify-center items-center">
+            <a style="display: inline-block;" class="font-bold text-4xl">All Products</a>
+        </div>
+        <th:block th:with="columnsPerRow=${4}">
+            <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
+                <th:block th:each="Product : ${listProduct}">
+                    <a th:href="@{cart (productId=${Product.id})}">
+                        <div class="p-3 bg-white rounded shadow-md border border-gray-200 transform transition duration-300 hover:scale-105">
+                            <div class="relative w-full mb-2 sm:mb-3 h-64 sm:h-72">
+                                <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-cover w-full h-full rounded">
+                            </div>
+                            <div class="bg-gray-100">
+                                <div class="p-2 sm:p-3">
+                                    <h2 class="text-base sm:text-lg cursor-pointer hover:text-gray-900 product-name">
+                                        <b>Name :</b> [[${Product.name}]]
+                                    </h2>
+                                    <h2 class="mt-1 text-sm sm:text-base cursor-pointer hover:text-gray-900 product-name">
+                                        <b>Description :</b> [[${Product.content}]]
+                                    </h2>
+                                    <h2 class="mt-1 text-sm sm:text-base cursor-pointer hover:text-gray-900 product-name">
+                                        <b>SKU :</b> [[${Product.sku}]]
+                                    </h2>
+                                    <div class="mt-1 text-base font-semibold">
+                                        <b>Price :</b>
+                                        <del class="text-red-500">[[${Product.price}]]</del>
+                                        <span>[[${Product.discount_price}]]</span>
                                     </div>
-                                    <div class="bg-gray-200">
-                                        <div class="flex-auto p-2 justify-evenly">
-                                            <div class="flex flex-wrap">
-                                                <div class="flex items-center justify-between w-full min-w-0">
-                                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                                        <b>Name :</b> [[${Product.name}]]
-                                                    </h2>
-                                                </div>
-                                                <div class="flex items-center justify-between w-full min-w-0">
-                                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                                        <b>Description :</b> [[${Product.content}]]
-                                                    </h2>
-                                                </div>
-                                                <div class="flex items-center justify-between w-full min-w-0">
-                                                    <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 product-name">
-                                                        <p class="product-content"><b>SKU :</b> [[${Product.sku}]]</p>
-                                                    </h2>
-                                                </div>
-                                            </div>
-                                            <div class="mt-1 text-xl font-semibold">
-                                                <b>Price :</b>
-                                                <del class="text-red-500">[[${Product.price}]]</del>
-                                                <span>[[${Product.discount_price}]]</span>
-                                            </div>
-                                            <form th:action="@{/cart}" method="get">
-                                                <input type="hidden" name="productId" th:value="${Product.id}" />
-                                                <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                                    <i class="fas fa-shopping-cart fa-1x"></i>
-                                                    <span class="ml-2">Add to Cart</span>
-                                                </button>
-
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <form th:action="@{/cart}" method="get">
+                                        <input type="hidden" name="productId" th:value="${Product.id}" />
+                                        <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs sm:text-sm px-4 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                            <i class="fas fa-shopping-cart fa-1x"></i>
+                                            <span class="ml-1">Add to Cart</span>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                        </a>
-                    </th:block>
-                </div>
+                        </div>
+                    </a>
+                </th:block>
             </div>
-        </div>
+        </th:block>
+
+
+
     </div>
 
-    <div th:if="${listProduct==0}">
-        <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Product is Empty</h3>
+</section>
+
+
+<section class="bg-white py-8">
+    <div class="container py-8 px-6 mx-auto">
+        <h2 class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8">Thank You for Visiting</h2>
+
+        <p class="mt-8 mb-8">
+            We extend our heartfelt thanks to you for taking the time to visit our store. SDN is committed to providing the finest quality technology products along with attentive and professional customer service.
+        </p>
+
+        <p class="mb-8">
+            Here at SDN, we specialize in offering a wide range of cutting-edge technological products to meet your needs. Our goal is to enhance your digital experience and make technology more accessible to everyone.
+        </p>
     </div>
+</section>
 
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-<script>
-    var searchButton = document.getElementById('searchButton');
-    var categoryId = document.getElementById('categoryId').value;
-    searchButton.addEventListener('click', function() {
-        var keyword = document.getElementById("default-search").value;
-        window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
-    });
-    function saveSearchValue(value) {
-        localStorage.setItem('previousSearch', value);
-    }
+<footer th:replace="fragmen::footer"></footer>
 
-    function restoreSearchValue() {
-        var previousSearch = localStorage.getItem('previousSearch');
-        if (previousSearch) {
-            document.getElementById('default-search').value = previousSearch;
-        }
-    }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        restoreSearchValue();
-
-        var successMessage = document.getElementById("successMessage");
-        if (successMessage) {
-            setTimeout(function() {
-                successMessage.style.display = "none";
-            }, 3000);
-        }
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        var currentPage = 1;
-        var productsPerPage = 5;
-        var totalProducts = document.getElementsByClassName('product-item').length;
-        var totalPages = Math.ceil(totalProducts / productsPerPage);
-        var previousBtn = document.getElementById('previous-btn');
-        var nextBtn = document.getElementById('next-btn');
-
-        previousBtn.addEventListener('click', function() {
-            if (currentPage > 1) {
-                currentPage--;
-                showProducts();
-            }
-        });
-
-        nextBtn.addEventListener('click', function() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                showProducts();
-            }
-        });
-
-        function showProducts() {
-            var products = document.getElementsByClassName('product-item');
-            var start = (currentPage - 1) * productsPerPage;
-            var end = Math.min(start + productsPerPage, totalProducts);
-
-            for (var i = 0; i < products.length; i++) {
-                if (i >= start && i < end) {
-                    products[i].style.display = 'block';
-                } else {
-                    products[i].style.display = 'none';
-                }
-            }
-        }
-
-        showProducts();
-    });
-
-</script>
 </body>
+
 </html>

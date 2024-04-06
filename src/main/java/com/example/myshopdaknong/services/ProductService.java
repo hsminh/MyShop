@@ -18,7 +18,7 @@ import java.util.*;
 
 @Service
 public class ProductService {
-    private static final Integer INT_PAGE_SIZE=10;
+    private static final Integer INT_PAGE_SIZE=8;
     @Autowired
     private ProductRepository producsRepository;
     @Autowired
