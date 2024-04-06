@@ -35,7 +35,7 @@ public class OrderRestController {
     }
 
     @GetMapping("/order/buy-direct")
-    public String buyDirect(
+    public String buyProductDirectly(
             @AuthenticationPrincipal ShopMeUserDetail customer,
             @RequestParam(value = "productId" ,required = false) Integer productId,
             @RequestParam(value = "quantity", required = false) Integer quantity) {

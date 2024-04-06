@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartRestController {
     @Autowired
     private CartService cartService;
-    @GetMapping("cart/checkout-all")
-    public String updateCart() {
-        return "ok";
-    }
     @GetMapping("/cart/update-cart")
     public String updateCart(
             Model model,

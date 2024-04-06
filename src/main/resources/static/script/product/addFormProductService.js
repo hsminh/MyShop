@@ -23,14 +23,10 @@
             if (event.target.files.length > 0) {
                 var src = URL.createObjectURL(event.target.files[0]);
                 var thumbnail = document.getElementById("thumbnail");
-                var thumbnail2 = document.getElementById("thumbnail2");
-                var imageFileHidden=document.getElementById("imageFileHidden");
-                imageFileHidden.value="";
                 thumbnail.src = src;
                 thumbnail.style.display = "block";
                 if ($(thumbnail).hasClass('hidden')) {
                     $(thumbnail).removeClass('hidden');
-                    $(thumbnail2).addClass('hidden');
                 }
             }
         });

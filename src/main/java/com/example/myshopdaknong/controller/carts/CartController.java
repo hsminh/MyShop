@@ -40,7 +40,7 @@ public class CartController {
 
 
     @GetMapping("/cart/remove")
-    public String removeCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer,
+    public String removeCartItem(@AuthenticationPrincipal ShopMeUserDetail customer,
                                      @RequestParam("cartLineItemId") Integer cartLineItemId,
                                      RedirectAttributes redirectAttributes) {
         try {
@@ -77,7 +77,7 @@ public class CartController {
         try {
             User user = this.cartService.findUserById(customer.getUserId());
             this.cartService.checkOutAll(user,productIds,quantities);
-            redirectAttributes.addFlashAttribute("messageSuccessfully","Congratulation! You're Buy Successfully");
+            redirectAttributes.addFlashAttribute("Message","Congratulation! You're Buy Successfully");
             return "redirect:/main-page";
         } catch (ProductException ex) {
             return "redirect:/main-page";

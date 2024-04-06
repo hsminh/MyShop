@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/button.css">
     <script th:src="@{/script/fragment/navigation.js}" type="text/javascript"></script>
     <script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
-
+    <script th:src="@{/script/common/setTimeOut.js}" type="text/javascript"></script>
 </head>
 
 
@@ -16,7 +16,7 @@
 <body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
 <div th:replace="fragmen::#navbar"></div>
 <div th:replace="slide"></div>
-
+<div th:replace="notification::announcement"></div>
 
 <div class="mb-8 mt-10 max-w-md mx-auto">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>

@@ -35,42 +35,55 @@
 
                 <h1 class="mb-8 text-3xl text-center">[[${titleForm}]]</h1>
 
-                <div th:if="${isNewUser}">
-                    <input type="text"
-                           class="block border border-grey-light w-full p-3 rounded mb-1"
-                           th:classappend="${#fields.hasErrors('userName')} ? 'border-red-500' : ''"
-                           name="username"
-                           id="username"
-                           placeholder="Username"
-                           th:field="*{userName}" />
-                    <div th:if="${#fields.hasErrors('userName')}" class="text-red-500 italic mt-1 text-sm">
-                        <span th:errors="*{userName}"></span>
-                    </div>
-                </div>
+               <div class="flex flex-col gap-y-3">
+                   <div th:if="${isNewUser}">
+                       <input type="text"
+                              class="block border border-grey-light w-full p-3 rounded mb-1"
+                              th:classappend="${#fields.hasErrors('userName')} ? 'border-red-500' : ''"
+                              name="username"
+                              id="username"
+                              placeholder="Username"
+                              th:field="*{userName}" />
+                       <div th:if="${#fields.hasErrors('userName')}" class="text-red-500 italic mt-1 text-sm">
+                           <span th:errors="*{userName}"></span>
+                       </div>
+                   </div>
 
 
-                <div th:if="${!isNewUser}">
-                    <input
-                            type="text"
-                            class="block border border-grey-light w-full p-3 rounded mb-4"
-                            name="username"
-                            th:field="*{userName}"
-                            readonly
-                    />
-                </div>
+                   <div th:if="${!isNewUser}">
+                       <input
+                               type="text"
+                               class="block border border-grey-light w-full p-3 rounded mb-4"
+                               name="username"
+                               th:field="*{userName}"
+                               readonly
+                       />
+                   </div>
 
-                <div th:if="${isNewUser}">
-                    <input type="password"
-                           class="block border border-grey-light w-full p-3 rounded mb-1"
-                           th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : ''"
-                           name="password"
-                           id="password"
-                           placeholder="password"
-                           th:field="*{password}" />
-                    <div th:if="${#fields.hasErrors('password')}" class="text-red-500 italic mt-1 text-sm">
-                        <span th:errors="*{password}"></span>
-                    </div>
-                </div>
+                   <div th:if="${isNewUser}">
+                       <input type="password"
+                              class="block border border-grey-light w-full p-3 rounded mb-1"
+                              th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : ''"
+                              name="password"
+                              id="password"
+                              placeholder="password"
+                              th:field="*{password}" />
+                       <div th:if="${#fields.hasErrors('password')}" class="text-red-500 italic mt-1 text-sm">
+                           <span th:errors="*{password}"></span>
+                       </div>
+                   </div>
+
+
+                   <div th:if="${isNewUser}">
+                       <input
+                               type="password"
+                               class="block border border-grey-light w-full p-3 rounded mb-4"
+                               placeholder="Repassword"
+                               id="repassword"
+                       />
+                   </div>
+
+               </div>
 
 
                 <div th:if="${!isNewUser}">
@@ -89,40 +102,33 @@
 
                 <input type="hidden" id="id" th:field="*{id}"/>
 
-                <div th:if="${isNewUser}">
-                    <input
-                            type="password"
-                            class="block border border-grey-light w-full p-3 rounded mb-4"
-                            placeholder="Repassword"
-                            id="repassword"
-                    />
-                </div>
-
-                <input type="text"
-                       class="block border border-grey-light w-full p-3 rounded mb-1"
-                       th:classappend="${#fields.hasErrors('firstName')} ? 'border-red-500' : ''"
-                       name="firstName"
-                       id="firstName"
-                       placeholder="FirstName"
-                       th:field="*{firstName}" />
-                <div th:if="${#fields.hasErrors('firstName')}" class="text-red-500 italic mt-1 text-sm">
-                    <span th:errors="*{firstName}"></span>
-                </div>
+                <div class="flex flex-col gap-y-3 pt-8">
+                    <input type="text"
+                           class="block border border-grey-light w-full p-3 rounded mb-1"
+                           th:classappend="${#fields.hasErrors('firstName')} ? 'border-red-500' : ''"
+                           name="firstName"
+                           id="firstName"
+                           placeholder="FirstName"
+                           th:field="*{firstName}" />
+                    <div th:if="${#fields.hasErrors('firstName')}" class="text-red-500 italic mt-1 text-sm">
+                        <span th:errors="*{firstName}"></span>
+                    </div>
 
 
-                <input type="text"
-                       class="block border border-grey-light w-full p-3 rounded mb-1"
-                       th:classappend="${#fields.hasErrors('lastName')} ? 'border-red-500' : ''"
-                       name="lastName"
-                       id="lastName"
-                       placeholder="lastName"
-                       th:field="*{lastName}" />
-                <div th:if="${#fields.hasErrors('lastName')}" class="text-red-500 italic mt-1 text-sm">
-                    <span th:errors="*{lastName}"></span>
+                    <input type="text"
+                           class="block border border-grey-light w-full p-3 rounded mb-1"
+                           th:classappend="${#fields.hasErrors('lastName')} ? 'border-red-500' : ''"
+                           name="lastName"
+                           id="lastName"
+                           placeholder="lastName"
+                           th:field="*{lastName}" />
+                    <div th:if="${#fields.hasErrors('lastName')}" class="text-red-500 italic mt-1 text-sm">
+                        <span th:errors="*{lastName}"></span>
+                    </div>
                 </div>
 
 
-                <div class="flex items-center mb-4">
+                <div class="flex items-center mb-4 mt-2">
                     <input
                             type="checkbox"
                             class="appearance-none border border-grey-light rounded-full w-6 h-6 checked:bg-green-500 checked:border-transparent"

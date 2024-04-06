@@ -6,6 +6,7 @@ import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.services.ProductService;
 import com.example.myshopdaknong.util.FileUploadUltil;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,8 +130,5 @@ public class ProductController {
 
         return "redirect:/products";
     }
-
-
-
 
 }

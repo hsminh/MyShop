@@ -35,7 +35,7 @@
 
         @GetMapping("/order/success")
         public String orderSuccess(RedirectAttributes redirectAttributes) {
-            redirectAttributes.addFlashAttribute("messageSuccessfully", "Congratulations on your successful purchase");
+            redirectAttributes.addFlashAttribute("Message", "Congratulations on your successful purchase");
             return "redirect:/main-page";
         }
         @GetMapping("/order/detail")

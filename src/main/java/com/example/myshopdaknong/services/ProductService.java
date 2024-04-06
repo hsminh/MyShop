@@ -6,10 +6,10 @@ import com.example.myshopdaknong.exception.ProductException;
 import com.example.myshopdaknong.repository.*;
 import com.example.myshopdaknong.util.FileUploadUltil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +56,7 @@ public class ProductService {
             return null;
         }
     }
+
     public List<ProductCategory>findAllCategory()
     {
         return this.productCategoryRepository.findAll(true);

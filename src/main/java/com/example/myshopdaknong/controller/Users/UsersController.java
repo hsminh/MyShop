@@ -73,7 +73,7 @@ public class UsersController {
             return "users/update-information-user";
         }
         this.userService.updateProfile(userProfile,userDetails);
-        redirectAttributes.addFlashAttribute("messageSuccessfully","update Profile Successfully");
+        redirectAttributes.addFlashAttribute("Message","update Profile Successfully");
         return "redirect:/main-page";
     }
 
@@ -145,7 +145,7 @@ public class UsersController {
             user.setPassword(passwordEncoder.encode(newPassword));
             this.tokenService.deleteToken(user);
             this.userService.save(user);
-            redirectAttributes.addFlashAttribute("message","Change Password Successfully");
+            redirectAttributes.addFlashAttribute("Message","Change Password Successfully");
             return "login-form";
         }
         return "redirect:/users/forgot";
@@ -154,7 +154,7 @@ public class UsersController {
 
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws UserNotFoundException {
         if (bindingResult.hasErrors()) {
             if (users.getId() != null) {
                 this.userService.prepareFormModel(model, "Edit User", false);
@@ -166,8 +166,11 @@ public class UsersController {
         User userToSave;
         if (users.getId() != null && users.getId() != 0) {
             userToSave = this.userService.updateUser(editPassword, users);
+            redirectAttributes.addFlashAttribute("Message","Update Information Successfully");
+
         } else {
             userToSave = this.userService.createNewUser(users);
+            redirectAttributes.addFlashAttribute("Message","Register Account Successfully");
         }
         this.userService.save(userToSave);
         return "redirect:/login-form";
