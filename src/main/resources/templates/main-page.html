@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-    <div th:replace="fragmen::header"></div>
+    <div th:replace="component/fragmen::header"></div>
 
     <link rel="stylesheet" href="css/slide.css">
     <link rel="stylesheet" href="css/button.css">
-    <script th:src="@{/script/fragment/navigation.js}" type="text/javascript"></script>
-    <script th:src="@{/script/mainpage/mainPage.js}" type="text/javascript"></script>
-    <script th:src="@{/script/common/setTimeOut.js}" type="text/javascript"></script>
+    <script th:src="@{javascripts/main-page.js}" type="text/javascript"></script>
+    <script th:src="@{javascripts/fragment/navigation.js}" type="text/javascript"></script>
+    <script th:src="@{javascripts/common/set-time-out.js}" type="text/javascript"></script>
 </head>
 
 
 <input type="hidden" id="categoryId" th:value="${category}" />
 <body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
-<div th:replace="fragmen::#navbar"></div>
-<div th:replace="slide"></div>
-<div th:replace="notification::announcement"></div>
+<div th:replace="component/fragmen::#navbar"></div>
+<div th:replace="component/slide::slide"></div>
+<div th:replace="component/notification::announcement"></div>
 
 <div class="mb-8 mt-10 max-w-md mx-auto">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -69,7 +69,7 @@
                             </div>
                             <b>Price :</b>
                             <del class="text-red-500">[[${product.getProduct().price}]]</del>
-                            <span>[[${product.getProduct().discount_price}]]</span>
+                            <span>[[${product.getProduct().discountPrice}]]</span>
                             <div>
                                 <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
                             </div>
@@ -115,7 +115,7 @@
                                     <div class="mt-1 text-base font-semibold">
                                         <b>Price :</b>
                                         <del class="text-red-500">[[${Product.price}]]</del>
-                                        <span>[[${Product.discount_price}]]</span>
+                                        <span>[[${Product.discountPrice}]]</span>
                                     </div>
                                     <form th:action="@{/cart}" method="get">
                                         <input type="hidden" name="productId" th:value="${Product.id}" />
@@ -153,9 +153,69 @@
     </div>
 </section>
 
-<footer th:replace="fragmen::footer"></footer>
+<footer th:replace="component/fragmen::footer"></footer>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var searchButton = document.getElementById('searchButton');
+        var categoryId = document.getElementById('categoryId').value;
+        searchButton.addEventListener('click', function() {
+            var keyword = document.getElementById("default-search").value;
+            window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
+        });
 
+        function saveSearchValue(value) {
+            localStorage.setItem('previousSearch', value);
+        }
+
+        function restoreSearchValue() {
+            var previousSearch = localStorage.getItem('previousSearch');
+            if (previousSearch) {
+                document.getElementById('default-search').value = previousSearch;
+            }
+        }
+
+        var previousBtn = document.getElementById('previous-btn');
+        var nextBtn = document.getElementById('next-btn');
+        if (previousBtn && nextBtn) {
+            var currentPage = 1;
+            var productsPerPage = 5;
+            var totalProducts = document.getElementsByClassName('product-item').length;
+            var totalPages = Math.ceil(totalProducts / productsPerPage);
+
+            previousBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showProducts();
+                }
+            });
+
+            nextBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showProducts();
+                }
+            });
+
+            function showProducts() {
+                var products = document.getElementsByClassName('product-item');
+                var start = (currentPage - 1) * productsPerPage;
+                var end = Math.min(start + productsPerPage, totalProducts);
+
+                for (var i = 0; i < products.length; i++) {
+                    if (i >= start && i < end) {
+                        products[i].style.display = 'block';
+                    } else {
+                        products[i].style.display = 'none';
+                    }
+                }
+            }
+            showProducts();
+            previousBtn.style.display = "inline-block";
+            nextBtn.style.display = "inline-block";
+        }
+    });
+</script>
 </body>
 
 </html>

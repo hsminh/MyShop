@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
-    <div th:replace="fragmen ::header"></div>
+    <div th:replace="component/fragmen ::header"></div>
 </head>
-<script th:src="@{/script/cart/shoppingCartService.js}" type="text/javascript"></script>
+<script th:src="@{/javascripts/cart/shopping-cart.js}" type="text/javascript"></script>
 <body>
-<div th:replace="fragmen ::Navbar"></div>
-
-
+<div th:replace="component/fragmen ::Navbar"></div>
 <div th:if="${listCartLineItem.size()==0}" class="mt-20">
     <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Cart is Empty Click Here to Come to Shop <b><a th:href="@{/main-page}">Click Here</a></b></h3>
     <div class="flex justify-center items-center">
@@ -39,40 +37,40 @@
                             </thead>
                             <tbody>
                             <th:block th:each="CartLineItems : ${listCartLineItem}" >
-                                    <input type="hidden" name="productIds" th:value="${CartLineItems.getProductId().getId()}" />
-                                    <!-- Các cột khác của bảng -->
-                                    <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
-                                    <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discount_price}" />
-                                    <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
-                                    <tr>
-                                        <td class="py-4">
-                                            <div class="flex items-center">
-                                                <img class="h-16 w-16 mr-4" th:src="${CartLineItems.getProductId().loadImages()}" alt="Product image">
-                                                <span class="font-semibold" >[[${CartLineItems.getProductId().getName()}]]</span>
-                                            </div>
-                                        </td>
-                                        <td class="py-4">
-                                            <span  class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discount_price}]]</span>
-                                        </td>
-                                        <td class="py-4">
-                                            <div class="flex items-center">
-                                                <button class="border rounded-md py-2 px-4 mr-2" type="button" th:onclick="decrementQuantity([[${CartLineItems.getId}]])">-</button>
-                                                <input class="text-center w-8" th:id="'quantityInput'+${CartLineItems.getId()}" name="quantities" th:value="${CartLineItems.quantity}" oninput="updateHiddenQuantity(${CartLineItems.getId()}, this.value)"></input>
-                                                <input type="hidden" class="text-center w-8" th:id="'quantityInputHidden'+${CartLineItems.getId()}"  th:value="${CartLineItems.quantity}" ></input>
-                                                <button class="border rounded-md py-2 px-4 ml-2" type="button" th:onclick="incrementQuantity([[${CartLineItems.getId()}]])">+</button>
-                                            </div>
-                                        </td>
-                                        <td class="py-4">
-                                            <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discount_price*CartLineItems.Quantity}]]</span>
-                                        </td>
-                                        <td class="px-4 py-2">
-                                            <div class="flex items-center space-x-2">
-                                                <a th:href="@{/cart(productId=${CartLineItems.getProductId().getId()})}" class="text-blue-500"><i class="fas fa-eye"></i></a>
-                                                <a th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="text-red-500"><i class="fas fa-trash-alt"></i></a>
-                                                <a class="text-green-500" th:onclick="paymentCart([[${CartLineItems.id}]])"><i class="fab fa-cc-paypal"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <input type="hidden" name="productIds" th:value="${CartLineItems.getProductId().getId()}" />
+                                <!-- Các cột khác của bảng -->
+                                <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
+                                <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discountPrice}" />
+                                <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
+                                <tr>
+                                    <td class="py-4">
+                                        <div class="flex items-center">
+                                            <img class="h-16 w-16 mr-4" th:src="${CartLineItems.getProductId().loadImages()}" alt="Product image">
+                                            <span class="font-semibold" >[[${CartLineItems.getProductId().getName()}]]</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <span  class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discountPrice}]]</span>
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="flex items-center">
+                                            <button class="border rounded-md py-2 px-4 mr-2" type="button" th:onclick="decrementQuantity([[${CartLineItems.getId}]])">-</button>
+                                            <input class="text-center w-8" th:id="'quantityInput'+${CartLineItems.getId()}" name="quantities" th:value="${CartLineItems.quantity}" oninput="updateHiddenQuantity(${CartLineItems.getId()}, this.value)"></input>
+                                            <input type="hidden" class="text-center w-8" th:id="'quantityInputHidden'+${CartLineItems.getId()}"  th:value="${CartLineItems.quantity}" ></input>
+                                            <button class="border rounded-md py-2 px-4 ml-2" type="button" th:onclick="incrementQuantity([[${CartLineItems.getId()}]])">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <span th:id="discountPrice+${CartLineItems.getId()}" class="block text-lg font-medium text-gray-900">$[[${CartLineItems.getProductId().discountPrice*CartLineItems.Quantity}]]</span>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <div class="flex items-center space-x-2">
+                                            <a th:href="@{/cart(productId=${CartLineItems.getProductId().getId()})}" class="text-blue-500"><i class="fas fa-eye"></i></a>
+                                            <a th:href="@{/cart/remove(cartLineItemId=${CartLineItems.id})}" class="text-red-500"><i class="fas fa-trash-alt"></i></a>
+                                            <a class="text-green-500" th:onclick="paymentCart([[${CartLineItems.id}]])"><i class="fab fa-cc-paypal"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
                                 </a>
                             </th:block>
                             </tbody>
@@ -84,18 +82,18 @@
                         <h2 class="text-lg font-semibold mb-4">Summary</h2>
                         <div class="flex justify-between mb-2">
                             <span>Subtotal</span>
-                            <input type="hidden" id="subTotalHidden" th:value="${Cart.getTotal_amount() - Cart.getTax_amount()}"></input>
-                            <span id="subTotal" th:text="'$'+${Cart.getTotal_amount() - Cart.getTax_amount()}"></span>
+                            <input type="hidden" id="subTotalHidden" th:value="${Cart.getTotalAmount() - Cart.getTaxAmount()}"></input>
+                            <span id="subTotal" th:text="'$'+${Cart.getTotalAmount() - Cart.getTaxAmount()}"></span>
                         </div>
                         <div class="flex justify-between mb-2">
                             <span>Taxes</span>
-                            <input type="hidden" id="taxTotalHidden" th:value="${Cart.getTax_amount()}"></input>
-                            <span id="taxTotal" th:text="'$'+${Cart.getTax_amount()}"></span>
+                            <input type="hidden" id="taxTotalHidden" th:value="${Cart.getTaxAmount()}"></input>
+                            <span id="taxTotal" th:text="'$'+${Cart.getTaxAmount()}"></span>
                         </div>
                         <hr class="my-2">
                         <div class="flex justify-between mb-2">
                             <span class="font-semibold">Total</span>
-                            <span class="font-semibold" id="totalAmount" th:text="'$'+${Cart.getTotal_amount()}"></span>
+                            <span class="font-semibold" id="totalAmount" th:text="'$'+${Cart.getTotalAmount()}"></span>
                         </div>
                         <button class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full" type="submit">Checkout</button>
                         <button class="bg-red-500 text-white py-2 px-4 rounded-lg mt-4 w-full" onclick="clearAll()">Clear All</button>
@@ -106,7 +104,6 @@
         </div>
     </div>
 </form>
-
 </body>
 
 </html>

@@ -1,0 +1,51 @@
+package com.example.sm.minh.eshop.controllers.Order;
+
+import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.exceptions.CardLineItemException;
+import com.example.sm.minh.eshop.exceptions.ProductException;
+import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
+import com.example.sm.minh.eshop.services.CartService;
+import com.example.sm.minh.eshop.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class OrderRestController {
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private CartService cartService;
+
+    @GetMapping("/order")
+    public String saveOrder(
+            @AuthenticationPrincipal ShopMeUserDetail customer,
+            @RequestParam(value = "cartLineItemId",required = false) Integer cartLineItemId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) {
+        try {
+            User customerUser = this.cartService.findUserById(customer.getUserId());
+            String notification = this.orderService.saveOrder(cartLineItemId, quantity, customerUser);
+            return notification;
+        } catch (ProductException | CardLineItemException ex) {
+            return "Error saving order: " + ex.getMessage();
+        }
+    }
+
+    @GetMapping("/order/buy-direct")
+    public String buyProductDirectly(
+            @AuthenticationPrincipal ShopMeUserDetail customer,
+            @RequestParam(value = "productId" ,required = false) Integer productId,
+            @RequestParam(value = "quantity", required = false) Integer quantity) {
+        try {
+
+            User customerUser = this.cartService.findUserById(customer.getUserId());
+            String notification = this.orderService.saveOrderDirect(productId, quantity, customerUser);
+            return notification;
+        } catch (ProductException | CardLineItemException ex) {
+            return "Error saving order: " + ex.getMessage();
+        }
+    }
+}

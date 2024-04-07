@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
-    <div th:replace="fragmen ::header"></div>
+    <div th:replace="component/fragmen ::header"></div>
 </head>
-<script th:src="@{/script/cart/shoppingCartService.js}" type="text/javascript"></script>
+<script th:src="@{/javascripts/cart/shoppingCartService.js}" type="text/javascript"></script>
 <body>
-<div th:replace="fragmen ::Navbar"></div>
+<div th:replace="component/fragmen ::Navbar"></div>
 
 
 <div th:if="${listOrderLineItem.size()==0}" class="mt-20">
@@ -23,7 +23,7 @@
     <div th:if="${listOrderLineItem.size()!=0}" class="bg-gray-100 h-screen py-8">
         <div class="container mx-auto px-4">
             <h1 class="text-2xl font-semibold mb-4">Order</h1>
-            <div th:replace="notification::announcement"></div>
+            <div th:replace="component/notification::announcement"></div>
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="md:w-3/4">
                     <div class="bg-white rounded-lg shadow-md p-6 mb-4">
@@ -48,10 +48,10 @@
                                         </div>
                                     </td>
                                     <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discount_price}]]</span>
+                                        <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discountPrice}]]</span>
                                     </td>
                                     <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discount_price*OrderLineItem.getProductId().getTax)/100}]]</span>
+                                        <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100}]]</span>
                                     </td>
                                     <td class="py-4">
                                         <div class="flex items-center">
@@ -59,7 +59,7 @@
                                         </div>
                                     </td>
                                     <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discount_price*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discount_price)*OrderLineItem.quantity}]]</span>
+                                        <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discountPrice)*OrderLineItem.quantity}]]</span>
                                     </td>
                                 </tr>
                             </th:block>

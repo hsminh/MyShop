@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="component/fragmen ::header"></div>
+
+</head>
+<body>
+<div th:replace="component/fragmen ::Navbar"></div>
+<script th:src="@{javascripts/users/update-infor-user}" type="text/javascript"></script>
+
+<div class="bg-grey-lighter min-h-screen flex flex-col">
+    <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+        <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
+            <form id="registerForm" method="post" th:action="@{/users/update_information/save}" th:object="${userProfile}">
+                <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <strong id="Title" class="font-bold"></strong>
+                    <span id="Message" class="block sm:inline"></span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg id="closeBtn" class="fill-current h-6 w-6 text-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M15.293 4.293a1 1 0 011.414 1.414L11.414 10l5.293 5.293a1 1 0 01-1.414 1.414L10 11.414l-5.293 5.293a1 1 0 01-1.414-1.414L8.586 10 3.293 4.707a1 1 0 011.414-1.414L10 8.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </span>
+                </div>
+                <h1 class="mb-8 text-3xl text-center">[[${titleForm}]]</h1>
+
+                    <input type="text"
+                           class="block border border-grey-light w-full p-3 rounded mb-1"
+                           th:classappend="${#fields.hasErrors('phoneNumber')} ? 'border-red-500' : ''"
+                           name="phoneNumber"
+                           id="phoneNumber"
+                           placeholder="phoneNumber"
+                           th:field="*{phoneNumber}" />
+                    <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-red-500 italic mt-1 text-sm">
+                        <span th:errors="*{phoneNumber}"></span>
+                    </div>
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('bio')} ? 'border-red-500' : ''"
+                       name="bio"
+                       id="bio"
+                       placeholder="Bio"
+                       th:field="*{bio}" />
+                <div th:if="${#fields.hasErrors('bio')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{bio}"></span>
+                </div>
+
+                <input type="text"
+                       class="block border border-grey-light w-full p-3 rounded mb-1"
+                       th:classappend="${#fields.hasErrors('address')} ? 'border-red-500' : ''"
+                       name="address"
+                       id="address"
+                       placeholder="address"
+                       th:field="*{address}" />
+                <div th:if="${#fields.hasErrors('address')}" class="text-red-500 italic mt-1 text-sm">
+                    <span th:errors="*{address}"></span>
+                </div>
+
+                <input  type="hidden" th:field="*{id}"/>
+                <input  type="hidden" th:field="*{users}"/>
+
+                <div th:if="${isCheckGenderChoose==true}">
+                    <div class="flex flex-col items-center justify-center mb-8">
+                        <span class="text-lg">Choose Gender</span>
+                        <div class="flex items-center">
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" th:field="*{gender}" class="form-radio" name="gender" value="true">
+                                <span class="ml-2">Nam</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" th:field="*{gender}"  class="form-radio" name="gender" value="false">
+                                <span class="ml-2">Nữ</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${isCheckGenderChoose==false}">
+                    <div class="flex flex-col items-center justify-center mb-8">
+                        <span class="text-lg mb-4">Choose Gender</span>
+                        <div class="flex flex-col">
+                            <div class="mb-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" class="form-radio" name="gender" value="true" th:checked="${isCheckGenderChoose != false && userProfile.gender}">
+                                    <span class="ml-2">Nam</span>
+                                </label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="inline-flex items-center">
+                                        <input type="radio" class="form-radio" name="gender" value="false" th:checked="${isCheckGenderChoose != false && !userProfile.gender}">
+                                    <span class="ml-2">Nữ</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button
+                            type="submit"
+                            class="w-full px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md"
+                    >
+                        Save Profile
+                    </button>
+                </div>
+
+            <div class="text-center text-sm text-grey-dark mt-4">
+                By signing up, you agree to the
+                <a class="no-underline border-b border-grey-dark text-grey-dark" href="#">
+                    Terms of Service
+                </a> and
+                <a class="no-underline border-b border-grey-dark text-grey-dark" href="#">
+                    Privacy Policy
+                </a>
+            </div>
+        </div>
+
+        <div class="text-grey-dark mt-6">
+            Already have an account?
+            <a class="no-underline border-b border-blue text-blue" th:href="@{/login-form}">
+                Log in
+            </a>.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
