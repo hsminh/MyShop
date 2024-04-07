@@ -22,24 +22,17 @@
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer id;
 
-        @NotNull
-        @NotBlank(message = "User Name Is Required")
-        @Length(min = 6,message = "User Name must be at least 6 characters")
+
         @Column(name = "user_name", length = 255, nullable = false)
-        @Email(message = "Invalid email address")
         private String userName;
 
-        @NotBlank(message = "Password Is Required")
-        @Length(min = 6,max = 128,message = "Password must be at least 6 characters")
+
         @Column(name = "password", length = 255, nullable = false)
         private String password;
 
-        @NotBlank(message = "First Name Is Required")
-        @Getter
         @Column(name = "first_name", length = 255, nullable = false)
         private String firstName;
 
-        @NotBlank(message = "Last Name Is Required")
         @Column(name = "last_name", length = 255, nullable = false)
         private String lastName;
 

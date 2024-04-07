@@ -4,9 +4,11 @@ import com.example.sm.minh.eshop.entities.Role;
 import com.example.sm.minh.eshop.entities.UserProfile;
 import com.example.sm.minh.eshop.entities.User;
 import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
+import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.repositories.UserProfileRepository;
 import com.example.sm.minh.eshop.repositories.UserRepository;
 import com.example.sm.minh.eshop.repositories.RoleRepository;
+import com.example.sm.minh.eshop.validators.UserProfileRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -149,17 +151,16 @@ public class UserService {
         model.addAttribute("isNewUser", isNewUser);
     }
 
-    public void setUpToUpdateForm(Model model,UserProfile existingUserProfile)
+    public void setUpToUpdateForm(Model model,UserProfile userProfile)
     {
         model.addAttribute("pageTitle", "Update User");
         model.addAttribute("titleForm", "Update User Profile");
-        if (existingUserProfile == null) {
-            UserProfile userProfile = new UserProfile();
+        if (userProfile == null) {
             model.addAttribute("isCheckGenderChoose", false);
-            model.addAttribute("userProfile", new UserProfile());
+            model.addAttribute("userProfileRequest",new UserProfileRequest());
         } else {
             model.addAttribute("isCheckGenderChoose", true);
-            model.addAttribute("userProfile", existingUserProfile);
+            model.addAttribute("userProfileRequest", UserProfileMapper.toUserProfileRequest(userProfile));
         }
     }
 }

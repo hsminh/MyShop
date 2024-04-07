@@ -1,12 +1,15 @@
 package com.example.sm.minh.eshop.controllers.Users;
 
-import com.example.sm.minh.eshop.entities.Token;
 import com.example.sm.minh.eshop.entities.UserProfile;
 import com.example.sm.minh.eshop.entities.User;
 import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
+import com.example.sm.minh.eshop.mappers.UserMapper;
+import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
 import com.example.sm.minh.eshop.services.TokenService;
 import com.example.sm.minh.eshop.services.UserService;
+import com.example.sm.minh.eshop.validators.UserProfileRequest;
+import com.example.sm.minh.eshop.validators.UserRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +37,7 @@ public class UsersController {
         model.addAttribute("pageTitle", "Register Form");
         model.addAttribute("titleForm", "Sign Up");
         model.addAttribute("isNewUser", true);
-        model.addAttribute("users", new User());
+        model.addAttribute("userRequest", new UserRequest());
         return "user/register-form";
     }
 
@@ -46,19 +49,23 @@ public class UsersController {
         if (userDetails != null) {
             userLoggin = userService.findUserByUserName(userDetails.getUsername());
         }
-        UserProfile existingUserProfile = this.userService.getUserProfileByUsersId(userLoggin.getId());
-        this.userService.setUpToUpdateForm(model,existingUserProfile);
+        UserProfile userProfile = this.userService.getUserProfileByUsersId(userLoggin.getId());
+
+        this.userService.setUpToUpdateForm(model,userProfile);
         return "user/update-information-user";
     }
 
     @PostMapping("/users/update_information/save")
-    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid UserProfile userProfile, BindingResult bindingResult,Model model,RedirectAttributes redirectAttributes) {
+    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("userProfileRequest") UserProfileRequest userProfileRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
-            this.userService.setUpToUpdateForm(model,userProfile);
+            model.addAttribute("pageTitle", "Update User");
+            model.addAttribute("titleForm", "Update User Profile");
+            model.addAttribute("isCheckGenderChoose", true);
             return "user/update-information-user";
         }
-        this.userService.updateProfile(userProfile,userDetails);
+
+        this.userService.updateProfile(UserProfileMapper.toUserProfile(userProfileRequest),userDetails);
         redirectAttributes.addFlashAttribute("Message","update Profile Successfully");
         return "redirect:/main-page";
     }
@@ -68,35 +75,38 @@ public class UsersController {
     public String viewEditForm(@AuthenticationPrincipal ShopMeUserDetail userDetails, Model model) {
         if (userDetails != null) {
             User user = userService.findUserByUserName(userDetails.getUsername());
+            UserRequest userRequest=UserMapper.toUserRequest(user);
+
             this.userService.prepareFormModel(model, "Edit User", false);
             model.addAttribute("pageTitle", "Edit User");
             model.addAttribute("titleForm", "Edit User");
-            model.addAttribute("users", user);
+            model.addAttribute("userRequest", userRequest);
             return "user/register-form";
         } else {
             return "redirect:/login";
         }
     }
 
-
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  @ModelAttribute("users") User users, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  UserRequest createUserRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserNotFoundException {
         if (bindingResult.hasErrors()) {
-            if (users.getId() != null) {
+            System.out.println(createUserRequest.getId());
+            if (createUserRequest.getId() != null) {
                 this.userService.prepareFormModel(model, "Edit User", false);
             } else {
                 this.userService.prepareFormModel(model, "Sign Up", true);
             }
             return "user/register-form";
         }
-        User userToSave;
-        if (users.getId() != null && users.getId() != 0) {
+        User userToSave=null;
+        User users = UserMapper.toUser(createUserRequest);
+        if (createUserRequest.getId() != null && createUserRequest.getId() != 0) {
             userToSave = this.userService.updateUser(editPassword, users);
-            redirectAttributes.addFlashAttribute("Message","Update Information Successfully");
+            redirectAttributes.addFlashAttribute("Message", "Update Information Successfully");
 
         } else {
             userToSave = this.userService.createNewUser(users);
-            redirectAttributes.addFlashAttribute("Message","Register Account Successfully");
+            redirectAttributes.addFlashAttribute("Message", "Register Account Successfully");
         }
         this.userService.save(userToSave);
         return "redirect:/login-form";

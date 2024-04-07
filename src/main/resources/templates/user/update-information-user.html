@@ -11,7 +11,7 @@
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
         <div class="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-            <form id="registerForm" method="post" th:action="@{/users/update_information/save}" th:object="${userProfile}">
+            <form id="registerForm" method="post" th:action="@{/users/update_information/save}" th:object="${userProfileRequest}">
                 <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
                     <span id="Message" class="block sm:inline"></span>
@@ -57,7 +57,7 @@
                 </div>
 
                 <input  type="hidden" th:field="*{id}"/>
-                <input  type="hidden" th:field="*{users}"/>
+<!--                <input  type="hidden" th:field="*{users}"/>-->
 
                 <div th:if="${isCheckGenderChoose==true}">
                     <div class="flex flex-col items-center justify-center mb-8">

@@ -19,9 +19,7 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NotBlank(message = "Phone Number Is Required!")
-    @Size(min = 10,max = 10,message = "Please enter a valid phone number!")
+
     @Column(name = "phone_number", length = 15, nullable = false)
     private String phoneNumber;
 
@@ -30,8 +28,6 @@ public class UserProfile {
     private String bio;
 
     @NotNull
-    @NotBlank(message = "address Is Required!")
-    @Size(min = 6,message = "Please enter a valid address!")
     @Column(name = "addresss",nullable = false)
     private String address;
 
