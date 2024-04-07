@@ -28,19 +28,19 @@
 
 
         @GetMapping("/order/success")
-        public String orderSuccess(RedirectAttributes redirectAttributes) {
+        public String messageSuccess(RedirectAttributes redirectAttributes) {
             redirectAttributes.addFlashAttribute("Message", "Congratulations on your successful purchase");
             return "redirect:/main-page";
         }
         @GetMapping("/order/detail")
-        public String viewOrderDetail(@RequestParam("oder-line-item-id")Integer oderLineItemId,Model model, RedirectAttributes redirectAttributes) throws OrderLineItemException {
+        public String viewOrderDetail(@RequestParam("oder-line-item-id")Integer orderLineItemId,Model model, RedirectAttributes redirectAttributes) throws OrderLineItemException {
             try
             {
-                model.addAttribute("OderLineItem",this.orderService.findOrderLineItemById(oderLineItemId));
+                model.addAttribute("OderLineItem",this.orderService.findOrderLineItemById(orderLineItemId));
                 return "order/order-detail";
             }catch (OrderLineItemException ex)
             {
-                redirectAttributes.addFlashAttribute("errorMessage","Cannot Find Order With Id "+oderLineItemId);
+                redirectAttributes.addFlashAttribute("errorMessage","Cannot Find Order With Id "+orderLineItemId);
                 return "redirect:/order/history/1";
             }
         }

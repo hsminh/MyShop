@@ -30,7 +30,7 @@ public class UsersController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/users/register")
-    public String showRegisterForm(Model model) {
+    public String viewRegisterForm(Model model) {
         model.addAttribute("pageTitle", "Register Form");
         model.addAttribute("titleForm", "Sign Up");
         model.addAttribute("isNewUser", true);
@@ -40,13 +40,13 @@ public class UsersController {
 
 
     @GetMapping("/users/update_information")
-    public String formUpdateInformation(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String viewUpdateInformation(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
-        User loggedInUser = null;
+        User userLoggin = null;
         if (userDetails != null) {
-            loggedInUser = userService.findUserByUserName(userDetails.getUsername());
+            userLoggin = userService.findUserByUserName(userDetails.getUsername());
         }
-        UserProfile existingUserProfile = this.userService.getUserProfileByUsersId(loggedInUser.getId());
+        UserProfile existingUserProfile = this.userService.getUserProfileByUsersId(userLoggin.getId());
         this.userService.setUpToUpdateForm(model,existingUserProfile);
         return "user/update-information-user";
     }
@@ -65,7 +65,7 @@ public class UsersController {
 
 
     @GetMapping("/users/edit")
-    public String showEditForm(@AuthenticationPrincipal ShopMeUserDetail userDetails, Model model) {
+    public String viewEditForm(@AuthenticationPrincipal ShopMeUserDetail userDetails, Model model) {
         if (userDetails != null) {
             User user = userService.findUserByUserName(userDetails.getUsername());
             this.userService.prepareFormModel(model, "Edit User", false);

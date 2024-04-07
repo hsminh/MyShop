@@ -28,7 +28,7 @@ public class CartRestController {
                 throw new IllegalArgumentException("Invalid productId or quantity.");
             }
             Product selectedProduct = this.cartService.getProductById(productId);
-            this.cartService.updateCartAndCartLineItem(customerUser, selectedProduct, quantity);
+            this.cartService.addProductToCart(customerUser, selectedProduct, quantity);
             model.addAttribute("messageSuccess", "Cart updated successfully");
             return "Cart updated successfully";
         } catch (ProductException ex) {

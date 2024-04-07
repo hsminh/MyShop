@@ -21,9 +21,9 @@ public class ProductController {
     @Autowired
     private ProductService productSerVice;
     @GetMapping("/products")
-    public String listProduct(@RequestParam(value = "search" ,required = false)String keyWord,
-                              @RequestParam(value = "isHide" ,required = false)Boolean isHide,
-                              Model model) {
+    public String viewListProduct(@RequestParam(value = "search" ,required = false)String keyWord,
+                     @RequestParam(value = "isHide" ,required = false)Boolean isHide,
+                     Model model) {
         if(isHide==null)
         {
             isHide=true;
@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/add")
-    public String formAddProduct(Model model) {
+    public String viewAddProduct(Model model) {
         model.addAttribute("pageTitle", "Add Product");
         model.addAttribute("TitleForm", "Add Product");
         model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/delete/{id}")
-    public String deleteProducts(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             productSerVice.delete(id);
             redirectAttributes.addFlashAttribute("Message", "Delete Successful Product With Id " + id);
@@ -91,20 +91,11 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult,@RequestParam(value = "imageFile",required = false)String imageFile, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute( "pageTitle", "Add Product");
             model.addAttribute("TitleForm", "Add Product");
-            String imageURL=null;
-            if(!multipartFile.isEmpty()&&multipartFile!=null)
-            {
-                imageURL=this.productSerVice.getImageURL(multipartFile);
-            }else
-            {
-                imageURL=imageFile;
-            }
-            model.addAttribute("imageURL", imageURL);
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
             return "product/add-product-form";
         }

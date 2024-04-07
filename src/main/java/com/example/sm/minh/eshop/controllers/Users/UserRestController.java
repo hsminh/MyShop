@@ -18,12 +18,12 @@ public class UserRestController {
     @Autowired
     private TokenService tokenService;
         @GetMapping("/users/check-username-unique")
-        public String checkUserNameUni(@RequestParam("username") String userName)
+        public String checkUserNameUnique(@RequestParam("username") String userName)
         {
             return this.userService.checkUserNameUni(userName);
         }
             @GetMapping("/users/send-email")
-            public String senEmail(@RequestParam("email") String email)
+            public String sendEmail(@RequestParam("email") String email)
             {
                 User accountForgot=this.userService.findUserByUserName(email);
                 if(accountForgot!=null)
@@ -42,24 +42,6 @@ public class UserRestController {
                 }
                 return "duplicated";
             }
-        @GetMapping("/users/verify-verification-code")
-        public String verifyVerificationCode(@RequestParam("digit1") String digit1,
-                                             @RequestParam("digit2") String digit2,
-                                             @RequestParam("digit3") String digit3,
-                                             @RequestParam("digit4") String digit4,
-                                             @RequestParam("digit5") String digit5,
-                                             @RequestParam("digit6") String digit6,
-                                             @RequestParam("email") String email) {
 
-            String code = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-            User verifiedUser = this.userService.findUserByUserName(email);
-            Token token=this.tokenService.findByToken(code);
-
-            if (this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser)) {
-                return code;
-            } else {
-                return "duplicated";
-            }
-        }
 
     }

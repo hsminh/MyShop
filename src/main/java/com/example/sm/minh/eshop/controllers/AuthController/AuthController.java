@@ -23,48 +23,47 @@ public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    @GetMapping("/users/forgot")
-    public String showForgotPassWordForm(Model model)
+    @GetMapping("/auth/forgot-password")
+    public String viewForgotPassword(Model model)
     {
         model.addAttribute("pageTitle", "Forgot Password");
-        model.addAttribute("users", new User());
-        return "user/forgot";
+        return "authenticated/forgot";
     }
 
-    @GetMapping("/users/verify")
-    public String showVerificationForm(@RequestParam("email") String email, Model model) {
+    @GetMapping("/auth/verify-token")
+    public String viewVerification(@RequestParam("email") String email, Model model) {
         model.addAttribute("pageTitle", "Verification Code");
         model.addAttribute("email",email);
-        return "user/vertification-code-form";
+        return "authenticated/vertification-code-form";
     }
 
-    @GetMapping("/reset-password")
-    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
-        Token resetToken = this.tokenService.findByToken(token);
+    @GetMapping("/auth/reset-password")
+    public String viewResetPassword(@RequestParam("token") String token, Model model) {
+        Token resetToken = this.tokenService.isTokenExists(token);
         if (resetToken == null) {
-            return "redirect:/users/forgot";
+            return "redirect:/auth/forgot";
         }
         model.addAttribute("token", token);
-        return "user/update-password";
+        return "authenticated/update-password";
     }
 
-    @GetMapping("/users/update-password")
-    public String showUpdatePasswordForm(@RequestParam("email")String email, @RequestParam("token")String code,Model model, RedirectAttributes redirectAttributes) {
+    @GetMapping("/auth/update-password")
+    public String viewUpdatePassword(@RequestParam("email")String email, @RequestParam("token")String code,Model model, RedirectAttributes redirectAttributes) {
         User verifiedUser = this.userService.findUserByUserName(email);
-        Token token=this.tokenService.findByToken(code);
-
+        Token token=this.tokenService.isTokenExists(code);
+        // Check token is valid 
         if (!(this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser))) {
-            return "redirect:/users/forgot";
+            return "redirect:/auth/forgot";
         }
 
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
         model.addAttribute("token",token);
-        return "user/update-password";
+        return "authenticated/update-password";
     }
 
-    @PostMapping("/user/save-update-password")
-    public String saveUpdatePassword(@RequestParam("email")String email
+    @PostMapping("/auth/save-update-password")
+    public String updatePassword(@RequestParam("email")String email
             , @RequestParam("password")String newPassword
             , @RequestParam("token")String token
             , RedirectAttributes redirectAttributes) {
@@ -78,6 +77,6 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("Message","Change Password Successfully");
             return "login-form";
         }
-        return "redirect:/users/forgot";
+        return "redirect:/auth/forgot";
     }
 }

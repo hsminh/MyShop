@@ -18,10 +18,7 @@ public class TokenService {
 
     public Token createToken(User user,String code) {
         String tokenValue = code;
-
-
         LocalDateTime expirationDateTime = LocalDateTime.now().plusMinutes(5);
-
         Token token = new Token();
         token.setCreatedAt(LocalDateTime.now());
         token.setToken(tokenValue);
@@ -42,7 +39,7 @@ public class TokenService {
     }
 
 
-    public Token findByToken(String token) {
+    public Token isTokenExists(String token) {
         return this.tokenRepository.findByToken(token);
     }
 }

@@ -20,5 +20,16 @@
         </div>
     </div>
 </div>
+<div th:fragment="alertMessage">
+    <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+        <strong id="Title" class="font-bold"></strong>
+        <span id="Message" class="block sm:inline"></span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg id="closeBtn" class="fill-current h-6 w-6 text-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M15.293 4.293a1 1 0 011.414 1.414L11.414 10l5.293 5.293a1 1 0 01-1.414 1.414L10 11.414l-5.293 5.293a1 1 0 01-1.414-1.414L8.586 10 3.293 4.707a1 1 0 011.414-1.414L10 8.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+    </div>
+</div>
 </body>
 </html>

@@ -46,17 +46,6 @@ public class ProductService {
         }
         return this.producsRepository.findAll(isHide);
     }
-    public String getImageURL(MultipartFile multipartFile) {
-        try {
-            byte[] imageData = multipartFile.getBytes();
-            String base64Image = Base64.getEncoder().encodeToString(imageData);
-            String imageURL = "data:image/png;base64," + base64Image;
-            return imageURL;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public List<ProductCategory>findAllCategory()
     {
@@ -81,28 +70,47 @@ public class ProductService {
     }
 
     public void delete(Integer id) throws ProductException {
-        Optional<Product> productOption=this.findByid(id);
-        if(productOption.isPresent())
-        {
-            Product product=productOption.get();
-            for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
-            {
-                Cart setCart=cartLineItem.getCartId();
-                setCart.setTaxAmount(setCart.getTaxAmount()-cartLineItem.getTaxTotalAmount());
-                setCart.setCountItem(setCart.getCountItem()-cartLineItem.getQuantity());
-                setCart.setTotalAmount(setCart.getTotalAmount()-cartLineItem.getTotalAmount());
-                setCart.setCreatedAt(new Date());
-                cartLineItem.setCartId(null);
-                this.cartLineItemRepositoty.save(cartLineItem);
-                this.cartReposttory.save(setCart);
-                this.cartLineItemRepositoty.delete(cartLineItem);
-            }
+        // Check if It Exist
+        Optional<Product> productOption = this.findByid(id);
+        if (productOption.isPresent()) {
+            Product product = productOption.get();
+
+
+            // Delete related cart items for the product
+            deleteCartLineItemsByProduct(product);
+
+            // Mark the product as deleted and inactive
             product.setDeletedAt(new Date());
             product.setIsActive(false);
             this.producsRepository.save(product);
-        }else {
-            throw new ProductException("Cannot Found Product With Id : "+id);
+        } else {
+            throw new ProductException("Cannot Found Product With Id : " + id);
         }
+    }
+
+    // Method to delete cart items related to a product
+    private void deleteCartLineItemsByProduct(Product product) {
+        for (CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product)) {
+            Cart cart = cartLineItem.getCartId();
+            // Update cart information
+            updateCartInfo(cart, cartLineItem);
+
+            // Update and save cart information
+            this.cartReposttory.save(cart);
+
+            // Delete cart item
+            this.cartLineItemRepositoty.delete(cartLineItem);
+        }
+    }
+
+
+    // Method to update cart information after deleting a cart item related to a product
+    private void updateCartInfo(Cart cart, CartLineItem cartLineItem) {
+        cart.setTaxAmount(cart.getTaxAmount() - cartLineItem.getTaxTotalAmount());
+        cart.setCountItem(cart.getCountItem() - cartLineItem.getQuantity());
+        cart.setTotalAmount(cart.getTotalAmount() - cartLineItem.getTotalAmount());
+        cart.setCreatedAt(new Date());
+        cartLineItem.setCartId(null);
     }
 
     public void restoreProduct(Integer id) throws ProductException {

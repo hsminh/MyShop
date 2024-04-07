@@ -4,7 +4,7 @@ import com.example.sm.minh.eshop.entities.Cart;
 import com.example.sm.minh.eshop.entities.CartLineItem;
 import com.example.sm.minh.eshop.entities.Product;
 import com.example.sm.minh.eshop.entities.User;
-import com.example.sm.minh.eshop.exceptions.CardLineItemException;
+import com.example.sm.minh.eshop.exceptions.CartLineItemException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.CartLineItemRepositoty;
 import com.example.sm.minh.eshop.repositories.CartReposttory;
@@ -45,55 +45,71 @@ public class CartService {
     }
 
 
-    public List<CartLineItem> getListCartItem(Cart cart) throws ProductException {
+    public List<CartLineItem> getListCartItemByCart(Cart cart) throws ProductException {
         return this.cartLineItemRepositoty.findByCartId(cart);
     }
 
-    public Cart getCartItem(User customer) throws ProductException {
+    public Cart getCartByCustomer(User customer) throws ProductException {
         return this.cartReposttory.findByUserId(customer);
     }
 
-    public String updateCartAndCartLineItem(User customer, Product selectProduct, Integer quantity) throws ProductException {
-        Cart Cart=this.cartReposttory.findByUserId(customer);
-        if(Cart==null)
-        {
-            Cart=new Cart();
-            Cart.setUserId(customer);
-            Cart=this.cartReposttory.save(Cart);
-        }else
-        {
-            Cart.setUpdatedAt(new Date());
-        }
-        CartLineItem cartLineItems=this.cartLineItemRepositoty.findByCartIdAndProductId(Cart,selectProduct);
-        Cart.setCountItem(Cart.getCountItem()+quantity);
-
-        Float taxAmount=((selectProduct.getDiscountPrice()*quantity)/100)*selectProduct.getTax();
-        Float PriceBeforeTax=selectProduct.getDiscountPrice()*quantity;
-        Cart.setTaxAmount(Cart.getTaxAmount()+taxAmount);
-        Cart.setTotalAmount(Cart.getTotalAmount()+taxAmount+PriceBeforeTax);
-
-
-            if(cartLineItems==null)
-        {
-            cartLineItems=new CartLineItem();
-            cartLineItems.setCreatedAt(new Date());
-        }else
-        {
-            cartLineItems.setUpdatedAt(new Date());
-        }
-        cartLineItems.setQuantity(cartLineItems.getQuantity()+quantity);
-        cartLineItems.setSubTotalAmount(cartLineItems.getSubTotalAmount() + PriceBeforeTax);
-        cartLineItems.setTaxTotalAmount(cartLineItems.getTaxTotalAmount() + taxAmount);
-        cartLineItems.setTotalAmount(cartLineItems.getSubTotalAmount() + cartLineItems.getTaxTotalAmount());
-        cartLineItems.setProductId(selectProduct);
-        cartLineItems.setCartId(Cart);
-        System.out.println("DCM "+cartLineItems);
-        this.cartLineItemRepositoty.save(cartLineItems);
-        this.cartReposttory.save(Cart);
-        return "ok";
+    public void addProductToCart(User customer, Product selectProduct, Integer quantity) throws ProductException {
+        Cart cart = getOrCreateCart(customer);
+        updateCartInfo(cart, selectProduct, quantity);
     }
 
-    public void deleteCardLineItem(Integer cardLineItemId, User customer) throws CardLineItemException {
+    private Cart getOrCreateCart(User customer) {
+        Cart cart = this.cartReposttory.findByUserId(customer);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUserId(customer);
+            cart = this.cartReposttory.save(cart);
+        } else {
+            cart.setUpdatedAt(new Date());
+        }
+        return cart;
+    }
+
+    private void updateCartInfo(Cart cart, Product selectProduct, Integer quantity) {
+        CartLineItem cartLineItem = getOrCreateCartLineItem(cart, selectProduct);
+        updateCartAndCartItem(cart, cartLineItem, selectProduct, quantity);
+    }
+
+    private CartLineItem getOrCreateCartLineItem(Cart cart, Product selectProduct) {
+        CartLineItem cartLineItem = this.cartLineItemRepositoty.findByCartIdAndProductId(cart, selectProduct);
+        if (cartLineItem == null) {
+            cartLineItem = new CartLineItem();
+            cartLineItem.setCreatedAt(new Date());
+        } else {
+            cartLineItem.setUpdatedAt(new Date());
+        }
+        return cartLineItem;
+    }
+
+    private void updateCartAndCartItem(Cart cart, CartLineItem cartLineItem, Product selectProduct, Integer quantity) {
+        Float taxAmount = calculateTaxAmount(selectProduct, quantity);
+        Float priceBeforeTax = selectProduct.getDiscountPrice() * quantity;
+
+        cart.setCountItem(cart.getCountItem() + quantity);
+        cart.setTaxAmount(cart.getTaxAmount() + taxAmount);
+        cart.setTotalAmount(cart.getTotalAmount() + taxAmount + priceBeforeTax);
+
+        cartLineItem.setQuantity(cartLineItem.getQuantity() + quantity);
+        cartLineItem.setSubTotalAmount(cartLineItem.getSubTotalAmount() + priceBeforeTax);
+        cartLineItem.setTaxTotalAmount(cartLineItem.getTaxTotalAmount() + taxAmount);
+        cartLineItem.setTotalAmount(cartLineItem.getSubTotalAmount() + cartLineItem.getTaxTotalAmount());
+        cartLineItem.setProductId(selectProduct);
+        cartLineItem.setCartId(cart);
+
+        this.cartLineItemRepositoty.save(cartLineItem);
+        this.cartReposttory.save(cart);
+    }
+
+    private Float calculateTaxAmount(Product selectProduct, Integer quantity) {
+        return ((selectProduct.getDiscountPrice() * quantity) / 100) * selectProduct.getTax();
+    }
+
+    public void deleteCartLineItem(Integer cardLineItemId, User customer) throws CartLineItemException {
         Optional<CartLineItem> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
         if(cartLineItemsOptional.isPresent()) {
             //set Cart Null
@@ -115,7 +131,7 @@ public class CartService {
             this.cartReposttory.save(cart);
             this.cartLineItemRepositoty.delete(cartLineItems);
         } else {
-            throw new CardLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId);
+            throw new CartLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId);
         }
     }
 
@@ -140,12 +156,12 @@ public class CartService {
     }
 
 
-    public void checkOutAll(User customer, List<String> productIds, List<String> quantities) throws ProductException, CardLineItemException {
+    public void checkOutCart(User customer, List<String> productIds, List<String> quantities) throws ProductException, CartLineItemException {
         int index=0;
         for(String s : productIds)
         {
             Integer quantity=Integer.parseInt(quantities.get(index++).replace(".0",""));
-            this.orderService.saveOrderDirect(Integer.parseInt(s), quantity,customer);
+            this.orderService.purchaseProductDirect(Integer.parseInt(s), quantity,customer);
             this.clearCard(customer);
         }
     }

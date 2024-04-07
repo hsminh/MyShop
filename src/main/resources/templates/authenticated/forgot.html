@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <div th:replace="fragmen ::header"></div>
-
+  <div th:replace="component/fragmen ::header"></div>
 </head>
 <body>
 <main id="content" role="main" class="w-full  max-w-md mx-auto p-6">
@@ -20,15 +19,7 @@
 
       <div class="mt-5">
         <form id="submitButton" th:action="@{/reset-password}" method="post">
-          <div id="AlerMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-            <strong id="Title" class="font-bold"></strong>
-            <span id="Message" class="block sm:inline"></span>
-            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                            <svg id="closeBtn" class="fill-current h-6 w-6 text-red-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M15.293 4.293a1 1 0 011.414 1.414L11.414 10l5.293 5.293a1 1 0 01-1.414 1.414L10 11.414l-5.293 5.293a1 1 0 01-1.414-1.414L8.586 10 3.293 4.707a1 1 0 011.414-1.414L10 8.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </span>
-          </div>
+         <div th:replace="component/notification::alertMessage"></div>
           <div class="grid gap-y-4">
             <div>
               <label for="email" class="block text-sm font-bold ml-1 mb-2 dark:text-white">Email address</label>
@@ -46,20 +37,18 @@
 
 </main>
 </body>
+
+
 <script>
   function ShowMessageError(title, message) {
     $('#Title').text(title);
     $('#Message').text(message);
     $('#AlerMessage').removeClass('hidden');
+    // Hide the alert after 10 seconds
     setTimeout(function() {
       $('#AlerMessage').addClass('hidden');
     }, 10000);
   }
-
-
-  $('#closeBtn').click(function() {
-    $('#AlerMessage').addClass('hidden');
-  });
   $('#submit').click(function (event) {
     event.preventDefault();
     let Email = $('#email').val();
@@ -71,7 +60,7 @@
       },
       success: function (data) {
         if (data === "ok") {
-          window.location.href = "/users/verify?email=" + encodeURIComponent(Email);
+          window.location.href = "/auth/verify-token?email=" + encodeURIComponent(Email);
         } else {
           ShowMessageError("Email!", "Email Not Exist!");
         }

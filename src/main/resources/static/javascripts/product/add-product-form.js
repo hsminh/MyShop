@@ -19,17 +19,17 @@
             $('#AlertMessage').addClass('hidden');
         });
 
-        $('#image').on('change', function (e) {
-            if (event.target.files.length > 0) {
-                var src = URL.createObjectURL(event.target.files[0]);
-                var thumbnail = document.getElementById("thumbnail");
-                thumbnail.src = src;
-                thumbnail.style.display = "block";
-                if ($(thumbnail).hasClass('hidden')) {
-                    $(thumbnail).removeClass('hidden');
+        $(document).ready(function () {
+            $('#image').on('change', function (e) {
+                if (event.target.files.length > 0) {
+                    var src = URL.createObjectURL(event.target.files[0]);
+                    var thumbnail = document.getElementById("thumbnail");
+                    thumbnail.src = src;
+                    thumbnail.style.display = "block";
                 }
-            }
+            });
         });
+
 
 
 

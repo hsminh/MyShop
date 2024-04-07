@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.controllers.Order;
 
 import com.example.sm.minh.eshop.entities.User;
-import com.example.sm.minh.eshop.exceptions.CardLineItemException;
+import com.example.sm.minh.eshop.exceptions.CartLineItemException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
 import com.example.sm.minh.eshop.services.CartService;
@@ -27,9 +27,8 @@ public class OrderRestController {
             @RequestParam(value = "quantity", required = false) Integer quantity) {
         try {
             User customerUser = this.cartService.findUserById(customer.getUserId());
-            String notification = this.orderService.saveOrder(cartLineItemId, quantity, customerUser);
-            return notification;
-        } catch (ProductException | CardLineItemException ex) {
+            return this.orderService.purchaseFromCart(cartLineItemId, quantity, customerUser);
+        } catch (ProductException | CartLineItemException ex) {
             return "Error saving order: " + ex.getMessage();
         }
     }
@@ -42,9 +41,9 @@ public class OrderRestController {
         try {
 
             User customerUser = this.cartService.findUserById(customer.getUserId());
-            String notification = this.orderService.saveOrderDirect(productId, quantity, customerUser);
+            String notification = this.orderService.purchaseProductDirect(productId, quantity, customerUser);
             return notification;
-        } catch (ProductException | CardLineItemException ex) {
+        } catch (ProductException | CartLineItemException ex) {
             return "Error saving order: " + ex.getMessage();
         }
     }

@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
         private ProductCategoryService productCategoriesSerVice;
         @GetMapping("/category/check-slug-name-uni")
         public String CheckSlugAndNameUni(@RequestParam("name")String name,@RequestParam("slug")String slug,@RequestParam(value = "id" ,required = false)Integer id) throws ProductCategoryException {
-            return this.productCategoriesSerVice.CheckNameAndSlugUnique(id,name,slug);
+            return this.productCategoriesSerVice.checkNameAndSlugUnique(id,name,slug);
         }
     }

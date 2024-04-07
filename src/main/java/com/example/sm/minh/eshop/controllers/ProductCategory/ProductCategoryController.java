@@ -12,12 +12,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
+
 @Controller
 public class ProductCategoryController {
     @Autowired
     private ProductCategoryService productCategoriesSerVice;
     @GetMapping("/category")
-    public String listProduct(@RequestParam(value = "search",required = false) String serachValue,
+    public String viewListProduct(@RequestParam(value = "search",required = false) String serachValue,
                               @RequestParam(value = "isHide" ,required = false)Boolean isHide,
                               Model model) {
 
@@ -44,10 +46,12 @@ public class ProductCategoryController {
 
 
     @GetMapping("/category/add")
-    public String formAddCategory(Model model) {
+    public String viewAddCategory(Model model) {
 
         model.addAttribute("category",new ProductCategory());
-        this.productCategoriesSerVice.setCategoryAddForm(model);
+        model.addAttribute("pageTitle","Category");
+        model.addAttribute("TitleForm", "Add Category");
+        model.addAttribute("isNewUser", true);
         return "category/add-category-form";
     }
 
@@ -64,12 +68,12 @@ public class ProductCategoryController {
         if(category.getId()==null||category.getId()==0)
         {
             redirectAttributes.addFlashAttribute("Message","Save Successfully Category "+category.getName());
-            category=this.productCategoriesSerVice.SetCreateNewCategory(category);
+            category.setCreatedAt(new Date());
         }else
         {
             redirectAttributes.addFlashAttribute("Message","Updated Successfully Category "+category.getName());
-            ProductCategory productCategory=this.productCategoriesSerVice.FindById(category.getId(),null);
-            category=this.productCategoriesSerVice.SetEditCategory(productCategory,category);
+            ProductCategory productCategory=this.productCategoriesSerVice.findById(category.getId(),null);
+            category=this.productCategoriesSerVice.setDataForProductCategory(productCategory,category);
         }
         this.productCategoriesSerVice.save(category);
         return "redirect:/category";
@@ -78,7 +82,7 @@ public class ProductCategoryController {
     @GetMapping("/category/delete/{id}")
     public String DeleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
-            this.productCategoriesSerVice.DeleteCategory(id);
+            this.productCategoriesSerVice.deleteCategory(id);
             redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
         } catch (ProductCategoryException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -101,7 +105,7 @@ public class ProductCategoryController {
     @GetMapping("/category/edit/{id}")
     public String update(@PathVariable Integer id, Model model,RedirectAttributes redirectAttributes) {
         try {
-            ProductCategory Category=this.productCategoriesSerVice.FindById(id,true);
+            ProductCategory Category=this.productCategoriesSerVice.findById(id,true);
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Edit Category");
             model.addAttribute("category",Category);
