@@ -1,8 +1,8 @@
     package com.example.sm.minh.eshop.controllers.Order;
 
-    import com.example.sm.minh.eshop.entities.Order;
-    import com.example.sm.minh.eshop.entities.OrderLineItem;
-    import com.example.sm.minh.eshop.entities.User;
+    import com.example.sm.minh.eshop.models.Order;
+    import com.example.sm.minh.eshop.models.OrderLineItem;
+    import com.example.sm.minh.eshop.models.User;
     import com.example.sm.minh.eshop.exceptions.OrderLineItemException;
     import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
     import com.example.sm.minh.eshop.securities.ShopMeUserDetail;

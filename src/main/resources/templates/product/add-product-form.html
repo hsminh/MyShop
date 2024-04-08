@@ -10,7 +10,7 @@
 <div class=" bg-grey-lighter min-h-screen flex flex-col">
     <div class="mt-14 container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
-            <form id="submitForm" th:action="@{/products/save}" th:object="${Product}" method="post" enctype="multipart/form-data">
+            <form id="submitForm" th:action="@{/products/save}" th:object="${productRequest}" method="post" enctype="multipart/form-data">
                 <!-- Nội dung form -->
                 <div id="AlertMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
@@ -87,7 +87,7 @@
                     <input type="hidden" id="checkError" >
                 </div>
                 <div class="flex justify-center items-center">
-                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${Product.loadImages()}}"/>
+                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${productRequest.loadImages()}}"/>
                 </div>
                 <div class="flex justify-center items-center">
                 </div>

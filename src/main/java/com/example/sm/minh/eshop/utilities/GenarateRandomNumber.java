@@ -1,4 +1,4 @@
-package com.example.sm.minh.eshop.utils;
+package com.example.sm.minh.eshop.utilities;
 
 import java.util.Random;
 

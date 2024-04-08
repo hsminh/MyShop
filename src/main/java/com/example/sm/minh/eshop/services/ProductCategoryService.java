@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.services;
 
-import com.example.sm.minh.eshop.entities.Product;
-import com.example.sm.minh.eshop.entities.ProductCategory;
+import com.example.sm.minh.eshop.models.Product;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import com.example.sm.minh.eshop.exceptions.ProductCategoryException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.ProductCategoryRepository;
@@ -106,10 +106,10 @@ public class ProductCategoryService {
 
 
     public void restoreCategory(Integer id) throws ProductCategoryException {
-        ProductCategory categoryRestore=this.findById(id,null);
-        categoryRestore.setIsActive(true);
-        categoryRestore.setDeletedAt(new Date());
-        this.productCategoryRepository.save(categoryRestore);
+        ProductCategory restoreCategory=this.findById(id,null);
+        restoreCategory.setIsActive(true);
+        restoreCategory.setDeletedAt(new Date());
+        this.productCategoryRepository.save(restoreCategory);
     }
 
 

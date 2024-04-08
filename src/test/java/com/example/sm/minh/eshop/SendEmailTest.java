@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop;
 
-import com.example.sm.minh.eshop.utils.EmailSender;
+import com.example.sm.minh.eshop.utilities.EmailSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

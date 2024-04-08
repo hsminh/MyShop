@@ -1,11 +1,11 @@
 package com.example.sm.minh.eshop.services;
 
 import com.example.sm.minh.eshop.dto.ProductDTO;
-import com.example.sm.minh.eshop.entities.*;
+import com.example.sm.minh.eshop.models.*;
 import com.example.sm.minh.eshop.exceptions.CategoryProductException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.*;
-import com.example.sm.minh.eshop.utils.FileUploadUltil;
+import com.example.sm.minh.eshop.utilities.FileUploadUltil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 

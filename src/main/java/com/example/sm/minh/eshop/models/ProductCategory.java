@@ -1,4 +1,4 @@
-    package com.example.sm.minh.eshop.entities;
+    package com.example.sm.minh.eshop.models;
 
     import jakarta.persistence.*;
     import jakarta.validation.constraints.NotBlank;

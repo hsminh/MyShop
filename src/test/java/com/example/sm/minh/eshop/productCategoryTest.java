@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop;
 
-import com.example.sm.minh.eshop.entities.Product;
-import com.example.sm.minh.eshop.entities.ProductCategory;
+import com.example.sm.minh.eshop.models.Product;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import com.example.sm.minh.eshop.repositories.ProductCategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
     package com.example.sm.minh.eshop.dto;
 
-    import com.example.sm.minh.eshop.entities.Product;
+    import com.example.sm.minh.eshop.models.Product;
 
     public class ProductDTO {
         private Product product;

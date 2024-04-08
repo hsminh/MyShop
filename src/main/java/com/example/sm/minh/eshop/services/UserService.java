@@ -1,8 +1,8 @@
 package com.example.sm.minh.eshop.services;
 
-import com.example.sm.minh.eshop.entities.Role;
-import com.example.sm.minh.eshop.entities.UserProfile;
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.Role;
+import com.example.sm.minh.eshop.models.UserProfile;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
 import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.repositories.UserProfileRepository;

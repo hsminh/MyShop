@@ -1,8 +1,8 @@
 package com.example.sm.minh.eshop.controllers;
 
 import com.example.sm.minh.eshop.dto.ProductDTO;
-import com.example.sm.minh.eshop.entities.Product;
-import com.example.sm.minh.eshop.entities.ProductCategory;
+import com.example.sm.minh.eshop.models.Product;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import com.example.sm.minh.eshop.exceptions.CategoryProductException;
 import com.example.sm.minh.eshop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

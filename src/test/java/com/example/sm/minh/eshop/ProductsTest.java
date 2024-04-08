@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop;
 
-import com.example.sm.minh.eshop.entities.Product;
+import com.example.sm.minh.eshop.models.Product;
 import com.example.sm.minh.eshop.repositories.ProductRepository;
 import com.example.sm.minh.eshop.repositories.ProductCategoryRepository;
 import com.example.sm.minh.eshop.services.ProductService;

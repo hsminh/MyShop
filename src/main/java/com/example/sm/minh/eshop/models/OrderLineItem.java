@@ -1,4 +1,4 @@
-package com.example.sm.minh.eshop.entities;
+package com.example.sm.minh.eshop.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,20 +9,22 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
-@Entity(name = "orders")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
-public class Order {
+public class OrderLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private float taxAmount;
+    private Integer quantity ;
 
     private Float totalAmount;
 
-    private float countItem;
+    private Float subTotalAmount;
+
+    private Float taxTotalAmount;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,33 +36,33 @@ public class Order {
     @LastModifiedDate
     private Date updatedAt;
 
-    @Column(name = "status")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Boolean status;
-
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_id")
-    private User userId;
-
-    public Order() {
-        this.taxAmount=0;
-        this.totalAmount=0f;
-        this.countItem =0;
-        this.createdAt=new Date();
-        this.status=false;
-    }
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "product_id")
+    private Product productId;
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderLineItem{" +
                 "id=" + id +
-                ", taxAmount=" + taxAmount +
+                ", quantity=" + quantity +
                 ", totalAmount=" + totalAmount +
-                ", countItems=" + countItem +
+                ", subTotalAmount=" + subTotalAmount +
+                ", taxTotalAmount=" + taxTotalAmount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", status=" + status +
                 '}';
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Order orderId;
+
+    public OrderLineItem() {
+
+        this.quantity=0;
+        this.totalAmount=0f;
+        this.subTotalAmount=0f;
+        this.taxTotalAmount=0f;
+        this.createdAt=new Date();
     }
 }

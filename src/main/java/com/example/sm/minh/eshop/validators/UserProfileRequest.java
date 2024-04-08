@@ -1,16 +1,12 @@
 package com.example.sm.minh.eshop.validators;
 
-import com.example.sm.minh.eshop.entities.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
 @Getter
 @Setter
 public class UserProfileRequest {

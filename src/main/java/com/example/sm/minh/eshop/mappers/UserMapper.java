@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop.mappers;
 
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.validators.UserRequest;
 
 public class UserMapper {

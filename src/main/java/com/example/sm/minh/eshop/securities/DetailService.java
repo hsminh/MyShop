@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop.securities;
 
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

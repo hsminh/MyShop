@@ -1,11 +1,8 @@
-package com.example.sm.minh.eshop.entities;
+package com.example.sm.minh.eshop.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,29 +10,23 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+
 @Getter
 @Setter
+@Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NotBlank(message = "Name Is Required")
-    @Length(min = 2,max = 100,message = "Name must be at least 2 characters")
+
     @Column(name = "name",length = 100,unique = true)
     private String name ;
 
-    @NotNull
-    @NotBlank(message = "SKU Is Required")
-    @Length(min = 2,max = 15,message = "SKU  must be between 2 and 15 characters")
+
     @Column(name = "sku",length = 15,unique = true)
     private String sku ;
 
-    @NotNull
-    @NotBlank(message = "Content Is Required")
-    @Length(min = 10,message = "Content must be at least 10 characters")
     @Column(name = "content")
     @Lob
     private String content ;

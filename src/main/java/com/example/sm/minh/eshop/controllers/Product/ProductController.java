@@ -1,8 +1,10 @@
 package com.example.sm.minh.eshop.controllers.Product;
 
-import com.example.sm.minh.eshop.entities.Product;
+import com.example.sm.minh.eshop.models.Product;
 import com.example.sm.minh.eshop.exceptions.ProductException;
+import com.example.sm.minh.eshop.mappers.ProductRequestMapper;
 import com.example.sm.minh.eshop.services.ProductService;
+import com.example.sm.minh.eshop.validators.ProductRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,7 @@ public class ProductController {
         model.addAttribute("pageTitle", "Add Product");
         model.addAttribute("TitleForm", "Add Product");
         model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-        model.addAttribute("Product", new Product());
+        model.addAttribute("productRequest", new ProductRequest());
         return "product/add-product-form";
     }
 
@@ -75,13 +77,12 @@ public class ProductController {
         return "redirect:/products";
     }
     @GetMapping("/products/edit/{id}")
-    public String editProducts(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+    public String editProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
             model.addAttribute("pageTitle", "Edit Product | ID " + id);
-            model.addAttribute("pageTitle", "Add Product");
-            model.addAttribute("TitleForm", "Add Product");
+            model.addAttribute("formTitle", "Edit Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-            model.addAttribute("Product", productSerVice.findByid(id).orElseThrow(() -> new ProductException("Product not found")));
+            model.addAttribute("productRequest", ProductRequestMapper.toProductRequest(productSerVice.findByid(id).orElseThrow(() -> new ProductException("Product not found"))));
             return "product/add-product-form";
         } catch (ProductException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
@@ -89,9 +90,10 @@ public class ProductController {
         }
     }
 
+
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid @ModelAttribute("Product") Product Product, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProducts(Model model,@Valid @ModelAttribute("productRequest") ProductRequest productRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute( "pageTitle", "Add Product");
@@ -100,8 +102,9 @@ public class ProductController {
             return "product/add-product-form";
         }
         try {
-            Integer idBeforeSaved=Product.getId();
-            this.productSerVice.saveProduct(Product, multipartFile);
+            Product ProductSaved=ProductRequestMapper.toProduct(productRequest);
+            Integer idBeforeSaved=ProductSaved.getId();
+            this.productSerVice.saveProduct(ProductSaved, multipartFile);
             if (idBeforeSaved != null) {
                 redirectAttributes.addFlashAttribute("Message", "Update Successful");
             } else {

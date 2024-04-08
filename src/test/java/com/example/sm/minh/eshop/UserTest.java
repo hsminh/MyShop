@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop;
 
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.repositories.RoleRepository;
 import com.example.sm.minh.eshop.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;

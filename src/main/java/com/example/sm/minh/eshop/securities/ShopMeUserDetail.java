@@ -1,7 +1,7 @@
     package com.example.sm.minh.eshop.securities;
     
-    import com.example.sm.minh.eshop.entities.User;
-    import com.example.sm.minh.eshop.entities.Role;
+    import com.example.sm.minh.eshop.models.User;
+    import com.example.sm.minh.eshop.models.Role;
     import lombok.AllArgsConstructor;
     import lombok.Data;
     import org.springframework.security.core.GrantedAuthority;

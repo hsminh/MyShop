@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.repositories;
 
-import com.example.sm.minh.eshop.entities.Order;
-import com.example.sm.minh.eshop.entities.OrderLineItem;
+import com.example.sm.minh.eshop.models.Order;
+import com.example.sm.minh.eshop.models.OrderLineItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

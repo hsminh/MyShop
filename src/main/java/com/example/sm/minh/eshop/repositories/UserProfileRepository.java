@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop.repositories;
 
-import com.example.sm.minh.eshop.entities.UserProfile;
+import com.example.sm.minh.eshop.models.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

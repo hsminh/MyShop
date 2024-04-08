@@ -1,9 +1,11 @@
 package com.example.sm.minh.eshop.controllers.ProductCategory;
 
-import com.example.sm.minh.eshop.entities.ProductCategory;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import com.example.sm.minh.eshop.exceptions.ProductCategoryException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
+import com.example.sm.minh.eshop.mappers.CategoryRequestMapper;
 import com.example.sm.minh.eshop.services.ProductCategoryService;
+import com.example.sm.minh.eshop.validators.CategoryRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +50,7 @@ public class ProductCategoryController {
     @GetMapping("/category/add")
     public String viewAddCategory(Model model) {
 
-        model.addAttribute("category",new ProductCategory());
+        model.addAttribute("categoryRequest",new CategoryRequest());
         model.addAttribute("pageTitle","Category");
         model.addAttribute("TitleForm", "Add Category");
         model.addAttribute("isNewUser", true);
@@ -57,7 +59,7 @@ public class ProductCategoryController {
 
 
     @PostMapping("/category/save")
-    public String saveCategory(@Valid  @ModelAttribute("category")  ProductCategory category, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws ProductCategoryException {
+    public String saveCategory(@Valid  @ModelAttribute("categoryRequest")  CategoryRequest categoryRequest, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws ProductCategoryException {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle","Category");
@@ -65,17 +67,18 @@ public class ProductCategoryController {
             model.addAttribute("isNewUser", true);
             return "category/add-category-form";
         }
-        if(category.getId()==null||category.getId()==0)
+        ProductCategory savedCategory=CategoryRequestMapper.toCategory(categoryRequest);
+        if(savedCategory.getId()==null||savedCategory.getId()==0)
         {
-            redirectAttributes.addFlashAttribute("Message","Save Successfully Category "+category.getName());
-            category.setCreatedAt(new Date());
+            redirectAttributes.addFlashAttribute("Message","Save Successfully Category "+savedCategory.getName());
+            savedCategory.setCreatedAt(new Date());
         }else
         {
-            redirectAttributes.addFlashAttribute("Message","Updated Successfully Category "+category.getName());
-            ProductCategory productCategory=this.productCategoriesSerVice.findById(category.getId(),null);
-            category=this.productCategoriesSerVice.setDataForProductCategory(productCategory,category);
+            redirectAttributes.addFlashAttribute("Message","Updated Successfully Category "+savedCategory.getName());
+            ProductCategory productCategory=this.productCategoriesSerVice.findById(savedCategory.getId(),null);
+            savedCategory=this.productCategoriesSerVice.setDataForProductCategory(productCategory,savedCategory);
         }
-        this.productCategoriesSerVice.save(category);
+        this.productCategoriesSerVice.save(savedCategory);
         return "redirect:/category";
     }
 
@@ -105,10 +108,11 @@ public class ProductCategoryController {
     @GetMapping("/category/edit/{id}")
     public String update(@PathVariable Integer id, Model model,RedirectAttributes redirectAttributes) {
         try {
-            ProductCategory Category=this.productCategoriesSerVice.findById(id,true);
+            ProductCategory editCategory=this.productCategoriesSerVice.findById(id,true);
+
             model.addAttribute("pageTitle","Category");
             model.addAttribute("TitleForm", "Edit Category");
-            model.addAttribute("category",Category);
+            model.addAttribute("categoryRequest",CategoryRequestMapper.toCategoryRequest(editCategory));
             return "category/add-category-form";
         } catch (ProductCategoryException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Category With Id " + id + " Not Found");

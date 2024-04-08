@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.controllers.AuthController;
 
-import com.example.sm.minh.eshop.entities.Token;
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.Token;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.services.TokenService;
 import com.example.sm.minh.eshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

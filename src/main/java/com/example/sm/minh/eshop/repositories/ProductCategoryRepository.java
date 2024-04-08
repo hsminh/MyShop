@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop.repositories;
 
-import com.example.sm.minh.eshop.entities.ProductCategory;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

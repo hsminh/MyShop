@@ -1,6 +1,6 @@
 package com.example.sm.minh.eshop.controllers.Order;
 
-import com.example.sm.minh.eshop.entities.User;
+import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.exceptions.CartLineItemException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;

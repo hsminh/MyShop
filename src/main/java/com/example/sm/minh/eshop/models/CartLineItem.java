@@ -1,4 +1,4 @@
-package com.example.sm.minh.eshop.entities;
+package com.example.sm.minh.eshop.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,18 +13,21 @@ import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor
-public class OrderLineItem {
+public class CartLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer quantity ;
+    private float quantity;
 
-    private Float totalAmount;
+    @Column(name = "total_amount", nullable = false)
+    private float totalAmount;
 
-    private Float subTotalAmount;
+    @Column(name = "sub_total_amount", nullable = false)
+    private float subTotalAmount;
 
-    private Float taxTotalAmount;
+    @Column(name = "tax_total_amount", nullable = false)
+    private float taxTotalAmount;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,13 +39,21 @@ public class OrderLineItem {
     @LastModifiedDate
     private Date updatedAt;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cartId;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product productId;
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
     @Override
     public String toString() {
-        return "OrderLineItem{" +
+        return "CartLineItems{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", totalAmount=" + totalAmount +
@@ -50,19 +61,18 @@ public class OrderLineItem {
                 ", taxTotalAmount=" + taxTotalAmount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", cartId=" + cartId +
+                ", productId=" + productId +
                 '}';
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private Order orderId;
-
-    public OrderLineItem() {
+    public CartLineItem() {
 
         this.quantity=0;
-        this.totalAmount=0f;
-        this.subTotalAmount=0f;
-        this.taxTotalAmount=0f;
+        this.totalAmount=0;
+        this.subTotalAmount=0;
+        this.taxTotalAmount=0;
         this.createdAt=new Date();
     }
+
 }
