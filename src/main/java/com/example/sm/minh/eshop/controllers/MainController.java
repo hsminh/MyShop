@@ -39,6 +39,8 @@ public class MainController {
 
             List<Product> listProduct = productSerVice.findAll(id, search,true);
             model.addAttribute("search", search);
+            model.addAttribute("pageTitle","SDN Shop");
+
             model.addAttribute("category", id);
             model.addAttribute("listProduct", listProduct);
             model.addAttribute("isChoice", "Shop");
@@ -58,6 +60,7 @@ public class MainController {
         {
             model.addAttribute("errorMessage","UserName or password is incorrect");
         }
+        model.addAttribute("pageTitle","Login");
         return "login-form";
     }
 }

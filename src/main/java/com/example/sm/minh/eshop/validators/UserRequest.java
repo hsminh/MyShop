@@ -13,18 +13,24 @@ public class UserRequest {
     private Integer id;
     @NotNull
     @NotBlank(message = "User Name Is Required")
-    @Length(min = 6,message = "User Name must be at least 6 characters")
+    @Length(min = 6, message = "Username must be at least 6 characters")
+    @Length(max = 100, message = "Username must not exceed 100 characters")
     @Email(message = "Invalid email address")
     private String userName;
 
     @NotBlank(message = "Password Is Required")
-    @Length(min = 6,max = 128,message = "Password must be at least 6 characters")
+    @Length(min = 6, message = "password must be at least 6 characters")
+    @Length(max = 50, message = "password must not exceed 50 characters")
     private String password;
 
     @NotBlank(message = "First Name Is Required")
+    @Length(min = 6, message = "firstName must be at least 6 characters")
+    @Length(max = 50, message = "firstName must not exceed 100 characters")
     private String firstName;
 
     @NotBlank(message = "Last Name Is Required")
+    @Length(min = 6, message = "lastName must be at least 6 characters")
+    @Length(max = 50, message = "lastName must not exceed 100 characters")
     private String lastName;
 
     private Boolean isActive;

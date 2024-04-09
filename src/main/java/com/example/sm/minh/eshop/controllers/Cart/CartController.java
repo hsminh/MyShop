@@ -24,12 +24,11 @@
         private CartService cartService;
 
         @GetMapping("/cart")
-        public String viewCart(@RequestParam("productId") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        public String viewCart(@RequestParam("productId") Integer productId, Model model, RedirectAttributes redirectAttributes) {
             try {
-                Product chosenProduct = this.cartService.getProductById(id);
-                model.addAttribute("pageTitle", "Page Cart");
-                model.addAttribute("cart", new Cart());
-                model.addAttribute("cartProduct", chosenProduct);
+                Product cartProduct = this.cartService.getProductById(productId);
+                model.addAttribute("pageTitle", "Cart ID |"+productId);
+                model.addAttribute("cartProduct", cartProduct);
                 return "cart/cart";
             } catch (ProductException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
@@ -58,10 +57,10 @@
                                        Model model, RedirectAttributes redirectAttributes) {
             try {
                 User user = this.cartService.findUserById(customer.getUserId());
-                model.addAttribute("pageTitle", "Page Cart");
-                Cart cartCustomer = this.cartService.getCartByCustomer(user);
-                model.addAttribute("Cart", cartCustomer);
-                model.addAttribute("listCartLineItem", this.cartService.getListCartItemByCart(cartCustomer));
+                model.addAttribute("pageTitle", "Cart");
+                Cart shoppingCart = this.cartService.getCartByCustomer(user);
+                model.addAttribute("shoppingCart", shoppingCart);
+                model.addAttribute("listCartLineItem", this.cartService.getListCartItemByCart(shoppingCart));
                 return "/cart/shopping-cart";
             } catch (ProductException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());

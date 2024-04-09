@@ -4,7 +4,7 @@ import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.services.TokenService;
 import com.example.sm.minh.eshop.services.UserService;
 import com.example.sm.minh.eshop.utilities.EmailSender;
-import com.example.sm.minh.eshop.utilities.GenarateRandomNumber;
+import com.example.sm.minh.eshop.utilities.GenerateRandomNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +27,7 @@ public class UserRestController {
                 User accountForgot=this.userService.findUserByUserName(email);
                 if(accountForgot!=null)
                 {
-                    String token=GenarateRandomNumber.generateRandomNumberString();
+                    String token= GenerateRandomNumber.generateRandomNumberString();
                     String from = "kucantscute@gmail.com";
                     String password = "ugop edsx ieoo fecs";
                     String to = email;

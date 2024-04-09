@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class UserProfileRequest {
 
     @NotNull
     @NotBlank(message = "Phone Number Is Required!")
-    @Size(min = 10,max = 10,message = "Please enter a valid phone number!")
+    @Size(min = 10, max = 10, message = "Phone number must have exactly 10 characters")
     private String phoneNumber;
 
 
@@ -34,8 +35,8 @@ public class UserProfileRequest {
 
     @NotNull
     @NotBlank(message = "address Is Required!")
-    @Size(min = 6, message = "Address must have at least 6 characters!")
-    @Column(name = "addresss",nullable = false)
+    @Length(min = 6, message = "address must be at least 6 characters")
+    @Length(max = 255, message = "address must not exceed 255 characters")
     private String address;
 
     private boolean gender;

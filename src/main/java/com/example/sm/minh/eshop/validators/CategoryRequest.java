@@ -16,17 +16,20 @@ public class CategoryRequest {
 
     @NotNull
     @NotBlank(message = "Name Is Required")
-    @Length(min = 2,max = 100,message = "Name must be at least 2 characters")
+    @Length(min = 2, message = "name must be at least 2 characters")
+    @Length(max =100, message = "name must not exceed 100 characters")
     private String name ;
 
     @NotNull
     @NotBlank(message = "Slug Is Required")
-    @Length(min = 2, max = 100, message = "Slug must be between 2 and 100 characters")
+    @Length(min = 2, message = "slug must be at least 2 characters")
+    @Length(max = 30, message = "slug must not exceed 30 characters")
     private String slug ;
 
     @NotNull
     @NotBlank(message = "Description Is Required")
-    @Length(min = 6,message = "description must be at least 6 characters")
+    @Length(min = 6, message = "description must be at least 6 characters")
+    @Length(max = 255, message = "description must not exceed 255 characters")
     private String description;
     private Boolean isActive;
 

@@ -41,10 +41,11 @@ public class OrderService {
 
     // This method is used when the user wants to purchase from their shopping cart.
     public String purchaseFromCart(Integer cartId, Integer quantity, User customer) throws CartLineItemException {
-        Optional<CartLineItem> cartOptional = findCartLineItemById(cartId);
-        if (cartOptional.isPresent()) {
-            CartLineItem cartLineItemPayment = cartOptional.get();
+            Optional<CartLineItem> cartOptional = findCartLineItemById(cartId);
+            CartLineItem cartLineItemPayment=cartOptional.orElseThrow(()-> new CartLineItemException("Cannot Found Cart With Id " + cartId));
             Order order = findOrCreateOrder(customer);
+
+            //Get product and calculator
             Product product = getProductById(cartLineItemPayment.getProductId().getId());
             Float taxPerProduct = cartLineItemPayment.getTaxTotalAmount() / cartLineItemPayment.getQuantity();
             Float totalAmount = calculateTotalAmount(product, quantity, taxPerProduct);
@@ -53,9 +54,6 @@ public class OrderService {
             OrderLineItem orderLineItem = createOrderLineItem(order, product, quantity, taxAmount, totalAmount);
             updateOrderAndCart(customer, order, cartLineItemPayment, totalAmount, taxAmount, orderLineItem);
             return "Buy Successfully";
-        } else {
-            throw new CartLineItemException("Cannot Found Cart With Id " + cartId);
-        }
     }
 
     private Optional<CartLineItem> findCartLineItemById(Integer cartId) {
@@ -81,6 +79,7 @@ public class OrderService {
         return (product.getDiscountPrice() * quantity) + (taxPerProduct * quantity);
     }
 
+    //create order and setup data
     private OrderLineItem createOrderLineItem(Order order, Product product, int quantity, Float taxAmount, Float totalAmount) {
         OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setOrderId(order);

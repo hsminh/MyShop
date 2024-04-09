@@ -86,9 +86,9 @@ public class CartService {
         return cartLineItem;
     }
 
-    private void updateCartAndCartItem(Cart cart, CartLineItem cartLineItem, Product selectProduct, Integer quantity) {
-        Float taxAmount = calculateTaxAmount(selectProduct, quantity);
-        Float priceBeforeTax = selectProduct.getDiscountPrice() * quantity;
+    private void updateCartAndCartItem(Cart cart, CartLineItem cartLineItem, Product buyProduct, Integer quantity) {
+        Float taxAmount = calculateTaxAmount(buyProduct, quantity);
+        Float priceBeforeTax = buyProduct.getDiscountPrice() * quantity;
 
         cart.setCountItem(cart.getCountItem() + quantity);
         cart.setTaxAmount(cart.getTaxAmount() + taxAmount);
@@ -98,7 +98,7 @@ public class CartService {
         cartLineItem.setSubTotalAmount(cartLineItem.getSubTotalAmount() + priceBeforeTax);
         cartLineItem.setTaxTotalAmount(cartLineItem.getTaxTotalAmount() + taxAmount);
         cartLineItem.setTotalAmount(cartLineItem.getSubTotalAmount() + cartLineItem.getTaxTotalAmount());
-        cartLineItem.setProductId(selectProduct);
+        cartLineItem.setProductId(buyProduct);
         cartLineItem.setCartId(cart);
 
         this.cartLineItemRepositoty.save(cartLineItem);
@@ -111,17 +111,19 @@ public class CartService {
 
     public void deleteCartLineItem(Integer cardLineItemId, User customer) throws CartLineItemException {
         Optional<CartLineItem> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
-        if(cartLineItemsOptional.isPresent()) {
-            //set Cart Null
-            CartLineItem cartLineItems = cartLineItemsOptional.get();
+        CartLineItem cartLineItems = cartLineItemsOptional.orElseThrow(() -> new CartLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId));
+
+            // Unlink Cart from CartLineItem
             cartLineItems.setCartId(null);
             this.cartLineItemRepositoty.save(cartLineItems);
-            //Set Cart in CartLineItem
+
+            // Update Cart
             Cart cart=this.cartReposttory.findByUserId(customer);
             cart.setCountItem(cart.getCountItem()-cartLineItems.getQuantity());
             cart.setTaxAmount(cart.getTaxAmount()-cartLineItems.getTaxTotalAmount());
             cart.setTotalAmount(cart.getTotalAmount()-cartLineItems.getTotalAmount());
 
+        // Check if the cart is empty after removing the cart line item
             List<CartLineItem>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
             if (cartLineItemContailCartId.isEmpty())
             {
@@ -130,9 +132,6 @@ public class CartService {
 
             this.cartReposttory.save(cart);
             this.cartLineItemRepositoty.delete(cartLineItems);
-        } else {
-            throw new CartLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId);
-        }
     }
 
     public void clearCard(User Customer)

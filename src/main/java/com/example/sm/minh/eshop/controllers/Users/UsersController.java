@@ -34,7 +34,7 @@ public class UsersController {
 
     @GetMapping("/users/register")
     public String viewRegisterForm(Model model) {
-        model.addAttribute("pageTitle", "Register Form");
+        model.addAttribute("pageTitle", "Sign Up");
         model.addAttribute("titleForm", "Sign Up");
         model.addAttribute("isNewUser", true);
         model.addAttribute("userRequest", new UserRequest());
@@ -78,7 +78,7 @@ public class UsersController {
             UserRequest userRequest=UserMapper.toUserRequest(user);
 
             this.userService.prepareFormModel(model, "Edit User", false);
-            model.addAttribute("pageTitle", "Edit User");
+            model.addAttribute("pageTitle", "Edit User Id | "+userDetails.getUserId());
             model.addAttribute("titleForm", "Edit User");
             model.addAttribute("userRequest", userRequest);
             return "user/register-form";

@@ -33,14 +33,15 @@ public class ProductController {
         if(isHide==true)
         {
             model.addAttribute("hideAndShowButton", "Show Deleted Product");
-            model.addAttribute("ProductTitle", "Product");
+            model.addAttribute("productTitle", "Product");
         }else
         {
             model.addAttribute("hideAndShowButton", "Hide Deleted Product");
-            model.addAttribute("ProductTitle", "Deleted Product");
+            model.addAttribute("productTitle", "Deleted Product");
         }
+        model.addAttribute("pageTitle","Product");
         model.addAttribute("isChoice", "Products");
-        model.addAttribute("ListProduct", productSerVice.findAll(null, keyWord,isHide));
+        model.addAttribute("listProduct", productSerVice.findAll(null, keyWord,isHide));
         isHide=(isHide==false)?true:false;
         model.addAttribute("isHide", isHide);
         return "product/product";
@@ -49,17 +50,17 @@ public class ProductController {
     @GetMapping("/products/add")
     public String viewAddProduct(Model model) {
         model.addAttribute("pageTitle", "Add Product");
-        model.addAttribute("TitleForm", "Add Product");
+        model.addAttribute("titleForm", "Add Product");
         model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
         model.addAttribute("productRequest", new ProductRequest());
         return "product/add-product-form";
     }
 
     @GetMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteProduct(@PathVariable("id") Integer deleteProductId, RedirectAttributes redirectAttributes) {
         try {
-            productSerVice.delete(id);
-            redirectAttributes.addFlashAttribute("Message", "Delete Successful Product With Id " + id);
+            productSerVice.delete(deleteProductId);
+            redirectAttributes.addFlashAttribute("Message", "Delete Successful Product With Id " + deleteProductId);
         } catch (ProductException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
@@ -67,10 +68,10 @@ public class ProductController {
     }
 
     @GetMapping("/products/restore/{id}")
-    public String restoreProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String restoreProduct(@PathVariable("id") Integer restoreProductId, RedirectAttributes redirectAttributes) {
         try {
-            productSerVice.restoreProduct(id);
-            redirectAttributes.addFlashAttribute("Message", "Restore Successful Product With Id " + id);
+            productSerVice.restoreProduct(restoreProductId);
+            redirectAttributes.addFlashAttribute("Message", "Restore Successful Product With Id " + restoreProductId);
         } catch (ProductException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
@@ -80,9 +81,9 @@ public class ProductController {
     public String editProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
             model.addAttribute("pageTitle", "Edit Product | ID " + id);
-            model.addAttribute("formTitle", "Edit Product");
+            model.addAttribute("TitleForm", "Edit Product");
             model.addAttribute("ListProductCategory", productSerVice.findAllCategory());
-            model.addAttribute("productRequest", ProductRequestMapper.toProductRequest(productSerVice.findByid(id).orElseThrow(() -> new ProductException("Product not found"))));
+            model.addAttribute("productRequest", ProductRequestMapper.toProductRequest(this.productSerVice.findById(id)));
             return "product/add-product-form";
         } catch (ProductException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());

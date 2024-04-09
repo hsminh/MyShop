@@ -36,7 +36,8 @@
         public String viewOrderDetail(@RequestParam("oder-line-item-id")Integer orderLineItemId,Model model, RedirectAttributes redirectAttributes) throws OrderLineItemException {
             try
             {
-                model.addAttribute("OderLineItem",this.orderService.findOrderLineItemById(orderLineItemId));
+                model.addAttribute("pageTitle", "Order ID | "+orderLineItemId);
+                model.addAttribute("viewOderLineItem",this.orderService.findOrderLineItemById(orderLineItemId));
                 return "order/order-detail";
             }catch (OrderLineItemException ex)
             {
@@ -59,6 +60,7 @@
                 pageNum = 1;
             }
             Page<OrderLineItem> listOrderLineItem = this.orderService.findByOrderId(order, pageNum - 1);
+            model.addAttribute("pageTitle", "Order");
             model.addAttribute("pageNum", pageNum);
             model.addAttribute("order", order);
             model.addAttribute("totalPage", totalPage);

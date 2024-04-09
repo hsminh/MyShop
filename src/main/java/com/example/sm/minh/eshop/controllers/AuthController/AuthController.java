@@ -41,21 +41,20 @@ public class AuthController {
     public String viewResetPassword(@RequestParam("token") String token, Model model) {
         Token resetToken = this.tokenService.isTokenExists(token);
         if (resetToken == null) {
-            return "redirect:/auth/forgot";
+            return "redirect:/auth/forgot-password";
         }
         model.addAttribute("token", token);
         return "authenticated/update-password";
     }
 
     @GetMapping("/auth/update-password")
-    public String viewUpdatePassword(@RequestParam("email")String email, @RequestParam("token")String code,Model model, RedirectAttributes redirectAttributes) {
+    public String viewUpdatePassword(@RequestParam("email")String email, @RequestParam("token")String code,Model model) {
         User verifiedUser = this.userService.findUserByUserName(email);
         Token token=this.tokenService.isTokenExists(code);
         // Check token is valid 
         if (!(this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser))) {
             return "redirect:/auth/forgot";
         }
-
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
         model.addAttribute("token",token);
@@ -65,15 +64,14 @@ public class AuthController {
     @PostMapping("/auth/save-update-password")
     public String updatePassword(@RequestParam("email")String email
             , @RequestParam("password")String newPassword
-            , @RequestParam("token")String token
             , RedirectAttributes redirectAttributes) {
 
-        User user=this.userService.findUserByUserName(email);
-        if(user!=null)
+        User savedUser=this.userService.findUserByUserName(email);
+        if(savedUser!=null)
         {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            this.tokenService.deleteToken(user);
-            this.userService.save(user);
+            savedUser.setPassword(passwordEncoder.encode(newPassword));
+            this.tokenService.deleteToken(savedUser);
+            this.userService.save(savedUser);
             redirectAttributes.addFlashAttribute("Message","Change Password Successfully");
             return "login-form";
         }

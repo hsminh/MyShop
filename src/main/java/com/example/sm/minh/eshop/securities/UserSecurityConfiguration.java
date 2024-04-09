@@ -1,9 +1,11 @@
 package com.example.sm.minh.eshop.securities;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,11 +32,13 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
 
-                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/forgot-password","/auth/reset-password","/auth/send-email","/auth/verify-token","auth/update-password","/auth/save-update-password","auth/verify-verification-code").permitAll()
+                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/forgot-password","/auth/reset-password","/auth/send-email","/auth/verify-token","/auth/update-password","/auth/save-update-password","/auth/verify-verification-code").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
+                        .requestMatchers("/orders/**").hasAnyAuthority("Admin","User")
+
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")
-                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**","/public/**").permitAll()
+                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/javascripts/**", "/images/**","/public/**").permitAll()
                         .anyRequest().authenticated()
                 ).formLogin(
                         form->form.loginPage("/login-form").loginProcessingUrl("/authenticateTheUser")

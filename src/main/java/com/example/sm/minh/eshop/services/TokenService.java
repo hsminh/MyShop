@@ -16,7 +16,7 @@ public class TokenService {
     @Autowired
     private TokenRepository tokenRepository;
 
-    public Token createToken(User user,String code) {
+    public void createToken(User user, String code) {
         String tokenValue = code;
         LocalDateTime expirationDateTime = LocalDateTime.now().plusMinutes(5);
         Token token = new Token();
@@ -25,7 +25,6 @@ public class TokenService {
         token.setUser(user);
         token.setExpiresAt(expirationDateTime);
         tokenRepository.save(token);
-        return token;
     }
 
     public boolean isValidToken(String tokenValue) {

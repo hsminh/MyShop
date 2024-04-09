@@ -31,48 +31,37 @@ public class ProductCategoryService {
     }
 
 
-    public ProductCategory save(ProductCategory productCategories) {
+    public ProductCategory saveCategory(ProductCategory productCategories) {
         return this.productCategoryRepository.save(productCategories);
     }
     @Transactional
-    public void deleteCategory(Integer id) throws ProductCategoryException, ProductException {
-        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(id);
-        if (categoryOptional.isPresent()) {
-            ProductCategory category = categoryOptional.get();
-             List< Product>listProducts =this.productRepository.findAll(id,true);
-             for(Product product: listProducts)
-             {
-                 productService.delete(product.getId());
-             }
-            category.setDeletedAt(new Date());
-            category.setIsActive(false);
-            this.productCategoryRepository.save(category);
-        } else {
-            throw new ProductCategoryException("Category with ID " + id + " not found");
+    public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
+        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
+        ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
+        //unlink category from product
+        List< Product>listProducts =this.productRepository.findAll(categoryId,true);
+        for(Product product: listProducts)
+        {
+            productService.delete(product.getId());
         }
+        deleteCategory.setDeletedAt(new Date());
+        deleteCategory.setIsActive(false);
+        this.productCategoryRepository.save(deleteCategory);
     }
 
     public ProductCategory findById(Integer id, Boolean isHide) throws ProductCategoryException {
-        System.out.println("come this1");
         Optional<ProductCategory> categoryOptional=null;
-        System.out.println("come this2");
-
+        //check if category is deleted or no
         if(isHide==null)
         {
-            System.out.println("come this3");
             categoryOptional = this.productCategoryRepository.findById(id);
         }else
         {
-            System.out.println("come this4");
             categoryOptional = this.productCategoryRepository.findById(id,isHide);
         }
-        System.out.println("come this5");
-        if (categoryOptional.isPresent()) {
-            ProductCategory category = categoryOptional.get();
-            return category;
-        } else {
-            throw new ProductCategoryException("Category with ID " + id + " not found");
-        }
+
+        ProductCategory targetProduct=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + id + " not found"));
+        return targetProduct;
     }
 
 

@@ -9,6 +9,7 @@ import com.example.sm.minh.eshop.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class OrderRestController {
         }
     }
 
-    @GetMapping("/order/buy-direct")
+    @PostMapping("/order/buy-direct")
     public String buyProductDirectly(
             @AuthenticationPrincipal ShopMeUserDetail customer,
             @RequestParam(value = "productId" ,required = false) Integer productId,

@@ -19,17 +19,17 @@
         private Integer id;
 
 
-        @Column(name = "user_name", length = 255, nullable = false)
+        @Column(name = "user_name", length = 100, nullable = false)
         private String userName;
 
 
-        @Column(name = "password", length = 255, nullable = false)
+        @Column(name = "password", length = 50, nullable = false)
         private String password;
 
-        @Column(name = "first_name", length = 255, nullable = false)
+        @Column(name = "first_name", length = 50, nullable = false)
         private String firstName;
 
-        @Column(name = "last_name", length = 255, nullable = false)
+        @Column(name = "last_name", length = 50, nullable = false)
         private String lastName;
 
         @Column(name = "created_at", nullable = false)

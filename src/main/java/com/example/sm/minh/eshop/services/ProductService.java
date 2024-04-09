@@ -57,12 +57,8 @@ public class ProductService {
         return this.productCategoryRepository.findAllCategoriesWithProducts();
     }
     public ProductCategory getCategoryById(Integer id) throws CategoryProductException {
-        Optional<ProductCategory> productCategory= this.productCategoryRepository.findById(id);
-        if(productCategory.isPresent())
-        {
-            return  productCategory.get();
-        }
-        throw new CategoryProductException("Cannot Find Category With ID :"+id);
+        Optional<ProductCategory> optionalProductCategory= this.productCategoryRepository.findById(id);
+        return optionalProductCategory.orElseThrow(()->new CategoryProductException("Cannot Find Category With ID :"+id));
     }
 
     public Product save(Product product) {
@@ -70,22 +66,14 @@ public class ProductService {
     }
 
     public void delete(Integer id) throws ProductException {
-        // Check if It Exist
-        Optional<Product> productOption = this.findByid(id);
-        if (productOption.isPresent()) {
-            Product product = productOption.get();
+        Product deleteProduct = this.findById(id);
+         // unlink Product from Product
+         deleteCartLineItemsByProduct(deleteProduct);
+         // Mark the product as deleted and inactive
+        deleteProduct.setDeletedAt(new Date());
+        deleteProduct.setIsActive(false);
+        this.producsRepository.save(deleteProduct);
 
-
-            // Delete related cart items for the product
-            deleteCartLineItemsByProduct(product);
-
-            // Mark the product as deleted and inactive
-            product.setDeletedAt(new Date());
-            product.setIsActive(false);
-            this.producsRepository.save(product);
-        } else {
-            throw new ProductException("Cannot Found Product With Id : " + id);
-        }
     }
 
     // Method to delete cart items related to a product
@@ -125,36 +113,31 @@ public class ProductService {
                     throw new ProductException("Cannot Restore "+productCategory.getName() + "Because it not exist");
                 }
             }
-            this.setCartLineItemAndCartToDelete(product);
+            this.updateCartAndCAndCartLineItem(product);
             product.setIsActive(true);
             this.producsRepository.save(productOption.get());
         }else {
             throw new ProductException("Cannot Found Product With Id : "+id);
         }
     }
-    public void setCartLineItemAndCartToDelete(Product product)
+    public void updateCartAndCAndCartLineItem(Product product)
     {
         for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
         {
-            Cart setCart=cartLineItem.getCartId();
-            setCart.setTaxAmount(setCart.getTaxAmount()-cartLineItem.getTaxTotalAmount());
-            setCart.setCountItem(setCart.getCountItem()-cartLineItem.getQuantity());
-            setCart.setTotalAmount(setCart.getTotalAmount()-cartLineItem.getTotalAmount());
-            setCart.setCreatedAt(new Date());
+            Cart updateCart=cartLineItem.getCartId();
+            updateCart.setTaxAmount(updateCart.getTaxAmount()-cartLineItem.getTaxTotalAmount());
+            updateCart.setCountItem(updateCart.getCountItem()-cartLineItem.getQuantity());
+            updateCart.setTotalAmount(updateCart.getTotalAmount()-cartLineItem.getTotalAmount());
+            updateCart.setUpdatedAt(new Date());
             cartLineItem.setCartId(null);
             this.cartLineItemRepositoty.save(cartLineItem);
-            this.cartReposttory.save(setCart);
+            this.cartReposttory.save(updateCart);
             this.cartLineItemRepositoty.delete(cartLineItem);
         }
     }
-    public Optional<Product> findByid(Integer id) throws ProductException {
-        Optional<Product> productOption=this.producsRepository.findById(id);
-        if(productOption.isPresent())
-        {
-            return this.producsRepository.findById(id);
-        }else {
-            throw new ProductException("Cannot Found Products With Id : "+id);
-        }
+    public Product findById(Integer id) throws ProductException {
+            Optional<Product> productOption=this.producsRepository.findById(id);
+            return productOption.orElseThrow(()->new ProductException("Cannot Found Products With Id : "+id));
     }
 
     public String checkNameAndSkuUnique(String name, String sku, Integer id) {
@@ -200,7 +183,7 @@ public class ProductService {
 
 
 
-    public Product setData(Product product,Product productInForm) throws IOException {
+    public Product setDataProduct(Product product, Product productInForm) throws IOException {
         product.setUpdatedAt(new Date());
         product.setContent(productInForm.getContent());
         product.setSku(productInForm.getSku());
@@ -213,7 +196,7 @@ public class ProductService {
         return product;
     }
 
-    public Product setImage(Product product,MultipartFile multipartFile) throws IOException {
+    public Product saveImage(Product product, MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()) {
             String fileName = multipartFile.getOriginalFilename();
             product.setImage(fileName);
@@ -230,13 +213,13 @@ public class ProductService {
 
     public void saveProduct(Product product, MultipartFile multipartFile) throws IOException, ProductException {
         if (product.getId() != null) {
-            Product productInDb = this.findByid(product.getId()).orElseThrow(() -> new ProductException("Product not found"));
-            productInDb=this.setData(productInDb,product);
-            productInDb=this.setImage(productInDb,multipartFile);
-            this.setImage(productInDb,multipartFile);
+            Product productInDb = this.findById(product.getId());
+            productInDb=this.setDataProduct(productInDb,product);
+            productInDb=this.saveImage(productInDb,multipartFile);
+            this.saveImage(productInDb,multipartFile);
         } else {
             product.setCreatedAt(new Date());
-            this.setImage(product,multipartFile);
+            this.saveImage(product,multipartFile);
         }
     }
 }

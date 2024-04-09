@@ -32,15 +32,15 @@ public class ProductCategoryController {
         if(isHide==true)
         {
             model.addAttribute("hideAndShowButton", "Show Deleted Category");
-            model.addAttribute("ProductTitle", "Product Category");
+            model.addAttribute("productTitle", "Product Category");
         }else
         {
             model.addAttribute("hideAndShowButton", "Hide Deleted Category");
-            model.addAttribute("ProductTitle", "Deleted Product Category");
+            model.addAttribute("productTitle", "Deleted Product Category");
         }
         model.addAttribute("pageTitle","Category");
         model.addAttribute("isChoice", "Category");
-        model.addAttribute("ListCate",this.productCategoriesSerVice.findAll(serachValue,isHide));
+        model.addAttribute("listCate",this.productCategoriesSerVice.findAll(serachValue,isHide));
         isHide=(isHide==false)?true:false;
         model.addAttribute("isHide", isHide);
         return "category/category";
@@ -52,7 +52,7 @@ public class ProductCategoryController {
 
         model.addAttribute("categoryRequest",new CategoryRequest());
         model.addAttribute("pageTitle","Category");
-        model.addAttribute("TitleForm", "Add Category");
+        model.addAttribute("titleForm", "Add Category");
         model.addAttribute("isNewUser", true);
         return "category/add-category-form";
     }
@@ -78,7 +78,7 @@ public class ProductCategoryController {
             ProductCategory productCategory=this.productCategoriesSerVice.findById(savedCategory.getId(),null);
             savedCategory=this.productCategoriesSerVice.setDataForProductCategory(productCategory,savedCategory);
         }
-        this.productCategoriesSerVice.save(savedCategory);
+        this.productCategoriesSerVice.saveCategory(savedCategory);
         return "redirect:/category";
     }
 
@@ -110,8 +110,8 @@ public class ProductCategoryController {
         try {
             ProductCategory editCategory=this.productCategoriesSerVice.findById(id,true);
 
-            model.addAttribute("pageTitle","Category");
-            model.addAttribute("TitleForm", "Edit Category");
+            model.addAttribute("pageTitle","Edit Category ID | "+id);
+            model.addAttribute("titleForm", "Edit Category");
             model.addAttribute("categoryRequest",CategoryRequestMapper.toCategoryRequest(editCategory));
             return "category/add-category-form";
         } catch (ProductCategoryException e) {

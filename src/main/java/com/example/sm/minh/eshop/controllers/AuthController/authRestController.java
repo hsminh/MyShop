@@ -18,7 +18,6 @@ public class authRestController {
     @GetMapping("/auth/verify-verification-code")
     public String verifyVerificationCode(@RequestParam("verificationCode") String verificationCode,
                                          @RequestParam("email") String email) {
-        System.out.println("come 123"+verificationCode);
         User verifiedUser = this.userService.findUserByUserName(email);
         Token token=this.tokenService.isTokenExists(verificationCode);
         if (this.tokenService.isValidToken(verificationCode)&&token.getToken().equals(verificationCode)&&token.getUser().equals(verifiedUser)) {
