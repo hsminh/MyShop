@@ -3,7 +3,7 @@ package com.example.sm.minh.eshop.services;
 import com.example.sm.minh.eshop.models.Role;
 import com.example.sm.minh.eshop.models.UserProfile;
 import com.example.sm.minh.eshop.models.User;
-import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.repositories.UserProfileRepository;
 import com.example.sm.minh.eshop.repositories.UserRepository;
@@ -85,12 +85,12 @@ public class UserService {
         return this.userProfileRepository.save(userProfile);
     }
 
-    public User findUserById(int id) throws UserNotFoundException {
+    public User findUserById(int id) throws UserException {
         try {
             return this.userRepository.findById(id).get();
         }catch (Exception ex)
         {
-            throw new UserNotFoundException("Cannot Find User With Id : "+id);
+            throw new UserException("Cannot Find User With Id : "+id);
         }
     }
 
@@ -109,7 +109,7 @@ public class UserService {
         return newUser;
     }
 
-    public User updateUser(String editPassword, User editedUser) throws UserNotFoundException {
+    public User updateUser(String editPassword, User editedUser) throws UserException {
         User user = this.findUserById(editedUser.getId());
         user.setActive(editedUser.getActive());
         user.setUpdatedAt(new Date());

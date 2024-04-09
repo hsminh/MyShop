@@ -4,7 +4,7 @@
     import com.example.sm.minh.eshop.models.OrderLineItem;
     import com.example.sm.minh.eshop.models.User;
     import com.example.sm.minh.eshop.exceptions.OrderLineItemException;
-    import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
+    import com.example.sm.minh.eshop.exceptions.UserException;
     import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
     import com.example.sm.minh.eshop.services.OrderService;
     import com.example.sm.minh.eshop.services.UserService;
@@ -47,7 +47,7 @@
         }
 
         @GetMapping("/order/history/{pageNum}")
-        public String viewPurchaseHistory(@PathVariable("pageNum") Integer pageNum, Model model, @AuthenticationPrincipal ShopMeUserDetail user) throws UserNotFoundException {
+        public String viewPurchaseHistory(@PathVariable("pageNum") Integer pageNum, Model model, @AuthenticationPrincipal ShopMeUserDetail user) throws UserException {
             User customerLogin = this.userService.findUserById(user.getUserId());
             Order order = this.orderService.getOrderById(customerLogin);
             Page<OrderLineItem> listOrderLineItemPage = this.orderService.findByOrderId(order, 0);
@@ -59,6 +59,7 @@
             if (pageNum < 1) {
                 pageNum = 1;
             }
+
             Page<OrderLineItem> listOrderLineItem = this.orderService.findByOrderId(order, pageNum - 1);
             model.addAttribute("pageTitle", "Order");
             model.addAttribute("pageNum", pageNum);

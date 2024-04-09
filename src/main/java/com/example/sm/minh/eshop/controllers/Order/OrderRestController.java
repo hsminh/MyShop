@@ -1,5 +1,6 @@
 package com.example.sm.minh.eshop.controllers.Order;
 
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.exceptions.CartLineItemException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
@@ -29,8 +30,10 @@ public class OrderRestController {
         try {
             User customerUser = this.cartService.findUserById(customer.getUserId());
             return this.orderService.purchaseFromCart(cartLineItemId, quantity, customerUser);
-        } catch (ProductException | CartLineItemException ex) {
+        } catch (CartLineItemException ex) {
             return "Error saving order: " + ex.getMessage();
+        } catch (UserException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -46,6 +49,8 @@ public class OrderRestController {
             return notification;
         } catch (ProductException | CartLineItemException ex) {
             return "Error saving order: " + ex.getMessage();
+        } catch (UserException e) {
+            throw new RuntimeException(e);
         }
     }
 }

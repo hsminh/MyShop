@@ -1,7 +1,10 @@
 package com.example.sm.minh.eshop.controllers.AuthController;
 
+import com.example.sm.minh.eshop.exceptions.TokenException;
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.models.Token;
 import com.example.sm.minh.eshop.models.User;
+import com.example.sm.minh.eshop.services.AuthService;
 import com.example.sm.minh.eshop.services.TokenService;
 import com.example.sm.minh.eshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthService authService;
     @GetMapping("/auth/forgot-password")
     public String viewForgotPassword(Model model)
     {
@@ -30,30 +36,32 @@ public class AuthController {
         return "authenticated/forgot";
     }
 
-    @GetMapping("/auth/verify-token")
-    public String viewVerification(@RequestParam("email") String email, Model model) {
-        model.addAttribute("pageTitle", "Verification Code");
-        model.addAttribute("email",email);
-        return "authenticated/vertification-code-form";
-    }
+    @PostMapping("/auth/send-email")
+    public String sendEmail(Model model,@RequestParam("email") String email,RedirectAttributes redirectAttributes) throws UserException {
 
-    @GetMapping("/auth/reset-password")
-    public String viewResetPassword(@RequestParam("token") String token, Model model) {
-        Token resetToken = this.tokenService.isTokenExists(token);
-        if (resetToken == null) {
+        try {
+            this.authService.sendEmail(email);
+            model.addAttribute("pageTitle", "Verification Code");
+            model.addAttribute("email",email);
+            return "authenticated/verification-code-form";
+        }catch (UserException ex)
+        {
+            redirectAttributes.addFlashAttribute("errorMessage",ex.getMessage());
             return "redirect:/auth/forgot-password";
         }
-        model.addAttribute("token", token);
-        return "authenticated/update-password";
     }
 
-    @GetMapping("/auth/update-password")
-    public String viewUpdatePassword(@RequestParam("email")String email, @RequestParam("token")String code,Model model) {
+
+    @PostMapping("/auth/reset-password")
+    public String viewResetPassword(@RequestParam("token") String token,@RequestParam("email")String email, Model model) throws TokenException {
         User verifiedUser = this.userService.findUserByUserName(email);
-        Token token=this.tokenService.isTokenExists(code);
-        // Check token is valid 
-        if (!(this.tokenService.isValidToken(code)&&token.getToken().equals(code)&&token.getUser().equals(verifiedUser))) {
-            return "redirect:/auth/forgot";
+        Token verificationToken=this.tokenService.findTokenByUser(verifiedUser);
+        // Check token is valid
+        if (!(this.tokenService.isValidToken(verificationToken)&&verificationToken.getToken().equals(token)&&verificationToken.getUser().equals(verifiedUser))) {
+            model.addAttribute("pageTitle", "Verification Code");
+            model.addAttribute("email",email);
+            model.addAttribute("errMessage","Your code is invalid");
+            return "authenticated/verification-code-form";
         }
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
@@ -61,19 +69,20 @@ public class AuthController {
         return "authenticated/update-password";
     }
 
+
+
     @PostMapping("/auth/save-update-password")
     public String updatePassword(@RequestParam("email")String email
             , @RequestParam("password")String newPassword
             , RedirectAttributes redirectAttributes) {
-
-        User savedUser=this.userService.findUserByUserName(email);
+            User savedUser=this.userService.findUserByUserName(email);
         if(savedUser!=null)
         {
             savedUser.setPassword(passwordEncoder.encode(newPassword));
             this.tokenService.deleteToken(savedUser);
             this.userService.save(savedUser);
             redirectAttributes.addFlashAttribute("Message","Change Password Successfully");
-            return "login-form";
+            return "redirect:/login-form";
         }
         return "redirect:/auth/forgot";
     }

@@ -26,6 +26,7 @@ public class ProductController {
     public String viewListProduct(@RequestParam(value = "search" ,required = false)String keyWord,
                      @RequestParam(value = "isHide" ,required = false)Boolean isHide,
                      Model model) {
+
         if(isHide==null)
         {
             isHide=true;
@@ -39,11 +40,13 @@ public class ProductController {
             model.addAttribute("hideAndShowButton", "Hide Deleted Product");
             model.addAttribute("productTitle", "Deleted Product");
         }
+
         model.addAttribute("pageTitle","Product");
         model.addAttribute("isChoice", "Products");
         model.addAttribute("listProduct", productSerVice.findAll(null, keyWord,isHide));
         isHide=(isHide==false)?true:false;
         model.addAttribute("isHide", isHide);
+
         return "product/product";
     }
 

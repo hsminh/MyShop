@@ -38,11 +38,13 @@ public class ProductCategoryController {
             model.addAttribute("hideAndShowButton", "Hide Deleted Category");
             model.addAttribute("productTitle", "Deleted Product Category");
         }
+
         model.addAttribute("pageTitle","Category");
         model.addAttribute("isChoice", "Category");
         model.addAttribute("listCate",this.productCategoriesSerVice.findAll(serachValue,isHide));
         isHide=(isHide==false)?true:false;
         model.addAttribute("isHide", isHide);
+
         return "category/category";
     }
 
@@ -83,7 +85,7 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/category/delete/{id}")
-    public String DeleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             this.productCategoriesSerVice.deleteCategory(id);
             redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);

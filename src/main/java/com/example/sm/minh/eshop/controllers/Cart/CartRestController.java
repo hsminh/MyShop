@@ -1,5 +1,6 @@
 package com.example.sm.minh.eshop.controllers.Cart;
 
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.models.Product;
 import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.exceptions.ProductException;
@@ -17,31 +18,27 @@ public class CartRestController {
     @Autowired
     private CartService cartService;
     @GetMapping("/cart/update-cart")
-    public String updateCart(
-            Model model,
-            @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "selectProduct", required = false) Integer productId,
-            @RequestParam(value = "quantity", required = false) Integer quantity) {
+    public String updateCart(Model model, @AuthenticationPrincipal ShopMeUserDetail customer,
+                             @RequestParam(value = "selectProduct") Integer productId,
+                             @RequestParam(value = "quantity") Integer quantity) {
         try {
-            User customerUser = this.cartService.findUserById(customer.getUserId());
+            User customerUser = cartService.findUserById(customer.getUserId());
             if (productId == null || quantity == null || quantity <= 0) {
                 throw new IllegalArgumentException("Invalid productId or quantity.");
             }
-            Product selectedProduct = this.cartService.getProductById(productId);
-            this.cartService.addProductToCart(customerUser, selectedProduct, quantity);
+            Product selectedProduct = cartService.getProductById(productId);
+            cartService.addProductToCart(customerUser, selectedProduct, quantity);
             model.addAttribute("messageSuccess", "Cart updated successfully");
             return "Cart updated successfully";
-        } catch (ProductException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-            return "Error updating cart: " + ex.getMessage();
-        } catch (IllegalArgumentException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
+        } catch (ProductException | IllegalArgumentException | UserException ex) {
+            model.addAttribute("errorMessage", "Error updating cart: " + ex.getMessage());
             return "Error updating cart: " + ex.getMessage();
         }
     }
 
+
     @GetMapping("/cart/clear")
-    public void clearAllCardAndCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer) throws ProductException {
+    public void clearAllCardAndCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer) throws ProductException, UserException {
         User customerUser = this.cartService.findUserById(customer.getUserId());
         this.cartService.clearCard(customerUser);
     }

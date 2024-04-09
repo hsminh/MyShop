@@ -1,5 +1,6 @@
     package com.example.sm.minh.eshop.controllers.Cart;
 
+    import com.example.sm.minh.eshop.exceptions.UserException;
     import com.example.sm.minh.eshop.models.Cart;
     import com.example.sm.minh.eshop.models.Product;
     import com.example.sm.minh.eshop.models.User;
@@ -44,10 +45,8 @@
             try {
                 User user = this.cartService.findUserById(customer.getUserId());
                 this.cartService.deleteCartLineItem(cartLineItemId, user);
-            } catch (CartLineItemException ex) {
+            } catch (CartLineItemException | UserException ex) {
                 redirectAttributes.addFlashAttribute("message", ex.getMessage());
-            } catch (ProductException e) {
-                throw new RuntimeException(e);
             }
             return "redirect:/cart/shopping-cart";
         }
@@ -65,6 +64,8 @@
             } catch (ProductException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
                 return "redirect:/main-page";
+            } catch (UserException e) {
+                throw new RuntimeException(e);
             }
         }
         @PostMapping("/cart/checkout")
@@ -77,7 +78,7 @@
                 this.cartService.checkOutCart(user,productIds,quantities);
                 redirectAttributes.addFlashAttribute("Message","Congratulation! You're Buy Successfully");
                 return "redirect:/main-page";
-            } catch (ProductException ex) {
+            } catch (ProductException | UserException ex) {
                 return "redirect:/main-page";
             } catch (CartLineItemException e) {
                 throw new RuntimeException(e);

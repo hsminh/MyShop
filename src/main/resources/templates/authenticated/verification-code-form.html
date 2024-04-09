@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="component/fragmen ::header"></div>
-    <script th:src="@{javascripts/common/set-time-out-alert.js}" type="text/javascript"></script>
-
+<!--    <script th:src="@{/javascripts/auth/.js}" type="text/javascript"></script>-->
 </head>
 <body>
 <main id="content" role="main" class="w-full max-w-3xl mx-auto p-6">
@@ -20,9 +19,16 @@
             </div>
 
             <div class="mt-5">
-                <form id="submitButton" action="#" method="post">
+                <form id="submitButton" th:action="@{/auth/reset-password}" method="post">
                     <input type="hidden" id="email" name="email" th:value="${email}">
+                    <input type="hidden" id="token" name="token">
+                    <div th:if="${errMessage}">
+                        <input type="hidden" id="errMessage" th:value="${errMessage}">
+                    </div>
+
+                    <div th:replace="component/notification::announcement"></div>
                     <div th:replace="component/notification::alertMessage"></div>
+
                     <div class="grid gap-y-4">
                         <div>
                             <label  class="text-center block text-sm font-bold ml-1 mb-2 dark:text-white">Enter Verification Code</label>
@@ -72,6 +78,12 @@
     document.getElementById('digit5').addEventListener('input', function () {
         moveToNextInput(this, document.getElementById('digit6'));
     });
+    $(document).ready(function() {
+        var errorMessage = $('#errMessage').val();
+        if (errorMessage) {
+            ShowMessageError("Error", errorMessage);
+        }
+    });
     function ShowMessageError(title, message) {
         $('#Title').text(title);
         $('#Message').text(message);
@@ -83,37 +95,37 @@
     }
 
 
-    // Close the alert when clicking on the "x" button
     $('#closeBtn').click(function() {
         $('#AlerMessage').addClass('hidden');
     });
-    $('#submit').click(function (event) {
-        event.preventDefault();
-        let email = $('#email').val();
-        let digit1 = parseInt($('#digit1').val());
-        let digit2 = parseInt($('#digit2').val());
-        let digit3 = parseInt($('#digit3').val());
-        let digit4 = parseInt($('#digit4').val());
-        let digit5 = parseInt($('#digit5').val());
-        let digit6 = parseInt($('#digit6').val());
-        let token = '' + digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-        $.ajax({
-            url: "/auth/verify-verification-code",
-            method: "GET",
-            data: {
-                verificationCode:token,
-                email : email
-            },
-            success: function (data) {
-                if (data !== "duplicated") {
-                    window.location.href = "/auth/update-password?token=" + encodeURIComponent(data)+"&email="+email;
-                } else {
 
-                    ShowMessageError("Verification Code!", "Incorrect Verification Code Or Time Out!");
-                }
-            },
-            error: function () {
-                ShowMessageError("Error!", "Something went wrong.");
+    $(document).ready(function() {
+        $('#submitButton').submit(function(event) {
+            event.preventDefault();
+
+            //Get value in input form
+            let digit1 = parseInt($('#digit1').val());
+            let digit2 = parseInt($('#digit2').val());
+            let digit3 = parseInt($('#digit3').val());
+            let digit4 = parseInt($('#digit4').val());
+            let digit5 = parseInt($('#digit5').val());
+            let digit6 = parseInt($('#digit6').val());
+
+            //Get Token
+            let token = '' + digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
+
+            //Check valid Token
+            let invalidCharacter = false;
+            if (isNaN(digit1) || isNaN(digit2) || isNaN(digit3) || isNaN(digit4) || isNaN(digit5) || isNaN(digit6)) {
+                invalidCharacter = true;
+            }
+
+            //Handle valid form and invalid form
+            if (invalidCharacter) {
+                ShowMessageError("Invalid Character", "Please enter only numeric characters.");
+            } else {
+                $('#token').val(token);
+                $(this).unbind('submit').submit();
             }
         });
     });

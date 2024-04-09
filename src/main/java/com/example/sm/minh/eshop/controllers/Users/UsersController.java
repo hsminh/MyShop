@@ -2,11 +2,10 @@ package com.example.sm.minh.eshop.controllers.Users;
 
 import com.example.sm.minh.eshop.models.UserProfile;
 import com.example.sm.minh.eshop.models.User;
-import com.example.sm.minh.eshop.exceptions.UserNotFoundException;
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.mappers.UserMapper;
 import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
-import com.example.sm.minh.eshop.services.TokenService;
 import com.example.sm.minh.eshop.services.UserService;
 import com.example.sm.minh.eshop.validators.UserProfileRequest;
 import com.example.sm.minh.eshop.validators.UserRequest;
@@ -14,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,11 +24,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/users/register")
     public String viewRegisterForm(Model model) {
@@ -88,7 +81,7 @@ public class UsersController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  UserRequest createUserRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserNotFoundException {
+    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  UserRequest createUserRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserException {
         if (bindingResult.hasErrors()) {
             System.out.println(createUserRequest.getId());
             if (createUserRequest.getId() != null) {

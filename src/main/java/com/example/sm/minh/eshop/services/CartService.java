@@ -1,5 +1,6 @@
 package com.example.sm.minh.eshop.services;
 
+import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.models.Cart;
 import com.example.sm.minh.eshop.models.CartLineItem;
 import com.example.sm.minh.eshop.models.Product;
@@ -31,17 +32,14 @@ public class CartService {
     @Autowired
     private OrderService orderService;
     public Product getProductById(Integer id) throws ProductException {
-        Optional<Product> productDetail=this.productsRepository.findById(id);
-        if(!productDetail.isPresent())
-        {
-            throw new ProductException("Cannot Found Product With Id "+id);
-        }
-        return productDetail.get();
+        Optional<Product> productOptional = productsRepository.findById(id);
+        return productOptional.orElseThrow(() -> new ProductException("Cannot find product with ID: " + id));
     }
 
 
-    public User findUserById(Integer id) throws ProductException {
-        return userRepository.findById(id).get();
+    public User findUserById(Integer id) throws UserException {
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.orElseThrow(() -> new UserException("Cannot find user with ID: " + id));
     }
 
 

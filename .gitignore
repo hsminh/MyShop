@@ -35,3 +35,4 @@ build/
 /.mvn/
 
 public/images
+src/main/resources/local.env
