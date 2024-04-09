@@ -30,7 +30,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
     @GetMapping("/auth/forgot-password")
-    public String viewForgotPassword(Model model)
+        public String viewForgotPassword(Model model)
     {
         model.addAttribute("pageTitle", "Forgot Password");
         return "authenticated/forgot";
@@ -52,8 +52,8 @@ public class AuthController {
     }
 
 
-    @PostMapping("/auth/reset-password")
-    public String viewResetPassword(@RequestParam("token") String token,@RequestParam("email")String email, Model model) throws TokenException {
+    @PostMapping("/auth/validator-token")
+    public String checkValidToken(@RequestParam("token") String token,@RequestParam("email")String email, Model model) throws TokenException {
         User verifiedUser = this.userService.findUserByUserName(email);
         Token verificationToken=this.tokenService.findTokenByUser(verifiedUser);
         // Check token is valid
@@ -63,6 +63,7 @@ public class AuthController {
             model.addAttribute("errMessage","Your code is invalid");
             return "authenticated/verification-code-form";
         }
+        //Token is Valid Come to update password form
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
         model.addAttribute("token",token);

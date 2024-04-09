@@ -134,7 +134,7 @@ public class OrderService {
         }
 
     // This method is used when the user wants to purchase a specific product directly without going through the shopping cart.
-    public String purchaseProductDirect(Integer productId, Integer quantity, User customer) throws CartLineItemException, ProductException {
+    public void purchaseProductDirect(Integer productId, Integer quantity, User customer) throws CartLineItemException, ProductException {
                 Optional<Product> selectProduct=this.productsRepository.findById(productId);
                 if(selectProduct.isPresent())
                 {
@@ -152,12 +152,10 @@ public class OrderService {
                     OrderLineItem orderLineItem=this.setDataForOderLineItemToSave(order,productSelect,quantity,taxAmount,totalAmount);
                     order = setDataForOrderToSave(order, totalAmount, taxAmount);
                     this.orderLineItemRepository.save(orderLineItem);
-                    return "Buy Successfully";
                 }else
                 {
                     throw new ProductException("Cannot Found Product With Id "+productId);
-
-        }
+                }
     }
 
 

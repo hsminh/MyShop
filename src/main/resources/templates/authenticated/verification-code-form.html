@@ -19,7 +19,7 @@
             </div>
 
             <div class="mt-5">
-                <form id="submitButton" th:action="@{/auth/reset-password}" method="post">
+                <form id="submitButton" th:action="@{/auth/validator-token}" method="post">
                     <input type="hidden" id="email" name="email" th:value="${email}">
                     <input type="hidden" id="token" name="token">
                     <div th:if="${errMessage}">

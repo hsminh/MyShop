@@ -37,20 +37,5 @@ public class OrderRestController {
         }
     }
 
-    @PostMapping("/order/buy-direct")
-    public String buyProductDirectly(
-            @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "productId" ,required = false) Integer productId,
-            @RequestParam(value = "quantity", required = false) Integer quantity) {
-        try {
 
-            User customerUser = this.cartService.findUserById(customer.getUserId());
-            String notification = this.orderService.purchaseProductDirect(productId, quantity, customerUser);
-            return notification;
-        } catch (ProductException | CartLineItemException ex) {
-            return "Error saving order: " + ex.getMessage();
-        } catch (UserException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

@@ -1,30 +1,11 @@
-function paymentCart() {
-    var quantity = parseInt($('#quantity').val());
-    var productId = parseInt($('#selectProduct').val());
-
-    var confirmation = confirm("Are you sure you want to proceed with the payment?");
-    if(confirmation)
-    {
-        $.ajax({
-            type: 'POST',
-            url: '/order/buy-direct',
-            data: {
-                productId: productId,
-                quantity: quantity
-            },
-            success: function(response) {
-                window.location.href = '/order/success';
-                // Handle success response, if needed
-            },
-            error: function(xhr, status, error) {
-                alert("Error updating quantity")
-                console.error('Error updating quantity:', error);
-                // Handle error response, if needed
-            }
-        });
-    }
-}
-
+$(document).ready(function() {
+    $('#submitForm').on('submit', function(event) {
+        var confirmation = confirm("Are you sure you want to buy?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    });
+});
 
 $(document).ready(function() {
 
@@ -61,26 +42,22 @@ $(document).ready(function() {
 
         quantityElement.value = quantity;
 
-        // Kiểm tra xem có phải là số hay không, nếu không phải số sẽ trả về NaN
         if (isNaN(originalProductPrice) || isNaN(originalDiscountPrice) || isNaN(quantity)) {
             alert("Invalid input. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có giá trị `NaN` trong quá trình tính toán không
         var totalPrice = originalProductPrice * quantity;
         if (isNaN(totalPrice)) {
             alert("Invalid calculation. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có phải là số hay không, nếu không phải số sẽ trả về NaN
         if (isNaN(originalDiscountPrice) || isNaN(originalDiscountPrice) || isNaN(quantity)) {
             alert("Invalid input. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có giá trị `NaN` trong quá trình tính toán không
         var totalDiscountPrice = originalDiscountPrice * quantity;
         if (isNaN(totalDiscountPrice)) {
             alert("Invalid calculation. Please check the values.");
@@ -101,26 +78,22 @@ $(document).ready(function() {
 
         quantityElement.value = quantity;
 
-        // Kiểm tra xem có phải là số hay không, nếu không phải số sẽ trả về NaN
         if (isNaN(originalProductPrice) || isNaN(originalDiscountPrice) || isNaN(quantity)) {
             alert("Invalid input. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có giá trị `NaN` trong quá trình tính toán không
         var totalPrice = originalProductPrice * quantity;
         if (isNaN(totalPrice)) {
             alert("Invalid calculation. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có phải là số hay không, nếu không phải số sẽ trả về NaN
         if (isNaN(originalDiscountPrice) || isNaN(originalDiscountPrice) || isNaN(quantity)) {
             alert("Invalid input. Please check the values.");
             return;
         }
 
-        // Kiểm tra xem có giá trị `NaN` trong quá trình tính toán không
         var totalDiscountPrice = originalDiscountPrice * quantity;
         if (isNaN(totalDiscountPrice)) {
             alert("Invalid calculation. Please check the values.");
