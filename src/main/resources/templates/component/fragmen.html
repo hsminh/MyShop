@@ -35,9 +35,9 @@
                             <div class="hidden sm:ml-6 sm:block">
                                 <div class="flex space-x-4">
 
-                                    <a th:href="@{/main-page}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Shop'}?'bg-red-100':''" sec:authorize="hasRole('ROLE_USER')">Shop</a>
-                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Products'}?'bg-red-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
-                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Category'}?'bg-red-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
+                                    <a th:href="@{/main-page}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Shop'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_USER')">Shop</a>
+                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Products'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
+                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Category'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +55,6 @@
                                 <span class="sr-only">View cart</span>
                                 <ion-icon name="cart-outline" class="h-8 w-8"></ion-icon>
                             </a>
-
-
-
 
                             <!-- Profile dropdown -->
                             <div class="relative ml-3">

@@ -1,24 +1,29 @@
-function paymentCart(productId) {
-    let quantity = parseInt($('#quantityInput' + productId).val());
+
+function paymentCart(cartLineItemId)
+{
+    //get form
+    var form = document.getElementById('submitForm');
+
+    //get product and quantity
+    var quantity = document.getElementById('quantityInputHidden'+cartLineItemId).value;
+    quantity = parseInt(quantity);
+    alert(quantity)
+    alert(cartLineItemId)
+    document.getElementById('cartLineItemId').setAttribute('value',cartLineItemId);
+    document.getElementById('quantity').setAttribute('value',quantity);
     let confirmation = confirm("Are you sure you want to proceed with the payment?");
     if (confirmation) {
-        $.ajax({
-            type: 'GET',
-            url: '/order',
-            data: {
-                cartLineItemId: productId,
-                quantity: quantity
-            },
-            success: function(response) {
-                window.location.href = '/order/success';
-            },
-            error: function(xhr, status, error) {
-                alert("Error updating quantity");
-                console.error('Error updating quantity:', error);
-            }
-        });
+        form.setAttribute('action', '/cart/purchase-in-cart');
+        form.submit();
     }
 }
+
+
+
+$('#addToCart').on('click', function() {
+    $('#submitCheckout').attr('action', '/cart/checkout');
+});
+
 function updateHiddenQuantity(productId, value) {
     $('#quantityInputHidden' + productId).val(value);
 }
@@ -57,9 +62,14 @@ function decrementQuantity(productId) {
     let quantityElement = $('#quantityInput' + productId);
     let quantity = parseInt(quantityElement.val());
     quantity--;
-    if (quantity < 1) quantity = 1;
-    quantityElement.val(quantity);
-    updatePriceDetails(productId, quantity);
+    if (quantity < 1)
+    {
+        quantity = 1;
+    }else
+    {
+        quantityElement.val(quantity);
+        updatePriceDetails(productId, quantity);
+    }
 }
 
 function incrementQuantity(productId) {
@@ -106,10 +116,16 @@ $(document).ready(function() {
 });
 
 // Notice when check out
-document.getElementById("submitCheckout").addEventListener("click", function(event) {
-    event.preventDefault();
-    let confirmation = confirm("Are you sure you want to proceed with the payment?");
-    if (confirmation) {
-        document.getElementById("checkoutForm").submit();
-    }
+// Sự kiện khi submit form
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("submitForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let confirmation = confirm("Are you sure you want to proceed with the payment?");
+
+        if (confirmation) {
+            this.submit();
+        }
+    });
 });
+

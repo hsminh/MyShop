@@ -1,5 +1,6 @@
     package com.example.sm.minh.eshop.controllers.Cart;
 
+    import com.example.sm.minh.eshop.exceptions.CartExeption;
     import com.example.sm.minh.eshop.exceptions.UserException;
     import com.example.sm.minh.eshop.models.Cart;
     import com.example.sm.minh.eshop.models.Product;
@@ -101,6 +102,27 @@
             } catch (CartLineItemException | UserException | ProductException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             }
+            return "redirect:/main-page";
+        }
+        @PostMapping("/cart/purchase-in-cart")
+        public String purchaseProductFromCart(
+                Model model,
+                @AuthenticationPrincipal ShopMeUserDetail customer,
+                @RequestParam(value = "cartLineItemId",required = false) Integer cartLineItemId,
+                @RequestParam(value = "quantity", required = false) Integer quantity,
+                RedirectAttributes redirectAttributes) {
+            try {
+                User customerUser = this.cartService.findUserById(customer.getUserId());
+                this.orderService.purchaseFromCart(cartLineItemId, quantity, customerUser);
+
+            } catch (CartLineItemException |UserException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+                System.out.println("hia" + e.getMessage());
+                return "redirect:/cart/shopping-cart";
+            }
+            System.out.println("h12ia");
+
+            redirectAttributes.addFlashAttribute("Message", "Congratulation! You're Buy Successfully");
             return "redirect:/main-page";
         }
 

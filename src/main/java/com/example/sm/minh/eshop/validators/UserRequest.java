@@ -24,12 +24,12 @@ public class UserRequest {
     private String password;
 
     @NotBlank(message = "First Name Is Required")
-    @Length(min = 6, message = "firstName must be at least 6 characters")
+    @Length(min = 2, message = "firstName must be at least 2 characters")
     @Length(max = 50, message = "firstName must not exceed 100 characters")
     private String firstName;
 
     @NotBlank(message = "Last Name Is Required")
-    @Length(min = 6, message = "lastName must be at least 6 characters")
+    @Length(min = 2, message = "lastName must be at least 2 characters")
     @Length(max = 50, message = "lastName must not exceed 100 characters")
     private String lastName;
 

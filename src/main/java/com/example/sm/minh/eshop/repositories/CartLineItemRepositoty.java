@@ -13,7 +13,7 @@ import java.util.List;
 public interface CartLineItemRepositoty extends JpaRepository<CartLineItem,Integer> {
     public CartLineItem findByCartIdAndProductId(Cart cartId, Product productId);
 
-//    @Query("select c.* from CartLineItem c where c.productId =:productId and c.productId.isActive=true")
+    //    @Query("select c.* from CartLineItem c where c.productId =:productId and c.productId.isActive=true")
     @Query("SELECT c FROM CartLineItem c WHERE c.productId = :productId AND c.productId.isActive = true")
     public List<CartLineItem> findByProductId(Product productId);
     @Query("SELECT c FROM CartLineItem c WHERE c.cartId = :cartId AND c.productId.isActive = true")

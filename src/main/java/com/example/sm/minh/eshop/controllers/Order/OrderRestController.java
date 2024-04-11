@@ -22,20 +22,7 @@ public class OrderRestController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/order")
-    public String saveOrder(
-            @AuthenticationPrincipal ShopMeUserDetail customer,
-            @RequestParam(value = "cartLineItemId",required = false) Integer cartLineItemId,
-            @RequestParam(value = "quantity", required = false) Integer quantity) {
-        try {
-            User customerUser = this.cartService.findUserById(customer.getUserId());
-            return this.orderService.purchaseFromCart(cartLineItemId, quantity, customerUser);
-        } catch (CartLineItemException ex) {
-            return "Error saving order: " + ex.getMessage();
-        } catch (UserException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
 }

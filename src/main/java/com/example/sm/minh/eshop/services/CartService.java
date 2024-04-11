@@ -111,25 +111,25 @@ public class CartService {
         Optional<CartLineItem> cartLineItemsOptional = this.cartLineItemRepositoty.findById(cardLineItemId);
         CartLineItem cartLineItems = cartLineItemsOptional.orElseThrow(() -> new CartLineItemException("Cannot find Cart Line Item with ID: " + cardLineItemId));
 
-            // Unlink Cart from CartLineItem
-            cartLineItems.setCartId(null);
-            this.cartLineItemRepositoty.save(cartLineItems);
+        // Unlink Cart from CartLineItem
+        cartLineItems.setCartId(null);
+        this.cartLineItemRepositoty.save(cartLineItems);
 
-            // Update Cart
-            Cart cart=this.cartReposttory.findByUserId(customer);
-            cart.setCountItem(cart.getCountItem()-cartLineItems.getQuantity());
-            cart.setTaxAmount(cart.getTaxAmount()-cartLineItems.getTaxTotalAmount());
-            cart.setTotalAmount(cart.getTotalAmount()-cartLineItems.getTotalAmount());
+        // Update Cart
+        Cart cart=this.cartReposttory.findByUserId(customer);
+        cart.setCountItem(cart.getCountItem()-cartLineItems.getQuantity());
+        cart.setTaxAmount(cart.getTaxAmount()-cartLineItems.getTaxTotalAmount());
+        cart.setTotalAmount(cart.getTotalAmount()-cartLineItems.getTotalAmount());
 
         // Check if the cart is empty after removing the cart line item
-            List<CartLineItem>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
-            if (cartLineItemContailCartId.isEmpty())
-            {
-                cart.setDeletedAt(new Date());
-            }
+        List<CartLineItem>cartLineItemContailCartId=this.cartLineItemRepositoty.findByCartId(cart);
+        if (cartLineItemContailCartId.isEmpty())
+        {
+            cart.setDeletedAt(new Date());
+        }
 
-            this.cartReposttory.save(cart);
-            this.cartLineItemRepositoty.delete(cartLineItems);
+        this.cartReposttory.save(cart);
+        this.cartLineItemRepositoty.delete(cartLineItems);
     }
 
     public void clearCard(User Customer)

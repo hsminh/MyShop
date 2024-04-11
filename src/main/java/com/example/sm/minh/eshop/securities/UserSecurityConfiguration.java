@@ -32,9 +32,10 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
 
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/forgot-password","/auth/reset-password","/auth/send-email","/auth/verify-token","/auth/update-password","/auth/save-update-password","/auth/verify-verification-code").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/orders/**").hasAnyAuthority("Admin","User")
+
                         .requestMatchers("/category/**").hasAnyAuthority("Admin")
                         .requestMatchers("/products/**").hasAnyAuthority("Admin")
                         .requestMatchers("/resources/**", "/static/**", "/css/**", "/javascripts/**", "/images/**","/public/**").permitAll()
@@ -46,15 +47,15 @@ public class UserSecurityConfiguration {
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                 ).logout(
-                       logout->logout.logoutUrl("/logout")
-                               .logoutSuccessUrl("/login-form")
-                               .invalidateHttpSession(true) // Invalidates the HttpSession
-                               .deleteCookies("JSESSIONID")
+                        logout->logout.logoutUrl("/logout")
+                                .logoutSuccessUrl("/login-form")
+                                .invalidateHttpSession(true) // Invalidates the HttpSession
+                                .deleteCookies("JSESSIONID")
                 ).rememberMe(
                         rememberme->rememberme
-                .rememberMeParameter("rememberMe")
-                .tokenValiditySeconds(604800)
-                .key("uniqueAndSecret")
+                                .rememberMeParameter("rememberMe")
+                                .tokenValiditySeconds(604800)
+                                .key("uniqueAndSecret")
                 ).exceptionHandling(
                         exceptionHandling->exceptionHandling
                                 .accessDeniedPage("/access-denied")

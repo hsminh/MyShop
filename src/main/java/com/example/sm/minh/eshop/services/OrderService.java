@@ -32,6 +32,7 @@ public class OrderService {
     @Autowired
     private ProductRepository productsRepository;
 
+
     private static Integer PAGE_SIZE=5;
 
     public Order getOrderById(User users)
@@ -40,20 +41,19 @@ public class OrderService {
     }
 
     // This method is used when the user wants to purchase from their shopping cart.
-    public String purchaseFromCart(Integer cartId, Integer quantity, User customer) throws CartLineItemException {
-            Optional<CartLineItem> cartOptional = findCartLineItemById(cartId);
-            CartLineItem cartLineItemPayment=cartOptional.orElseThrow(()-> new CartLineItemException("Cannot Found Cart With Id " + cartId));
-            Order order = findOrCreateOrder(customer);
+    public void purchaseFromCart(Integer cartId, Integer quantity, User customer) throws CartLineItemException {
+        Optional<CartLineItem> cartOptional = findCartLineItemById(cartId);
+        CartLineItem cartLineItemPayment=cartOptional.orElseThrow(()-> new CartLineItemException("Cannot Found Cart"));
+        Order order = findOrCreateOrder(customer);
 
-            //Get product and calculator
-            Product product = getProductById(cartLineItemPayment.getProductId().getId());
-            Float taxPerProduct = cartLineItemPayment.getTaxTotalAmount() / cartLineItemPayment.getQuantity();
-            Float totalAmount = calculateTotalAmount(product, quantity, taxPerProduct);
-            Float taxAmount = taxPerProduct * quantity;
+        //Get product and calculator
+        Product product = getProductById(cartLineItemPayment.getProductId().getId());
+        Float taxPerProduct = cartLineItemPayment.getTaxTotalAmount() / cartLineItemPayment.getQuantity();
+        Float totalAmount = calculateTotalAmount(product, quantity, taxPerProduct);
+        Float taxAmount = taxPerProduct * quantity;
 
-            OrderLineItem orderLineItem = createOrderLineItem(order, product, quantity, taxAmount, totalAmount);
-            updateOrderAndCart(customer, order, cartLineItemPayment, totalAmount, taxAmount, orderLineItem);
-            return "Buy Successfully";
+        OrderLineItem orderLineItem = createOrderLineItem(order, product, quantity, taxAmount, totalAmount);
+        updateOrderAndCart(customer, order, cartLineItemPayment, totalAmount, taxAmount, orderLineItem);
     }
 
     private Optional<CartLineItem> findCartLineItemById(Integer cartId) {
@@ -94,14 +94,16 @@ public class OrderService {
     private void updateOrderAndCart(User customer, Order order, CartLineItem cartLineItemPayment, Float totalAmount, Float taxAmount, OrderLineItem orderLineItem) {
         order.setCountItem(order.getCountItem() + cartLineItemPayment.getQuantity());
         setDataForOrderToSave(order, totalAmount, taxAmount);
-        Cart updateCart = setDateForCartToSave(customer, cartLineItemPayment);
+        Cart updateCart = setDataForCartToSave(customer, cartLineItemPayment);
+        cartLineItemPayment.setCartId(null);
+        this.cartLineItemRepositoty.save(cartLineItemPayment);
         this.cartReposttory.save(updateCart);
         this.cartLineItemRepositoty.delete(cartLineItemPayment);
         this.orderLineItemRepository.save(orderLineItem);
     }
 
 
-    public Cart setDateForCartToSave(User customer,CartLineItem cartLineItemPayment)
+    public Cart setDataForCartToSave(User customer,CartLineItem cartLineItemPayment)
     {
         Cart updateCart = this.cartReposttory.findByUserId(customer);
         updateCart.setTotalAmount(updateCart.getTotalAmount() - cartLineItemPayment.getTotalAmount());
@@ -122,40 +124,40 @@ public class OrderService {
     }
 
     public OrderLineItem setDataForOderLineItemToSave(Order order, Product product, int quantity, Float taxAmount, Float totalAmount)
-        {
-            OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setOrderId(order);
-            orderLineItem.setProductId(product);
-            orderLineItem.setQuantity(quantity);
-            orderLineItem.setTaxTotalAmount(taxAmount);
-            orderLineItem.setTotalAmount(totalAmount);
-            orderLineItem.setSubTotalAmount(product.getDiscountPrice() * quantity);
-            return orderLineItem;
-        }
+    {
+        OrderLineItem orderLineItem = new OrderLineItem();
+        orderLineItem.setOrderId(order);
+        orderLineItem.setProductId(product);
+        orderLineItem.setQuantity(quantity);
+        orderLineItem.setTaxTotalAmount(taxAmount);
+        orderLineItem.setTotalAmount(totalAmount);
+        orderLineItem.setSubTotalAmount(product.getDiscountPrice() * quantity);
+        return orderLineItem;
+    }
 
     // This method is used when the user wants to purchase a specific product directly without going through the shopping cart.
     public void purchaseProductDirect(Integer productId, Integer quantity, User customer) throws CartLineItemException, ProductException {
-                Optional<Product> selectProduct=this.productsRepository.findById(productId);
-                if(selectProduct.isPresent())
-                {
-                    Product productSelect=selectProduct.get();
-                    Order order = this.orderRepository.findByUserId(customer);
-                    if (order == null) {
-                        order = new Order();
-                        order.setUserId(customer);
-                        order.setCountItem(0);
-                    }
-                    order.setCountItem(order.getCountItem() + quantity);
-                    Float taxPerProduct=(productSelect.getDiscountPrice()/100)*productSelect.getTax();
-                    Float totalAmount = (productSelect.getDiscountPrice() * quantity) + (taxPerProduct * quantity);
-                    Float taxAmount = taxPerProduct * quantity;
-                    OrderLineItem orderLineItem=this.setDataForOderLineItemToSave(order,productSelect,quantity,taxAmount,totalAmount);
-                    order = setDataForOrderToSave(order, totalAmount, taxAmount);
-                    this.orderLineItemRepository.save(orderLineItem);
-                }else
-                {
-                    throw new ProductException("Cannot Found Product With Id "+productId);
-                }
+        Optional<Product> selectProduct=this.productsRepository.findById(productId);
+        if(selectProduct.isPresent())
+        {
+            Product productSelect=selectProduct.get();
+            Order order = this.orderRepository.findByUserId(customer);
+            if (order == null) {
+                order = new Order();
+                order.setUserId(customer);
+                order.setCountItem(0);
+            }
+            order.setCountItem(order.getCountItem() + quantity);
+            Float taxPerProduct=(productSelect.getDiscountPrice()/100)*productSelect.getTax();
+            Float totalAmount = (productSelect.getDiscountPrice() * quantity) + (taxPerProduct * quantity);
+            Float taxAmount = taxPerProduct * quantity;
+            OrderLineItem orderLineItem=this.setDataForOderLineItemToSave(order,productSelect,quantity,taxAmount,totalAmount);
+            order = setDataForOrderToSave(order, totalAmount, taxAmount);
+            this.orderLineItemRepository.save(orderLineItem);
+        }else
+        {
+            throw new ProductException("Cannot Found Product With Id "+productId);
+        }
     }
 
 

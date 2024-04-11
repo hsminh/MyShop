@@ -51,7 +51,6 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/auth/validator-token")
     public String checkValidToken(@RequestParam("token") String token,@RequestParam("email")String email, Model model) throws TokenException {
         User verifiedUser = this.userService.findUserByUserName(email);
