@@ -82,7 +82,7 @@ public class Product {
             return "/images/img.png";
         }else
         {
-            return "/images/"+this.id+"/"+this.image;
+            return "/images/products/"+this.id+"/"+this.image;
         }
     }
 

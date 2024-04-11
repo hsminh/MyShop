@@ -12,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Date;
 
 @Controller
@@ -61,7 +63,8 @@ public class ProductCategoryController {
 
 
     @PostMapping("/category/save")
-    public String saveCategory(@Valid  @ModelAttribute("categoryRequest")  CategoryRequest categoryRequest, BindingResult bindingResult, Model model,RedirectAttributes redirectAttributes) throws ProductCategoryException {
+    public String saveCategory(@Valid  @ModelAttribute("categoryRequest")  CategoryRequest categoryRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, Model model, RedirectAttributes redirectAttributes) throws ProductCategoryException, IOException {
+        System.out.println(multipartFile.getOriginalFilename());
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle","Category");
@@ -73,14 +76,11 @@ public class ProductCategoryController {
         if(savedCategory.getId()==null||savedCategory.getId()==0)
         {
             redirectAttributes.addFlashAttribute("Message","Save Successfully Category "+savedCategory.getName());
-            savedCategory.setCreatedAt(new Date());
         }else
         {
             redirectAttributes.addFlashAttribute("Message","Updated Successfully Category "+savedCategory.getName());
-            ProductCategory productCategory=this.productCategoriesSerVice.findById(savedCategory.getId(),null);
-            savedCategory=this.productCategoriesSerVice.setDataForProductCategory(productCategory,savedCategory);
         }
-        this.productCategoriesSerVice.saveCategory(savedCategory);
+        this.productCategoriesSerVice.saveCategory(savedCategory,multipartFile);
         return "redirect:/category";
     }
 

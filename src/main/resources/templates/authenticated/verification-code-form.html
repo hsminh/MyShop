@@ -81,23 +81,10 @@
     $(document).ready(function() {
         var errorMessage = $('#errMessage').val();
         if (errorMessage) {
-            ShowMessageError("Error", errorMessage);
+            showAlert(errorMessage, "failAlert", "span");
         }
     });
-    function ShowMessageError(title, message) {
-        $('#Title').text(title);
-        $('#Message').text(message);
-        $('#AlerMessage').removeClass('hidden');
-        // Hide the alert after 10 seconds
-        setTimeout(function() {
-            $('#AlerMessage').addClass('hidden');
-        }, 10000);
-    }
 
-
-    $('#closeBtn').click(function() {
-        $('#AlerMessage').addClass('hidden');
-    });
 
     $(document).ready(function() {
         $('#submitButton').submit(function(event) {
@@ -122,7 +109,8 @@
 
             //Handle valid form and invalid form
             if (invalidCharacter) {
-                ShowMessageError("Invalid Character", "Please enter only numeric characters.");
+                var message="Invalid Character! Please enter only numeric characters.";
+                showAlert(message, "failAlert", "span");
             } else {
                 $('#token').val(token);
                 $(this).unbind('submit').submit();

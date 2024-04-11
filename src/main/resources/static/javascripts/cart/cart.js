@@ -8,26 +8,29 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-
-        $('#addToCart').on('click', function() {
-            var quantity = document.getElementById('quantity').value;
-            var productId = document.getElementById('selectProduct').value;
-            $.ajax({
-                url: "/cart/update-cart",
-                method: "GET",
-                data: {
-                    selectProduct: productId,
-                    quantity: quantity
-                },
-                success: function(data) {
-                    alert(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
+    $('#addToCart').on('click', function() {
+        var quantity = document.getElementById('quantity').value;
+        var productId = document.getElementById('selectProduct').value;
+        $.ajax({
+            url: "/cart/update-cart",
+            method: "GET",
+            data: {
+                selectProduct: productId,
+                quantity: quantity
+            },
+            success: function(data) {
+                if (data.success) {
+                    showAlert(data.message, "successAlert", "span");
+                } else {
+                    showFailAlert("Error: " + data.errorMessage);
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
     });
+});
 
 
 

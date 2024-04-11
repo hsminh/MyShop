@@ -43,6 +43,7 @@ public class AuthController {
             this.authService.sendEmail(email);
             model.addAttribute("pageTitle", "Verification Code");
             model.addAttribute("email",email);
+            System.out.println("come sendEmail");
             return "authenticated/verification-code-form";
         }catch (UserException ex)
         {
@@ -60,12 +61,15 @@ public class AuthController {
             model.addAttribute("pageTitle", "Verification Code");
             model.addAttribute("email",email);
             model.addAttribute("errMessage","Your code is invalid");
+            System.out.println("come checkValidToken1");
             return "authenticated/verification-code-form";
         }
         //Token is Valid Come to update password form
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
         model.addAttribute("token",token);
+        System.out.println("come checkValidToken");
+
         return "authenticated/update-password";
     }
 

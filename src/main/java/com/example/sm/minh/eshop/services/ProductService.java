@@ -202,7 +202,7 @@ public class ProductService {
             product.setImage(fileName);
             this.save(product);
 
-            String directory = "public/images/" + product.getId();
+            String directory = "public/images/products/" + product.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         }else
         {

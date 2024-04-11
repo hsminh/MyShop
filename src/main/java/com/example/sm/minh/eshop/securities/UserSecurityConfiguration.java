@@ -32,7 +32,7 @@ public class UserSecurityConfiguration {
         security
                 .authorizeHttpRequests(configurer -> configurer
 
-                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/forgot-password","/auth/reset-password","/auth/send-email","/auth/verify-token","/auth/update-password","/auth/save-update-password","/auth/verify-verification-code").permitAll()
+                        .requestMatchers("/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/**").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")
                         .requestMatchers("/orders/**").hasAnyAuthority("Admin","User")
 

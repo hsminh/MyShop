@@ -19,7 +19,6 @@
             $('#AlertMessage').addClass('hidden');
         });
 
-        $(document).ready(function () {
             $('#image').on('change', function (e) {
                 if (event.target.files.length > 0) {
                     var src = URL.createObjectURL(event.target.files[0]);
@@ -28,7 +27,6 @@
                     thumbnail.style.display = "block";
                 }
             });
-        });
 
 
 

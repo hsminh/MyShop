@@ -51,6 +51,9 @@
         @Column(name = "is_active")
         private Boolean isActive;
 
+        @Column(name = "image",length = 255)
+        private String image;
+
         @ManyToMany(mappedBy = "ListProductCategories" ,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
         private Set<Product> listProducts = new HashSet<>();
 
@@ -69,5 +72,15 @@
         @Override
         public String toString() {
             return this.name;
+        }
+        public String loadImages()
+        {
+            if(this.image==null||this.image.isEmpty())
+            {
+                return "/images/img.png";
+            }else
+            {
+                return "/images/categories/"+this.id+"/"+this.image;
+            }
         }
     }

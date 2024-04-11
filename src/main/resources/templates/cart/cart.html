@@ -2,16 +2,20 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <div th:replace="component/fragmen ::header"></div>
-    <script th:src="@{javascripts/cart/cart.js}" type="text/javascript"></script>
+    <script th:src="@{/javascripts/cart/cart.js}" type="text/javascript"></script>
 </head>
 <body>
+
 <div th:replace="component/fragmen ::Navbar"></div>
+
 <form id="submitForm" method="post" th:action="@{/cart/purchase}" >
     <input type="hidden" id="selectProduct" name="productId" th:value="${cartProduct.id}" />
     <div class="mt-16">
         <div class="mt-16 text-gray-700 ">
             <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Detail Product</b></h1>
         </div>
+        <div th:replace="component/notification::alertMessage"></div>
+
         <section class="mt-16 text-gray-700 body-font overflow-hidden bg-white">
             <div class="border border-gray-270 container px-5 py-24 mx-auto">
                 <div class="lg:w-4/5 mx-auto flex flex-wrap">
@@ -112,6 +116,7 @@
     </section>
     </div>
 </form>
+<footer th:replace="component/fragmen::footer"></footer>
 
 </body>
 </html>

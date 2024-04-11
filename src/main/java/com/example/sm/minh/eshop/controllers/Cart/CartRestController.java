@@ -1,26 +1,29 @@
 package com.example.sm.minh.eshop.controllers.Cart;
 
+import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.exceptions.UserException;
 import com.example.sm.minh.eshop.models.Product;
 import com.example.sm.minh.eshop.models.User;
-import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
 import com.example.sm.minh.eshop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class CartRestController {
     @Autowired
     private CartService cartService;
     @GetMapping("/cart/update-cart")
-    public String updateCart(Model model, @AuthenticationPrincipal ShopMeUserDetail customer,
-                             @RequestParam(value = "selectProduct") Integer productId,
-                             @RequestParam(value = "quantity") Integer quantity) {
+    public ResponseEntity<Map<String, Object>> updateCart(Model model, @AuthenticationPrincipal ShopMeUserDetail customer,
+                                                          @RequestParam(value = "selectProduct") Integer productId,
+                                                          @RequestParam(value = "quantity") Integer quantity) {
+        Map<String, Object> response = new HashMap<>();
         try {
             User customerUser = cartService.findUserById(customer.getUserId());
             if (productId == null || quantity == null || quantity <= 0) {
@@ -28,18 +31,13 @@ public class CartRestController {
             }
             Product selectedProduct = cartService.getProductById(productId);
             cartService.addProductToCart(customerUser, selectedProduct, quantity);
-            model.addAttribute("messageSuccess", "Cart updated successfully");
-            return "Cart updated successfully";
+            response.put("success", true);
+            response.put("message", "Shopping cart is updated Successfully");
+            return ResponseEntity.ok(response);
         } catch (ProductException | IllegalArgumentException | UserException ex) {
-            model.addAttribute("errorMessage", "Error updating cart: " + ex.getMessage());
-            return "Error updating cart: " + ex.getMessage();
+            response.put("success", false);
+            response.put("errorMessage", "Error updating cart: " + ex.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
-    }
-
-
-    @GetMapping("/cart/clear")
-    public void clearAllCardAndCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer) throws ProductException, UserException {
-        User customerUser = this.cartService.findUserById(customer.getUserId());
-        this.cartService.clearCard(customerUser);
     }
 }

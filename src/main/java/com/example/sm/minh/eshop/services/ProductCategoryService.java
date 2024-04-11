@@ -6,10 +6,14 @@ import com.example.sm.minh.eshop.exceptions.ProductCategoryException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.ProductCategoryRepository;
 import com.example.sm.minh.eshop.repositories.ProductRepository;
+import com.example.sm.minh.eshop.utilities.FileUploadUltil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.color.ProfileDataException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +34,36 @@ public class ProductCategoryService {
         return productCategoryRepository.findAll(isHide);
     }
 
+    public ProductCategory saveImage(ProductCategory productCategory, MultipartFile multipartFile) throws IOException {
+        if(multipartFile!=null&&!multipartFile.isEmpty())
+        {
+            if (!multipartFile.isEmpty()) {
+                String fileName = multipartFile.getOriginalFilename();
+                productCategory.setImage(fileName);
+                this.productCategoryRepository.save(productCategory);
+                String directory = "public/images/categories/" + productCategory.getId();
+                FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
+            }else
+            {
+                this.productCategoryRepository.save(productCategory);
+            }
+        }
+        return productCategory;
+    }
+    public void saveCategory(ProductCategory productCategory, MultipartFile multipartFile) throws IOException {
 
-    public ProductCategory saveCategory(ProductCategory productCategories) {
-        return this.productCategoryRepository.save(productCategories);
+        if(productCategory.getId()==null||productCategory.getId().equals(0))
+        {
+            productCategory.setCreatedAt(new Date());
+            this.saveImage(productCategory,multipartFile);
+        }else
+        {
+            Optional<ProductCategory> productCategoryOptional=this.productCategoryRepository.findById(productCategory.getId());
+            ProductCategory loadProducts=productCategoryOptional.orElseThrow(()->new ProfileDataException("Cannot Find ProductCategory With Id "+productCategory.getId()));
+            loadProducts=this.setDataForProductCategory(loadProducts,productCategory);
+            loadProducts=this.saveImage(loadProducts,multipartFile);
+            this.saveImage(loadProducts,multipartFile);
+        }
     }
     @Transactional
     public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {

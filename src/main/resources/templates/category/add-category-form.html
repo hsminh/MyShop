@@ -11,7 +11,7 @@
 <div class="bg-grey-lighter min-h-screen flex flex-col">
     <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
-            <form id="submitForm" th:action="@{/category/save}" th:object="${categoryRequest}" method="post">
+            <form id="submitForm" th:action="@{/category/save}" th:object="${categoryRequest}" method="post" enctype="multipart/form-data">
                 <div id="AlertMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong id="Title" class="font-bold"></strong>
                     <span id="Message" class="block sm:inline"></span>
@@ -59,6 +59,34 @@
                 </div>
 
 
+                <div class="mb-4">
+                    <label for="image" class="text-sm font-bold text-gray-700">Choose Image:</label>
+                    <input
+                            type="file"
+                            class="hidden"
+                            name="images"
+                            id="image"
+                    />
+                    <div class="flex items-center mt-2">
+                        <label
+                                for="image"
+                                class="cursor-pointer flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm leading-5 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm sm:leading-5"
+                        >
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Upload Image
+                        </label>
+                        <div id="thumbnailPreview" class="ml-2"></div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center">
+                    <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  />
+                </div>
+                <div class="flex justify-center items-center">
+                </div>
 
                 <div class="flex items-center mb-4">
                     <input
