@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="css/slide.css">
     <link rel="stylesheet" href="css/button.css">
     <script th:src="@{/javascripts/mainpage/main-page.js}" type="text/javascript"></script>
-<!--    <script th:src="@{/javascripts/fragment/navigation.js}" type="text/javascript"></script>-->
 </head>
 
 <input type="hidden" id="categoryId" th:value="${category}" />
@@ -14,76 +13,72 @@
 <div th:replace="component/fragmen::Navbar"></div>
 <div th:replace="component/slide::slide"></div>
 <div th:replace="component/notification::announcement"></div>
-
-<div class="mb-8 mt-10 max-w-md mx-auto">
-    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-    <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
+<section class="bg-white py-8" style="background-color: #F2F2F2">
+    <div class="mb-8  max-w-md mx-auto">
+        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search By Name Or SKU....." required onchange="saveSearchValue(this.value)" />
+            <button id="searchButton" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
         </div>
-        <input name="search" type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search By Name Or SKU....." required onchange="saveSearchValue(this.value)" />
-        <button id="searchButton" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
-</div>
 
-<div th:if="${listCategory != null and listCategory.size() != 0}" class="flex flex-col justify-center items-center my-8">
-    <a style="display: inline-block;" class="font-bold text-4xl">List Category</a>
-    <nav class="flex justify-center space-x-4">
-        <div class="category-wrapper flex flex-wrap justify-center">
-            <a th:each="ProductCategory, rowStat : ${listCategory}"
-               th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
-               class="category-item-container inline-block m-2 hover:shadow-lg transform transition-all duration-300"
-               th:classappend="${ProductCategory.name == isChoiceCategory ? 'bg-blue-500' : ''}">
-                <div class="category-item p-4 border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white">
-                    <span th:text="${#strings.length(ProductCategory.name) > 10 ? #strings.substring(ProductCategory.name, 0, 10) + '...' : ProductCategory.name}"></span>
-                </div>
-            </a>
+    <div th:if="${listCategory != null and listCategory.size() != 0}" class="flex flex-col justify-center items-center my-8" >
+        <a style="display: inline-block;" class="font-bold text-4xl">List Category</a>
+        <nav class="flex justify-center space-x-4">
+            <div class="category-wrapper flex flex-wrap justify-center">
+                <a th:each="ProductCategory, rowStat : ${listCategory}"
+                   th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
+                   class="category-item-container inline-block m-2 hover:shadow-lg transform transition-all duration-300"
+                   th:classappend="${ProductCategory.name == isChoiceCategory ? 'bg-blue-500' : ''}">
+                    <div class="category-item p-4 border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white">
+                        <span th:text="${#strings.length(ProductCategory.name) > 10 ? #strings.substring(ProductCategory.name, 0, 10) + '...' : ProductCategory.name}"></span>
+                    </div>
+                </a>
+            </div>
+        </nav>
+    </div>
+    <div >
+        <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}" style="text-align: center;" class="flex justify-center items-center">
+            <a style="display: inline-block;" class="font-bold text-4xl">Top Product Trending</a>
         </div>
-    </nav>
-</div>
-
-
-
-
-
-<div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}" style="text-align: center;" class="mt-14 flex justify-center items-center">
-    <a style="display: inline-block;" class="font-bold text-4xl">Top Product Trending</a>
-</div>
-<section class="bg-white py-8">
-    <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-        <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
-        <div class="pagination-buttons flex justify-between items-center">
-            <button class="bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
-            <div class="grid grid-cols-5 gap-4 p-4">
-                <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
-                    <a th:href="@{cart (productId=${product.getProduct().id})}">
-                        <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
-                        <div class="px-5 pb-5">
-                            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
-                            <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
-                                <p><b>Description :</b> [[${product.getProduct().content}]]</p>
-                            </div>
-                            <b>Price :</b>
-                            <del class="text-red-500">[[${product.getProduct().price}]]</del>
-                            <span>[[${product.getProduct().discountPrice}]]</span>
-                            <div>
-                                <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                    <i class="fas fa-shopping-cart fa-1x"></i>
-                                    <span class="ml-2">Add to Cart</span>
-                                </button>
-                            </div>
+        <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+            <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
+                <div class="pagination-buttons flex justify-between items-center">
+                    <button class="bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                    <div class="grid grid-cols-5 gap-4 p-4">
+                        <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
+                            <a th:href="@{cart (productId=${product.getProduct().id})}">
+                                <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
+                                <div class="px-5 pb-5">
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
+                                    <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
+                                        <p><b>Description :</b> [[${product.getProduct().content}]]</p>
+                                    </div>
+                                    <b>Price :</b>
+                                    <del class="text-red-500">[[${product.getProduct().price}]]</del>
+                                    <span>[[${product.getProduct().discountPrice}]]</span>
+                                    <div>
+                                        <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                            <i class="fas fa-shopping-cart fa-1x"></i>
+                                            <span class="ml-2">Add to Cart</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
+                    <button class="bg-zinc-50 p-1" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
                 </div>
             </div>
-            <button class="bg-zinc-50 p-1" id="next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
-        </div>
-        </div>
+    </div>
 
         <div th:if="${isChoiceCategory != null}" style="text-align: center;" class="flex justify-center items-center">
             <a style="display: inline-block;" class="font-bold text-4xl">
@@ -94,33 +89,34 @@
         <div th:if="${isChoiceCategory==null}" style="text-align: center;" class="flex justify-center items-center">
             <a style="display: inline-block;" class="font-bold text-4xl">All Products</a>
         </div>
-        <th:block th:with="columnsPerRow=${4}">
-            <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
-                <th:block th:each="Product : ${listProduct}">
+
+        <div class="container mx-auto">
+            <div class="mt-6 grid grid-cols-6 gap-2">
+                <div th:each="Product : ${listProduct}">
                     <a th:href="@{cart (productId=${Product.id})}">
-                        <div class="p-3 bg-white rounded shadow-md border border-gray-200 transform transition duration-300 hover:scale-105">
-                            <div class="relative w-full mb-2 sm:mb-3 h-64 sm:h-72">
+                        <div class="p-2 bg-white rounded shadow-md border border-gray-200 transform transition duration-300 hover:scale-105 hover:border-blue-500">
+                            <div class="relative w-full mb-1 sm:mb-1 h-32 sm:h-32">
                                 <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-cover w-full h-full rounded">
                             </div>
                             <div class="bg-gray-100">
-                                <div class="p-2 sm:p-3">
-                                    <h2 class="text-base sm:text-lg cursor-pointer hover:text-gray-900 product-name">
+                                <div class="p-2 sm:p-2">
+                                    <h2 class="text-xs sm:text-sm cursor-pointer hover:text-gray-900 product-name">
                                         <b>Name :</b> [[${Product.name}]]
                                     </h2>
-                                    <h2 class="mt-1 text-sm sm:text-base cursor-pointer hover:text-gray-900 product-name">
+                                    <h2 class="mt-1 text-xs sm:text-xs cursor-pointer hover:text-gray-900 product-name">
                                         <b>Description :</b> [[${Product.content}]]
                                     </h2>
-                                    <h2 class="mt-1 text-sm sm:text-base cursor-pointer hover:text-gray-900 product-name">
+                                    <h2 class="mt-1 text-xs sm:text-xs cursor-pointer hover:text-gray-900 product-name">
                                         <b>SKU :</b> [[${Product.sku}]]
                                     </h2>
-                                    <div class="mt-1 text-base font-semibold">
+                                    <div class="mt-1 text-xs font-semibold">
                                         <b>Price :</b>
                                         <del class="text-red-500">[[${Product.price}]]</del>
                                         <span>[[${Product.discountPrice}]]</span>
                                     </div>
                                     <form th:action="@{/cart}" method="get">
                                         <input type="hidden" name="productId" th:value="${Product.id}" />
-                                        <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs sm:text-sm px-4 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                        <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs sm:text-xs px-4 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
                                             <i class="fas fa-shopping-cart fa-1x"></i>
                                             <span class="ml-1">Add to Cart</span>
                                         </button>
@@ -129,9 +125,11 @@
                             </div>
                         </div>
                     </a>
-                </th:block>
+                </div>
             </div>
-        </th:block>
+        </div>
+
+
 
 
 

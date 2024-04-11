@@ -7,9 +7,9 @@
     </head>
     <body>
         <div th:fragment="Navbar">
-            <nav id="navbar" class="bg-gray-800 w-full z-50 fixed top-0">
+            <nav id="navbar" class="w-full z-50 fixed top-0" style="background-color: #1E90FF">
                 <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                    <div class="relative flex h-16 items-center justify-between">
+                    <div class="relative flex items-center justify-between" style="height:100px">
                         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             <!-- Mobile menu button-->
                             <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
@@ -29,15 +29,14 @@
                             <a th:href="@{/main-page}">
                                 <div class="flex-shrink-0 flex items-center">
                                     <img class="h-8 w-auto" th:src="@{/images/logo.png}" alt="Your Company">
+                                    <p class="text-2xl">Shop DN</p>
                                 </div>
                             </a>
-
                             <div class="hidden sm:ml-6 sm:block">
-                                <div class="flex space-x-4">
-
-                                    <a th:href="@{/main-page}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Shop'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_USER')">Shop</a>
-                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Products'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
-                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Category'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
+                                <div class="flex space-x-4 item-center">
+                                    <a th:href="@{/main-page}" class="text-gray-300 hover:bg-gray-700 hover:text-white text-lg rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Shop'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_USER')">Shop</a>
+                                    <a th:href="@{/products}" class="text-gray-300 hover:bg-gray-700 hover:text-white  text-lg rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Products'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Products</a>
+                                    <a th:href="@{/category}" class="text-gray-300 hover:bg-gray-700 hover:text-white  text-lg rounded-md px-3 py-2 text-sm font-medium" th:classappend="${isChoice=='Category'}?'bg-gray-100':''" sec:authorize="hasRole('ROLE_ADMIN')">Category</a>
                                 </div>
                             </div>
                         </div>
