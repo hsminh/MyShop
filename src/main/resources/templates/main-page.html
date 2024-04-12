@@ -28,32 +28,30 @@
     </div>
 
     <div th:if="${listCategory != null and listCategory.size() != 0}" class="flex flex-col justify-center items-center my-8" >
-        <a style="display: inline-block;" class="font-bold text-4xl">List Category</a>
-        <nav class="flex justify-center space-x-4">
-            <div class="category-wrapper flex flex-wrap justify-center">
-                <a th:each="ProductCategory, rowStat : ${listCategory}"
-                   th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
-                   class="category-item-container inline-block m-2 hover:shadow-lg transform transition-all duration-300"
-                   th:classappend="${ProductCategory.name == isChoiceCategory ? 'bg-blue-500' : ''}">
-                    <div class="category-item p-4 border border-gray-300 rounded-md hover:bg-blue-500 hover:text-white">
-                        <span th:text="${#strings.length(ProductCategory.name) > 10 ? #strings.substring(ProductCategory.name, 0, 10) + '...' : ProductCategory.name}"></span>
-                    </div>
-                </a>
+        <div class="max-w-8xl mx-auto">
+            <p class="px-4 h-16 flex items-center uppercase text-stone-500">Category</p>
+            <div class="grid grid-cols-10 gap-2 w-50 h-80 divide-stone-200 divide-y-[1px]  border-[1px] border-stone-200">
+                <th:block th:each=" ProductCategory : ${listCategory}">
+                        <a th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}" class="hover:border-blue-500 flex flex-col justify-center border border-sky-500  items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110">
+                            <img th:src="${ProductCategory.loadImages()}" alt="" class="h-20">
+                            <p class="text-center p-2 text-sm" th:text="${#strings.length(ProductCategory.name) &gt; 10} ? ${#strings.substring(ProductCategory.name, 0, 10) + '...'} : ${ProductCategory.name}"></p>
+                        </a>
+                </th:block>
             </div>
-        </nav>
+        </div>
     </div>
     <div >
         <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}" style="text-align: center;" class="flex justify-center items-center">
-            <a style="display: inline-block;" class="font-bold text-4xl">Top Product Trending</a>
+            <p class="text-4xl px-4 h-16 flex items-center uppercase text-stone-500">Best-selling products</p>
         </div>
         <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
             <div th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
                 <div class="pagination-buttons flex justify-between items-center">
                     <button class="bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
                     <div class="grid grid-cols-5 gap-4 p-4">
-                        <div th:each="product, iterStat : ${productsOrderedMost}" class="product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
+                        <div th:each="product, iterStat : ${productsOrderedMost}" class="hover:border-blue-500 product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
                             <a th:href="@{cart (productId=${product.getProduct().id})}">
-                                <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110" th:src="@{${product.getProduct().loadImages}}" alt="product image" />
+                                <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110 " th:src="@{${product.getProduct().loadImages}}" alt="product image" />
                                 <div class="px-5 pb-5">
                                     <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
                                     <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
@@ -81,13 +79,13 @@
     </div>
 
         <div th:if="${isChoiceCategory != null}" style="text-align: center;" class="flex justify-center items-center">
-            <a style="display: inline-block;" class="font-bold text-4xl">
+            <a class="text-4xl px-4 h-16 flex items-center uppercase text-stone-500">
                 <span th:text="${#strings.length(isChoiceCategory) > 15 ? #strings.substring(isChoiceCategory, 0, 15) + '...' : isChoiceCategory}"></span>
             </a>
         </div>
 
         <div th:if="${isChoiceCategory==null}" style="text-align: center;" class="flex justify-center items-center">
-            <a style="display: inline-block;" class="font-bold text-4xl">All Products</a>
+            <p class="text-4xl px-4 h-16 flex items-center uppercase text-stone-500">All Product</p>
         </div>
 
         <div class="container mx-auto">
