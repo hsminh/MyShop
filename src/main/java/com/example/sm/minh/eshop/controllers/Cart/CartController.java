@@ -33,7 +33,7 @@
         public String viewCart(@RequestParam("productId") Integer productId, Model model, RedirectAttributes redirectAttributes) {
             try {
                 asdgkjerogjedorjgh
-                Product cartProduct = this.cartService.getProductById(productId);
+                Productb cartProduct = this.cartService.getProductById(productId);
                 model.addAttribute("pageTitle", "Cart ID |" + productId);
                 model.addAttribute("cartProduct", cartProduct);
                 return "cart/cart";
