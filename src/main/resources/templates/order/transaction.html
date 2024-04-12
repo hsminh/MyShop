@@ -7,17 +7,15 @@
 <div th:replace="component/fragmen ::Navbar"></div>
 
 
-<div th:if="${listOrderLineItem.size()==0}" class="mt-20">
+<div th:if="${listOrderLineItem.size()==0}" >
     <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Order History is Empty Click Here to Come to Shop <b><a th:href="@{/main-page}">Click Here</a></b></h3>
     <div class="flex justify-center items-center">
         <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/images/cute.png}">
     </div>
 </div>
-<div th:if="${listOrderLineItem.size()!=0}" class="mt-24">
-    <div class="mt-16">
+<div th:if="${listOrderLineItem.size()!=0}" >
         <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Order History</b></h1>
     </div>
-</div>
 <form th:action="@{/cart/checkout}" method="post">
     <div th:if="${listOrderLineItem.size()!=0}" class="bg-gray-100 h-screen py-8">
         <div class="container mx-auto px-4">

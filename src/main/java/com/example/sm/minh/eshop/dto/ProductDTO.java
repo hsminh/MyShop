@@ -4,7 +4,7 @@
 
     public class ProductDTO {
         private Product product;
-        private Long quantiryPurchase;
+        private Long qualityPurchase;
 
 
 
@@ -16,16 +16,16 @@
             this.product = product;
         }
 
-        public Long getQuantiryPurchase() {
-            return quantiryPurchase;
+        public Long getQualityPurchase() {
+            return qualityPurchase;
         }
 
-        public void setQuantiryPurchase(Long quantiryPurchase) {
-            this.quantiryPurchase = quantiryPurchase;
+        public void setQualityPurchase(Long qualityPurchase) {
+            this.qualityPurchase = qualityPurchase;
         }
 
         public ProductDTO(Product product, Long quantiryPurchase) {
             this.product = product;
-            this.quantiryPurchase = quantiryPurchase;
+            this.qualityPurchase = quantiryPurchase;
         }
     }

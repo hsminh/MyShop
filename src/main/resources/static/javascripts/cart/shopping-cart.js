@@ -13,7 +13,7 @@ function paymentCart(cartLineItemId)
     document.getElementById('quantity').setAttribute('value',quantity);
     let confirmation = confirm("Are you sure you want to proceed with the payment?");
     if (confirmation) {
-        form.setAttribute('action', '/cart/purchase-in-cart');
+        form.setAttribute('action', '/order/purchase-in-cart');
         form.submit();
     }
 }

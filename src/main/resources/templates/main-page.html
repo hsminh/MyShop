@@ -32,7 +32,9 @@
             <p class="px-4 h-16 flex items-center uppercase text-stone-500">Category</p>
             <div class="grid grid-cols-10 gap-2 w-50 h-80 divide-stone-200 divide-y-[1px]  border-[1px] border-stone-200">
                 <th:block th:each=" ProductCategory : ${listCategory}">
-                        <a th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}" class="hover:border-blue-500 flex flex-col justify-center border border-sky-500  items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110">
+                    <a th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
+                       class="hover:border-blue-500 flex flex-col justify-center border border-sky-500 items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover:transform transition duration-300 hover:scale-110"
+                       th:classappend="${ProductCategory.name.equals(isChoiceCategory) ? 'bg-blue-100' : ''}">
                             <img th:src="${ProductCategory.loadImages()}" alt="" class="h-20">
                             <p class="text-center p-2 text-sm" th:text="${#strings.length(ProductCategory.name) &gt; 10} ? ${#strings.substring(ProductCategory.name, 0, 10) + '...'} : ${ProductCategory.name}"></p>
                         </a>

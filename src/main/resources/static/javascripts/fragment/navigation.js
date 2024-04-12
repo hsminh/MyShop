@@ -28,10 +28,10 @@ window.addEventListener('scroll', function() {
     var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
     if (currentScroll > lastScrollTop) {
-        navbar.style.transition = 'transform 0.3s ease-in-out'; // Sử dụng transition CSS khi cuộn xuống
+        navbar.style.transition = 'transform 0.3s ease-in-out';
         navbar.style.transform = 'translateY(-100%)';
         } else {
-        navbar.style.transition = 'transform 0.3s ease-in-out'; // Sử dụng transition CSS khi cuộn lên
+        navbar.style.transition = 'transform 0.3s ease-in-out';
         navbar.style.transform = 'translateY(0)';
         navbar.style.position = 'fixed';
         navbar.style.top = '0';
@@ -41,7 +41,7 @@ window.addEventListener('scroll', function() {
         if (currentScroll === 0 ) {
             navbar.style.position = 'static';
             navbar.style.width = 'auto';
-            navbar.style.zIndex = 'auto';
+            navbar.style.zIndex = '9999 ';
         }
     }
     lastScrollTop = currentScroll;

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,8 @@ public class OrderService {
 
     @Autowired
     private ProductRepository productsRepository;
+    @Autowired
+    private CartService cartService;
 
 
     private static Integer PAGE_SIZE=5;
@@ -160,7 +163,15 @@ public class OrderService {
         }
     }
 
-
+    public void checkOutCart(User customer, List<String> productIds, List<String> quantities) throws ProductException, CartLineItemException {
+        int index=0;
+        for(String s : productIds)
+        {
+            Integer quantity=Integer.parseInt(quantities.get(index++).replace(".0",""));
+            this.purchaseProductDirect(Integer.parseInt(s), quantity,customer);
+            this.cartService.clearCard(customer);
+        }
+    }
     public Page<OrderLineItem> findByOrderId(Order order, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         return this.orderLineItemRepository.findByOrderId(order,pageable);

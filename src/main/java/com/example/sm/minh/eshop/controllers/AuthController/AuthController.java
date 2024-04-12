@@ -38,12 +38,10 @@ public class AuthController {
 
     @PostMapping("/auth/send-email")
     public String sendEmail(Model model,@RequestParam("email") String email,RedirectAttributes redirectAttributes) throws UserException {
-
         try {
             this.authService.sendEmail(email);
             model.addAttribute("pageTitle", "Verification Code");
             model.addAttribute("email",email);
-            System.out.println("come sendEmail");
             return "authenticated/verification-code-form";
         }catch (UserException ex)
         {
@@ -61,19 +59,14 @@ public class AuthController {
             model.addAttribute("pageTitle", "Verification Code");
             model.addAttribute("email",email);
             model.addAttribute("errMessage","Your code is invalid");
-            System.out.println("come checkValidToken1");
             return "authenticated/verification-code-form";
         }
         //Token is Valid Come to update password form
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email",email);
         model.addAttribute("token",token);
-        System.out.println("come checkValidToken");
-
         return "authenticated/update-password";
     }
-
-
 
     @PostMapping("/auth/save-update-password")
     public String updatePassword(@RequestParam("email")String email

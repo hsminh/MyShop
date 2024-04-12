@@ -8,15 +8,14 @@
 
 <div th:replace="component/fragmen ::Navbar"></div>
 
-<form id="submitForm" method="post" th:action="@{/cart/purchase}" >
+<form id="submitForm" method="post" th:action="@{/order/purchase}" >
     <input type="hidden" id="selectProduct" name="productId" th:value="${cartProduct.id}" />
-    <div class="mt-16">
-        <div class="mt-16 text-gray-700 ">
+        <div class="text-gray-700 ">
             <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Detail Product</b></h1>
         </div>
         <div th:replace="component/notification::alertMessage"></div>
 
-        <section class="mt-16 text-gray-700 body-font overflow-hidden bg-white">
+        <section class="text-gray-700 body-font overflow-hidden bg-white">
             <div class="border border-gray-270 container px-5 py-24 mx-auto">
                 <div class="lg:w-4/5 mx-auto flex flex-wrap">
                     <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{${cartProduct.loadImages()}}">
@@ -114,8 +113,7 @@
                 </div>
             </div>
     </section>
-    </div>
-</form>
+    </form>
 <footer th:replace="component/fragmen::footer"></footer>
 
 </body>
