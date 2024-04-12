@@ -7,7 +7,7 @@
 <body>
 <div th:replace="component/fragmen ::Navbar"></div>
 <div class=" bg-grey-lighter min-h-screen flex flex-col">
-    <div class="mt-14 container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
+    <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-4">
         <div class="bg-white px-8 py-10 rounded-lg shadow-md text-black w-full">
             <form id="submitForm" th:action="@{/products/save}" th:object="${productRequest}" method="post" enctype="multipart/form-data">
 <!--                content-->
