@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.mappers;
 
 import com.example.sm.minh.eshop.models.ProductCategory;
-import com.example.sm.minh.eshop.validators.CategoryRequest;
+import com.example.sm.minh.eshop.requests.CategoryRequest;
 
 public class CategoryRequestMapper {
     public static ProductCategory toCategory(CategoryRequest categoryRequest) {

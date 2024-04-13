@@ -29,8 +29,6 @@ public class CartService {
     private CartLineItemRepositoty cartLineItemRepositoty;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OrderService orderService;
     public Product getProductById(Integer id) throws ProductException {
         Optional<Product> productOptional = productsRepository.findById(id);
         return productOptional.orElseThrow(() -> new ProductException("Cannot find product with ID: " + id));
@@ -153,13 +151,5 @@ public class CartService {
     }
 
 
-    public void checkOutCart(User customer, List<String> productIds, List<String> quantities) throws ProductException, CartLineItemException {
-        int index=0;
-        for(String s : productIds)
-        {
-            Integer quantity=Integer.parseInt(quantities.get(index++).replace(".0",""));
-            this.orderService.purchaseProductDirect(Integer.parseInt(s), quantity,customer);
-            this.clearCard(customer);
-        }
-    }
+
 }

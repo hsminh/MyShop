@@ -1,17 +1,23 @@
-package com.example.sm.minh.eshop.validators;
+package com.example.sm.minh.eshop.requests;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.sm.minh.eshop.validators.annotations.ValidateCategorySlugAndName;
+import com.example.sm.minh.eshop.validators.annotations.ValidateSkuAndName;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.executable.ExecutableValidator;
+import jakarta.validation.metadata.BeanDescriptor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.Set;
+
 @Getter
 @Setter
-public class CategoryRequest {
+@ValidateCategorySlugAndName(idField = "id",SlugField ="slug", nameField = "name")
+public class CategoryRequest  {
     private Integer id;
 
     @NotNull
@@ -35,4 +41,6 @@ public class CategoryRequest {
 
     public CategoryRequest() {
     }
+
+
 }

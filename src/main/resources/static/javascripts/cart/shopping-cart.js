@@ -13,7 +13,7 @@ function paymentCart(cartLineItemId)
     document.getElementById('quantity').setAttribute('value',quantity);
     let confirmation = confirm("Are you sure you want to proceed with the payment?");
     if (confirmation) {
-        form.setAttribute('action', '/cart/purchase-in-cart');
+        form.setAttribute('action', '/order/purchase-in-cart');
         form.submit();
     }
 }
@@ -21,7 +21,7 @@ function paymentCart(cartLineItemId)
 
 
 $('#addToCart').on('click', function() {
-    $('#submitCheckout').attr('action', '/cart/checkout');
+    $('#submitCheckout').attr('action', '/order/checkout');
 });
 
 function updateHiddenQuantity(productId, value) {
@@ -115,8 +115,7 @@ $(document).ready(function() {
     });
 });
 
-// Notice when check out
-// Sự kiện khi submit form
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("submitForm").addEventListener("submit", function(event) {
         event.preventDefault();

@@ -6,6 +6,7 @@ import com.example.sm.minh.eshop.exceptions.CategoryProductException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.*;
 import com.example.sm.minh.eshop.utilities.FileUploadUltil;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -19,7 +20,7 @@ import java.util.*;
 
 @Service
 public class ProductService {
-    private static final Integer INT_PAGE_SIZE=8;
+    private static final Integer INT_PAGE_SIZE = 8;
     @Autowired
     private ProductRepository producsRepository;
     @Autowired
@@ -31,34 +32,30 @@ public class ProductService {
     private OrderLineItemRepository orderLineItemRepository;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
-    public List<Product> findAll(Integer id, String search, Boolean isHide)
-    {
-        if(id!=null&&search!=null)
-        {
-            return this.producsRepository.findAll(id,search,isHide);
-        }else if(id!=null)
-        {
-            return this.producsRepository.findAll(id,isHide);
-        }else if(search!=null&&!search.trim().isEmpty())
-        {
-            return this.producsRepository.findAll(search,isHide);
+
+    public List<Product> findAll(Integer id, String search, Boolean isHide) {
+        if (id != null && search != null) {
+            return this.producsRepository.findAll(id, search, isHide);
+        } else if (id != null) {
+            return this.producsRepository.findAll(id, isHide);
+        } else if (search != null && !search.trim().isEmpty()) {
+            return this.producsRepository.findAll(search, isHide);
 
         }
         return this.producsRepository.findAll(isHide);
     }
 
-    public List<ProductCategory>findAllCategory()
-    {
+    public List<ProductCategory> findAllCategory() {
         return this.productCategoryRepository.findAll(true);
     }
 
-    public List<ProductCategory>findAllCategoryContainProduct()
-    {
+    public List<ProductCategory> findAllCategoryContainProduct() {
         return this.productCategoryRepository.findAllCategoriesWithProducts();
     }
+
     public ProductCategory getCategoryById(Integer id) throws CategoryProductException {
-        Optional<ProductCategory> optionalProductCategory= this.productCategoryRepository.findById(id);
-        return optionalProductCategory.orElseThrow(()->new CategoryProductException("Cannot Find Category With ID :"+id));
+        Optional<ProductCategory> optionalProductCategory = this.productCategoryRepository.findById(id);
+        return optionalProductCategory.orElseThrow(() -> new CategoryProductException("Cannot Find Category With ID :" + id));
     }
 
     public Product save(Product product) {
@@ -67,9 +64,9 @@ public class ProductService {
 
     public void delete(Integer id) throws ProductException {
         Product deleteProduct = this.findById(id);
-         // unlink Product from Product
-         deleteCartLineItemsByProduct(deleteProduct);
-         // Mark the product as deleted and inactive
+        // unlink Product from Product
+        deleteCartLineItemsByProduct(deleteProduct);
+        // Mark the product as deleted and inactive
         deleteProduct.setDeletedAt(new Date());
         deleteProduct.setIsActive(false);
         this.producsRepository.save(deleteProduct);
@@ -102,32 +99,28 @@ public class ProductService {
     }
 
     public void restoreProduct(Integer id) throws ProductException {
-        Optional<Product> productOption=this.producsRepository.findProductByIsActiveIsFalse(id);
-        if(productOption.isPresent())
-        {
-            Product product=productOption.get();
-            for(ProductCategory productCategory : product.getListProductCategories())
-            {
-                if(!productCategory.getIsActive())
-                {
-                    throw new ProductException("Cannot Restore "+productCategory.getName() + "Because it not exist");
+        Optional<Product> productOption = this.producsRepository.findProductByIsActiveIsFalse(id);
+        if (productOption.isPresent()) {
+            Product product = productOption.get();
+            for (ProductCategory productCategory : product.getListProductCategories()) {
+                if (!productCategory.getIsActive()) {
+                    throw new ProductException("Cannot Restore " + productCategory.getName() + "Because it not exist");
                 }
             }
             this.updateCartAndCAndCartLineItem(product);
             product.setIsActive(true);
             this.producsRepository.save(productOption.get());
-        }else {
-            throw new ProductException("Cannot Found Product With Id : "+id);
+        } else {
+            throw new ProductException("Cannot Found Product With Id : " + id);
         }
     }
-    public void updateCartAndCAndCartLineItem(Product product)
-    {
-        for(CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product))
-        {
-            Cart updateCart=cartLineItem.getCartId();
-            updateCart.setTaxAmount(updateCart.getTaxAmount()-cartLineItem.getTaxTotalAmount());
-            updateCart.setCountItem(updateCart.getCountItem()-cartLineItem.getQuantity());
-            updateCart.setTotalAmount(updateCart.getTotalAmount()-cartLineItem.getTotalAmount());
+
+    public void updateCartAndCAndCartLineItem(Product product) {
+        for (CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product)) {
+            Cart updateCart = cartLineItem.getCartId();
+            updateCart.setTaxAmount(updateCart.getTaxAmount() - cartLineItem.getTaxTotalAmount());
+            updateCart.setCountItem(updateCart.getCountItem() - cartLineItem.getQuantity());
+            updateCart.setTotalAmount(updateCart.getTotalAmount() - cartLineItem.getTotalAmount());
             updateCart.setUpdatedAt(new Date());
             cartLineItem.setCartId(null);
             this.cartLineItemRepositoty.save(cartLineItem);
@@ -135,52 +128,28 @@ public class ProductService {
             this.cartLineItemRepositoty.delete(cartLineItem);
         }
     }
+
     public Product findById(Integer id) throws ProductException {
-            Optional<Product> productOption=this.producsRepository.findById(id);
-            return productOption.orElseThrow(()->new ProductException("Cannot Found Products With Id : "+id));
+        Optional<Product> productOption = this.producsRepository.findById(id);
+        return productOption.orElseThrow(() -> new ProductException("Cannot Found Products With Id : " + id));
     }
 
-    public String checkNameAndSkuUnique(String name, String sku, Integer id) {
-        if (id == null || id == 0) {
-            List<Product> checkProductsByNameOrSku = producsRepository.findProductByNameOrSku(name, sku);
-            if (!checkProductsByNameOrSku.isEmpty()) {
-                return "duplicated";
-            }
-        } else {
-            Product existingProduct = producsRepository.findById(id).orElse(null);
-            if (existingProduct == null) {
-                // Handle case where product with given id does not exist
-                return "not_found";
-            }
-
-            Product checkProductByName = producsRepository.findProductByName(name);
-            Product checkProductBySku = producsRepository.findProductBySku(sku);
-
-            // Check if the new name or sku conflicts with existing products
-            if ((checkProductBySku != null && !existingProduct.getSku().equals(sku)) ||
-                    (checkProductByName != null && !existingProduct.getName().equals(name))) {
-                return "duplicated";
-            }
-        }
-        return "ok";
-    }
 
     public ArrayList<ProductDTO> productOrderMost() {
         Pageable pageable = PageRequest.of(0, INT_PAGE_SIZE);
         List<Object[]> listProductOrderMost = this.orderLineItemRepository.findProductsOrderedMost(pageable);
-        ArrayList<ProductDTO>productDTOS=new ArrayList<>();
+        ArrayList<ProductDTO> productDTOS = new ArrayList<>();
 
         for (Object[] obj : listProductOrderMost) {
 
             Product product = (Product) obj[0];
-            Long quantityPurchase=(Long) obj[1];
-            ProductDTO productDTO=new ProductDTO(product,quantityPurchase);
+            Long quantityPurchase = (Long) obj[1];
+            ProductDTO productDTO = new ProductDTO(product, quantityPurchase);
             productDTOS.add(productDTO);
 
         }
         return productDTOS;
     }
-
 
 
     public Product setDataProduct(Product product, Product productInForm) throws IOException {
@@ -204,8 +173,7 @@ public class ProductService {
 
             String directory = "public/images/products/" + product.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
-        }else
-        {
+        } else {
             this.save(product);
         }
         return product;
@@ -214,12 +182,59 @@ public class ProductService {
     public void saveProduct(Product product, MultipartFile multipartFile) throws IOException, ProductException {
         if (product.getId() != null) {
             Product productInDb = this.findById(product.getId());
-            productInDb=this.setDataProduct(productInDb,product);
-            productInDb=this.saveImage(productInDb,multipartFile);
-            this.saveImage(productInDb,multipartFile);
+            productInDb = this.setDataProduct(productInDb, product);
+            productInDb = this.saveImage(productInDb, multipartFile);
+            this.saveImage(productInDb, multipartFile);
         } else {
             product.setCreatedAt(new Date());
-            this.saveImage(product,multipartFile);
+            this.saveImage(product, multipartFile);
         }
     }
+
+    public boolean checkNameAndSkuUnique(String name, String sku, Integer id, String nameField, String skuField, ConstraintValidatorContext context) {
+        String nameErrorMessage = null;
+        String skuErrorMessage = null;
+
+        if (id == null || id == 0) {
+            if (producsRepository.findProductByName(name)!=null) {
+                nameErrorMessage = "Product with name "+nameErrorMessage+" already exists";
+            }
+            if (producsRepository.findProductBySku(sku)!=null) {
+                skuErrorMessage = "Product with SKU "+skuErrorMessage+" already exists";
+            }
+        } else {
+            Product existingProduct = producsRepository.findById(id).orElse(null);
+            if (existingProduct == null) {
+                nameErrorMessage = "Product not found";
+                skuErrorMessage = "Product not found";
+            } else {
+                Product checkProductByName = producsRepository.findProductByName(name);
+                Product checkProductBySku = producsRepository.findProductBySku(sku);
+
+                if (checkProductBySku != null && !existingProduct.getSku().equals(sku)) {
+                    skuErrorMessage = "Product SKU conflicts with existing products";
+                }
+                if (checkProductByName != null && !existingProduct.getName().equals(name)) {
+                    nameErrorMessage = "Product name conflicts with existing products";
+                }
+            }
+        }
+
+        if (nameErrorMessage != null) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(nameErrorMessage)
+                    .addPropertyNode(nameField)
+                    .addConstraintViolation();
+        }
+        if (skuErrorMessage != null) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(skuErrorMessage)
+                    .addPropertyNode(skuField)
+                    .addConstraintViolation();
+        }
+
+        return nameErrorMessage == null && skuErrorMessage == null;
+    }
+
+
 }

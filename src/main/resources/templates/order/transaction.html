@@ -21,7 +21,7 @@
 <form th:action="@{/cart/checkout}" method="post">
     <div th:if="${listOrderLineItem.size()!=0}" class="bg-gray-100 h-screen py-8">
         <div class="container mx-auto px-4">
-            <h1 class="text-2xl font-semibold mb-4">Order</h1>
+            <h1 class="text-2xl font-semi-bold mb-4">Order</h1>
             <div th:replace="component/notification::announcement"></div>
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="md:w-3/4">
@@ -54,7 +54,9 @@
                                     </td>
                                     <td class="py-4">
                                         <div class="flex items-center">
-                                            <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
+                                            <label>
+                                                <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
+                                            </label>
                                         </div>
                                     </td>
                                     <td class="py-4">
@@ -86,7 +88,7 @@
                 </div>
                 <div class="md:w-1/4">
                     <div class="bg-white rounded-lg shadow-md p-6">
-                        <h2 class="text-lg font-semibold mb-4">Summary</h2>
+                        <h2 class="text-lg font-semi-bold mb-4">Summary</h2>
                         <div class="flex justify-between mb-2">
                             <span>Sub Total</span>
                             <span id="subTotal" >[[${order.totalAmount-order.taxAmount}]]</span>
@@ -97,8 +99,8 @@
                         </div>
                         <hr class="my-2">
                         <div class="flex justify-between mb-2">
-                            <span class="font-semibold">Total</span>
-                            <span class="font-semibold" id="totalAmount">[[${order.totalAmount}]]</span>
+                            <span class="font-semi-bold">Total</span>
+                            <span class="font-semi-bold" id="totalAmount">[[${order.totalAmount}]]</span>
                         </div>
                     </div>
                 </div>

@@ -39,6 +39,7 @@
                        <div th:if="${#fields.hasErrors('userName')}" class="text-red-500 italic mt-1 text-sm">
                            <span th:errors="*{userName}"></span>
                        </div>
+
                    </div>
 
 
@@ -70,7 +71,7 @@
                        <input
                                type="password"
                                class="block border border-grey-light w-full p-3 rounded mb-4"
-                               placeholder="Repassword"
+                               placeholder="re-enter password"
                                id="repassword"
                        />
                    </div>
@@ -128,7 +129,7 @@
                             id="active"
                             th:field="*{isActive}"
                     />
-                    <label for="active" class="ml-2">Acitve</label>
+                    <label for="active" class="ml-2">Active</label>
                 </div>
                 <div class="mt-6">
                     <button

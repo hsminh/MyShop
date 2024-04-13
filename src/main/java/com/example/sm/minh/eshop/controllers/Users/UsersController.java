@@ -7,8 +7,8 @@ import com.example.sm.minh.eshop.mappers.UserMapper;
 import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
 import com.example.sm.minh.eshop.services.UserService;
-import com.example.sm.minh.eshop.validators.UserProfileRequest;
-import com.example.sm.minh.eshop.validators.UserRequest;
+import com.example.sm.minh.eshop.requests.UserProfileRequest;
+import com.example.sm.minh.eshop.requests.UserRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -82,8 +83,14 @@ public class UsersController {
 
     @PostMapping("/users/save")
     public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  UserRequest createUserRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserException {
+
         if (bindingResult.hasErrors()) {
-            System.out.println(createUserRequest.getId());
+
+            for(FieldError fieldError: bindingResult.getFieldErrors())
+            {
+                System.out.println("hihi"+fieldError.getDefaultMessage());
+            }
+                System.out.println("haha"+createUserRequest.getId());
             if (createUserRequest.getId() != null) {
                 this.userService.prepareFormModel(model, "Edit User", false);
             } else {

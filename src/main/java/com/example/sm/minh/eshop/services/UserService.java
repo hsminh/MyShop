@@ -8,7 +8,7 @@ import com.example.sm.minh.eshop.mappers.UserProfileMapper;
 import com.example.sm.minh.eshop.repositories.UserProfileRepository;
 import com.example.sm.minh.eshop.repositories.UserRepository;
 import com.example.sm.minh.eshop.repositories.RoleRepository;
-import com.example.sm.minh.eshop.validators.UserProfileRequest;
+import com.example.sm.minh.eshop.requests.UserProfileRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,15 +30,20 @@ public class UserService {
     private UserProfileRepository userProfileRepository;
 
 
-    public String checkUserNameUni(String userName)
-    {
-        User users=this.userRepository.findUsersByUserName(userName);
-        if(users!=null)
-        {
-            return "duplicated";
+    public boolean checkUserNameUni(String userName, Integer id) {
+        User user = this.userRepository.findUsersByUserName(userName);
+        if (id==null||id == 0 ) {
+            if (user != null) {
+                return false;
+            }
+        } else {
+            if (user != null && user.getId() != id) {
+                return false;
+            }
         }
-        return "ok";
+        return true;
     }
+
 
     public User findUserByUserName(String userName)
     {

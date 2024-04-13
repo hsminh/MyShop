@@ -8,7 +8,7 @@
 
 <div th:replace="component/fragmen ::Navbar"></div>
 
-<form id="submitForm" method="post" th:action="@{/cart/purchase}" >
+<form id="submitForm" method="post" th:action="@{/order/purchase}" >
     <input type="hidden" id="selectProduct" name="productId" th:value="${cartProduct.id}" />
     <div class="mt-16">
         <div class="mt-16 text-gray-700 ">

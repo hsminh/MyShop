@@ -17,14 +17,7 @@ public class ProductsTest {
     @Autowired
     ProductCategoryRepository productCategoryRepository;
 
-    @Test
-    public void checkProductUnique()
-    {
-        Integer id = 0;
-        String name="123123";
-        String sku="1241234";
-        System.out.println("cc " +this.productSerVice.checkNameAndSkuUnique("123","2341321",11));
-    }
+
     @Test
      public void CreateFiveProducst()
      {

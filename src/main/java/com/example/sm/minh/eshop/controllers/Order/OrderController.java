@@ -1,6 +1,7 @@
     package com.example.sm.minh.eshop.controllers.Order;
 
     import com.example.sm.minh.eshop.exceptions.CartLineItemException;
+    import com.example.sm.minh.eshop.exceptions.ProductException;
     import com.example.sm.minh.eshop.models.Order;
     import com.example.sm.minh.eshop.models.OrderLineItem;
     import com.example.sm.minh.eshop.models.User;
@@ -19,6 +20,8 @@
     import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+    import java.util.List;
 
     @Controller
     public class OrderController {
@@ -47,7 +50,38 @@
                 return "redirect:/order/history/1";
             }
         }
+        @PostMapping("/order/purchase-in-cart")
+        public String purchaseProductFromCart(
+                @AuthenticationPrincipal ShopMeUserDetail customer,
+                @RequestParam(value = "cartLineItemId",required = false) Integer cartLineItemId,
+                @RequestParam(value = "quantity", required = false) Integer quantity,
+                RedirectAttributes redirectAttributes) {
+            try {
+                User customerUser = this.userService.findUserById(customer.getUserId());
+                this.orderService.purchaseFromCart(cartLineItemId, quantity, customerUser);
 
+            } catch (CartLineItemException |UserException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+                return "redirect:/cart/shopping-cart";
+            }
+
+            redirectAttributes.addFlashAttribute("Message", "Congratulation! You're Buy Successfully");
+            return "redirect:/main-page";
+        }
+        @PostMapping("/order/purchase")
+        public String purchaseProducts(RedirectAttributes redirectAttributes,
+                                       @AuthenticationPrincipal ShopMeUserDetail customer,
+                                       @RequestParam(value = "productId", required = false) Integer productId,
+                                       @RequestParam(value = "quantity", required = false) Integer quantity) {
+            try {
+                User customerUser = userService.findUserById(customer.getUserId());
+                orderService.purchaseProductDirect(productId, quantity, customerUser);
+                redirectAttributes.addFlashAttribute("Message", "Congratulations on your successful purchase!");
+            } catch (CartLineItemException | UserException | ProductException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            }
+            return "redirect:/main-page";
+        }
         @GetMapping("/order/history/{pageNum}")
         public String viewPurchaseHistory(@PathVariable("pageNum") Integer pageNum, Model model, @AuthenticationPrincipal ShopMeUserDetail user) throws UserException {
             User customerLogin = this.userService.findUserById(user.getUserId());
@@ -71,7 +105,23 @@
 
             return "order/transaction";
         }
-
+        @PostMapping("/cart/checkout")
+        public String checkOutCart(@AuthenticationPrincipal ShopMeUserDetail customer,
+                                   @RequestParam("productIds") List<String> productIds,
+                                   @RequestParam("quantities") List<String> quantities,
+                                   RedirectAttributes redirectAttributes) throws ProductException
+        {
+            try {
+                User user = this.userService.findUserById(customer.getUserId());
+                this.orderService.checkOutCart(user, productIds, quantities);
+                redirectAttributes.addFlashAttribute("Message", "Congratulation! You're Buy Successfully");
+                return "redirect:/main-page";
+            } catch (ProductException | UserException ex) {
+                return "redirect:/main-page";
+            } catch (CartLineItemException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
     }

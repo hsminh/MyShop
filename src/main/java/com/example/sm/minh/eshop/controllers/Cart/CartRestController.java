@@ -20,7 +20,7 @@ public class CartRestController {
     @Autowired
     private CartService cartService;
     @GetMapping("/cart/update-cart")
-    public ResponseEntity<Map<String, Object>> updateCart(Model model, @AuthenticationPrincipal ShopMeUserDetail customer,
+    public ResponseEntity<Map<String, Object>> updateCart(@AuthenticationPrincipal ShopMeUserDetail customer,
                                                           @RequestParam(value = "selectProduct") Integer productId,
                                                           @RequestParam(value = "quantity") Integer quantity) {
         Map<String, Object> response = new HashMap<>();

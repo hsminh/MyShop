@@ -1,6 +1,7 @@
-package com.example.sm.minh.eshop.validators;
+package com.example.sm.minh.eshop.requests;
 
 import com.example.sm.minh.eshop.models.ProductCategory;
+import com.example.sm.minh.eshop.validators.annotations.ValidateSkuAndName;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@ValidateSkuAndName(idField = "id",skuField ="sku", nameField = "name")
 public class ProductRequest {
     private Integer id;
 

@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.mappers;
 
 import com.example.sm.minh.eshop.models.Product;
-import com.example.sm.minh.eshop.validators.ProductRequest;
+import com.example.sm.minh.eshop.requests.ProductRequest;
 
 public class ProductRequestMapper {
     public static Product toProduct(ProductRequest productRequest) {

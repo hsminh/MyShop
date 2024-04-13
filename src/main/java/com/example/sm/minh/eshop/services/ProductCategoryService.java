@@ -8,12 +8,14 @@ import com.example.sm.minh.eshop.repositories.ProductCategoryRepository;
 import com.example.sm.minh.eshop.repositories.ProductRepository;
 import com.example.sm.minh.eshop.utilities.FileUploadUltil;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.color.ProfileDataException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -96,33 +98,58 @@ public class ProductCategoryService {
     }
 
 
-    public String checkNameAndSlugUnique(Integer id, String name, String slug) throws ProductCategoryException {
+    public boolean checkNameAndSlugUnique(Integer id, String name, String slug, Field nameField, Field slugField, ConstraintValidatorContext  context) throws ProductCategoryException {
+        String nameErrorMessage = null;
+        String slugErrorMessage = null;
+
         // Check if the category already exists in the database
         if (id == null || id == 0) {
-            ProductCategory productCategories = this.productCategoryRepository.findByNameOrSlug(name, slug);
-            if (productCategories != null) {
-                return "duplicated";
+            if (this.productCategoryRepository.findByName(name) != null) {
+                nameErrorMessage = "Product category already exists with the provided name or slug";
+            }else if (this.productCategoryRepository.findBySlug(slug) != null)
+            {
+                slugErrorMessage = "Product category already exists with the provided name or slug";
             }
         } else {
+            // If the id exists, check if the name or slug already exists in the database (excluding the current category)
             ProductCategory existingCategoryByName = this.productCategoryRepository.findByName(name);
             ProductCategory existingCategoryBySlug = this.productCategoryRepository.findBySlug(slug);
-            ProductCategory currentCategory = this.findById(id,false);
-            // if the category exists, check if it is already in the database
+            ProductCategory currentCategory = this.findById(id, false);
+
+            // If the current category is not found
             if (currentCategory == null) {
-                throw new ProductCategoryException("Category with ID " + id + " not found");
+                throw new ProductCategoryException("Product category with ID " + id + " not found");
             }
 
+            // Check if the name already exists
             if (existingCategoryByName != null && !existingCategoryByName.getId().equals(id)) {
-                return "duplicated";
+                nameErrorMessage = "Product category already exists with the provided name";
             }
 
+            // Check if the slug already exists
             if (existingCategoryBySlug != null && !existingCategoryBySlug.getId().equals(id)) {
-                return "duplicated";
+                slugErrorMessage = "Product category already exists with the provided slug";
             }
         }
 
-        return "ok";
+        // If there are errors, assign error messages to each field
+        if (nameErrorMessage != null) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(nameErrorMessage)
+                    .addPropertyNode(nameField.getName())
+                    .addConstraintViolation();
+        }
+        if (slugErrorMessage != null) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(slugErrorMessage)
+                    .addPropertyNode(slugField.getName())
+                    .addConstraintViolation();
+        }
+
+        // Return the validation result: true if there are no errors, false if there are errors
+        return nameErrorMessage == null && slugErrorMessage == null;
     }
+
 
 
     public void restoreCategory(Integer id) throws ProductCategoryException {
@@ -142,4 +169,6 @@ public class ProductCategoryService {
         productCategories.setUpdatedAt(new Date());
         return productCategories;
     }
+
+
 }

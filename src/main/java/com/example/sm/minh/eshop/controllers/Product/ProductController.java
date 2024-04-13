@@ -4,7 +4,7 @@ import com.example.sm.minh.eshop.models.Product;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.mappers.ProductRequestMapper;
 import com.example.sm.minh.eshop.services.ProductService;
-import com.example.sm.minh.eshop.validators.ProductRequest;
+import com.example.sm.minh.eshop.requests.ProductRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

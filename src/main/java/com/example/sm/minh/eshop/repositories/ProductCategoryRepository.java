@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
-    ProductCategory findByNameOrSlug(String name, String slug);
+//    ProductCategory findByNameOrSlug(String name, String slug);
 
     ProductCategory findByName(String name);
     ProductCategory findBySlug(String slug);

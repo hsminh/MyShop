@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.mappers;
 
 import com.example.sm.minh.eshop.models.UserProfile;
-import com.example.sm.minh.eshop.validators.UserProfileRequest;
+import com.example.sm.minh.eshop.requests.UserProfileRequest;
 
 public class UserProfileMapper {
     public static UserProfile toUserProfile(UserProfileRequest userProfileRequest) {
