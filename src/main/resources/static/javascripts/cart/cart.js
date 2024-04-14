@@ -1,41 +1,29 @@
-$(document).ready(function() {
-    $('#submitForm').on('submit', function(event) {
-        var confirmation = confirm("Are you sure you want to buy?");
-        if (!confirmation) {
-            event.preventDefault();
+
+
+function addCartItem() {
+    handleFormSubmission("Are you sure you want to Add this item to cart?", function(confirm) {
+        if(confirm===true)
+        {
+            var form = document.getElementById('submitForm');
+                form.setAttribute('action', '/cart/update-cart');
+                form.submit();
         }
     });
-});
+}
 
-$(document).ready(function() {
-    $('#addToCart').on('click', function() {
-        var quantity = document.getElementById('quantity').value;
-        var productId = document.getElementById('selectProduct').value;
-        $.ajax({
-            url: "/cart/update-cart",
-            method: "GET",
-            data: {
-                selectProduct: productId,
-                quantity: quantity
-            },
-            success: function(data) {
-                if (data.success) {
-                    showAlert(data.message, "successAlert", "span");
-                } else {
-                    showFailAlert("Error: " + data.errorMessage);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+function purchase() {
+    handleFormSubmission("Are you sure you want to purchase this item?", function(confirm) {
+        if(confirm===true)
+        {
+            var form = document.getElementById('submitForm');
+            form.setAttribute('action', '/order/purchase');
+            form.submit();
+        }
     });
-});
+}
 
 
-
-
-    function decrementQuantity() {
+function decrementQuantity() {
         var quantityElement = document.getElementById('quantity');
         var originalProductPrice = parseFloat(document.getElementById('originalProductPrice').value);
         var originalDiscountPrice = parseFloat(document.getElementById('originalDiscountProductPrice').value);

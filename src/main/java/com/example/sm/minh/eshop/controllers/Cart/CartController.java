@@ -9,12 +9,17 @@
     import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
     import com.example.sm.minh.eshop.services.CartService;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.http.ResponseEntity;
     import org.springframework.security.core.annotation.AuthenticationPrincipal;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+    import java.util.HashMap;
+    import java.util.Map;
 
     @Controller
     public class CartController {
@@ -41,6 +46,7 @@
             try {
                 User user = this.cartService.findUserById(customer.getUserId());
                 this.cartService.deleteCartLineItem(cartLineItemId, user);
+                redirectAttributes.addFlashAttribute("message", "Delete Cart With Id : "+cartLineItemId+" Successfully");
             } catch (CartLineItemException | UserException ex) {
                 redirectAttributes.addFlashAttribute("message", ex.getMessage());
             }
@@ -64,5 +70,31 @@
                 throw new RuntimeException(e);
             }
         }
+        @PostMapping("/cart/update-cart")
+        public String updateCart(@AuthenticationPrincipal ShopMeUserDetail customer,
+                                                              @RequestParam(value = "productId") Integer productId,
+                                                              @RequestParam(value = "quantity") Integer quantity,
+                                                              RedirectAttributes redirectAttributes ) {
+            try {
+                User customerUser = cartService.findUserById(customer.getUserId());
+                if (productId == null || quantity == null || quantity <= 0) {
+                    throw new IllegalArgumentException("Invalid productId or quantity.");
+                }
+                Product selectedProduct = cartService.getProductById(productId);
+                cartService.addProductToCart(customerUser, selectedProduct, quantity);
+                redirectAttributes.addFlashAttribute("message", "Shopping cart is updated Successfully");
+                return "redirect:/cart?productId="+productId;
+            } catch (ProductException | IllegalArgumentException | UserException ex) {
+                redirectAttributes.addFlashAttribute("errMessage", ex.getMessage());
+                return "redirect:/cart/productId="+productId;
+            }
+        }
+        @GetMapping("/cart/clear")
+        public String clearAllCardAndCartLineItem(@AuthenticationPrincipal ShopMeUserDetail customer,RedirectAttributes redirectAttributes) throws ProductException, UserException {
+            User customerUser = this.cartService.findUserById(customer.getUserId());
+            this.cartService.clearCard(customerUser);
+            redirectAttributes.addFlashAttribute("message","Clear Cart Successfully");
+            return "redirect:/cart/shopping-cart";
 
+        }
     }

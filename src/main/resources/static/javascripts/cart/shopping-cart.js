@@ -1,56 +1,53 @@
 
-function paymentCart(cartLineItemId)
-{
-    //get form
-    var form = document.getElementById('submitForm');
 
-    //get product and quantity
-    var quantity = document.getElementById('quantityInputHidden'+cartLineItemId).value;
-    quantity = parseInt(quantity);
-    alert(quantity)
-    alert(cartLineItemId)
-    document.getElementById('cartLineItemId').setAttribute('value',cartLineItemId);
-    document.getElementById('quantity').setAttribute('value',quantity);
-    let confirmation = confirm("Are you sure you want to proceed with the payment?");
-    if (confirmation) {
-        form.setAttribute('action', '/order/purchase-in-cart');
-        form.submit();
-    }
+function clearAll() {
+    handleFormSubmission("Are you sure you want to Clear All Cart?", function(confirm) {
+        if (confirm) {
+            window.location.href = '/cart/clear';
+        }
+    });
+}
+function checkOut() {
+    handleFormSubmission("Are you sure you want to Check Out?", function (confirm) {
+        if(confirm)
+        {
+            var form = document.getElementById('submitForm');
+            form.setAttribute('action', '/cart/checkout');
+            form.submit();
+        }
+    })
 }
 
-
-
-$('#addToCart').on('click', function() {
-    $('#submitCheckout').attr('action', '/order/checkout');
-});
-
+function deleteCartLineItem(cartLineItemId)
+{
+    handleFormSubmission("Are you sure you want to remove this item?",function (confirm)
+    {
+        if(confirm) {
+            window.location.href = '/cart/remove?cartLineItemId='+cartLineItemId;
+        }
+    })
+}
 function updateHiddenQuantity(productId, value) {
     $('#quantityInputHidden' + productId).val(value);
 }
-function clearAll() {
-    let confirmation = confirm("Are you sure you want to Clear All Cart?");
-    if (confirmation) {
-        $.ajax({
-            type: 'GET',
-            url: '/cart/clear',
-            success: function(response) {
-                window.location.href = '/cart/shopping-cart';
-            },
-            error: function(xhr, status, error) {
-                alert("Error updating quantity");
-                console.error('Error clearing cart:', error);
-            }
-        });
-    }
+
+function buyInCartLineItem(cartLineItemId)
+{
+    var form = document.getElementById('submitForm');
+    //get product and quantity
+    var quantity = document.getElementById('quantityInputHidden'+cartLineItemId).value;
+    quantity = parseInt(quantity);
+    document.getElementById('cartLineItemId').setAttribute('value',cartLineItemId);
+    document.getElementById('quantity').setAttribute('value',quantity);
+
+    handleFormSubmission("Are you sure you want to proceed with the payment?",function (confirm)
+    {
+        if(confirm) {
+            form.setAttribute('action', '/order/purchase-in-cart');
+            form.submit();
+        }
+    })
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("clearAllButton").addEventListener("click", function(event) {
-        event.preventDefault();
-        clearAll();
-    });
-});
-
 
 
 
@@ -115,16 +112,4 @@ $(document).ready(function() {
     });
 });
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("submitForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        let confirmation = confirm("Are you sure you want to proceed with the payment?");
-
-        if (confirmation) {
-            this.submit();
-        }
-    });
-});
 

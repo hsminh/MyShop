@@ -10,3 +10,9 @@ function showAlert(message, alertType, contentElement) {
         }, 2000);
     });
 }
+$(document).ready(function() {
+    var message = $('#message').val();
+    if (message !== null && message.trim() !== "") {
+        showAlert(message, "successAlert", "span");
+    }
+});
