@@ -1,6 +1,5 @@
     package com.example.sm.minh.eshop.controllers.Cart;
 
-    import com.example.sm.minh.eshop.exceptions.CartExeption;
     import com.example.sm.minh.eshop.exceptions.UserException;
     import com.example.sm.minh.eshop.models.Cart;
     import com.example.sm.minh.eshop.models.Product;
@@ -9,17 +8,13 @@
     import com.example.sm.minh.eshop.exceptions.ProductException;
     import com.example.sm.minh.eshop.securities.ShopMeUserDetail;
     import com.example.sm.minh.eshop.services.CartService;
-    import com.example.sm.minh.eshop.services.OrderService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.core.annotation.AuthenticationPrincipal;
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-    import java.util.List;
 
     @Controller
     public class CartController {
@@ -38,7 +33,6 @@
                 return "redirect:/main-page";
             }
         }
-
 
         @GetMapping("/cart/remove")
         public String removeCartItem(@AuthenticationPrincipal ShopMeUserDetail customer,
@@ -61,7 +55,7 @@
                 model.addAttribute("pageTitle", "Cart");
                 Cart shoppingCart = this.cartService.getCartByCustomer(user);
                 model.addAttribute("shoppingCart", shoppingCart);
-                model.addAttribute("listCartLineItem", this.cartService.getListCartItemByCart(shoppingCart));
+                model.addAttribute("listCartLineItem", cartService.getListCartItemByCart(shoppingCart));
                 return "/cart/shopping-cart";
             } catch (ProductException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
@@ -70,7 +64,5 @@
                 throw new RuntimeException(e);
             }
         }
-
-
 
     }

@@ -2,7 +2,7 @@ package com.example.sm.minh.eshop.validators.constraints;
 
 import com.example.sm.minh.eshop.exceptions.ProductCategoryException;
 import com.example.sm.minh.eshop.services.ProductCategoryService;
-import com.example.sm.minh.eshop.validators.annotations.ValidateCategorySlugAndName;
+import com.example.sm.minh.eshop.validators.annotations.SlugAndNameUnique;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-public class UniqueSlugAndName implements ConstraintValidator<ValidateCategorySlugAndName, Object> {
+public class UniqueSlugAndNameConstraint implements ConstraintValidator<SlugAndNameUnique, Object> {
     @Autowired
     private ProductCategoryService productCategoriesSerVice;
     private String nameField;
@@ -19,7 +19,7 @@ public class UniqueSlugAndName implements ConstraintValidator<ValidateCategorySl
 
 
     @Override
-    public void initialize(ValidateCategorySlugAndName constraintAnnotation) {
+    public void initialize(SlugAndNameUnique constraintAnnotation) {
         this.nameField = constraintAnnotation.nameField();
         this.idField = constraintAnnotation.idField();
         this.SlugField = constraintAnnotation.SlugField();
@@ -43,11 +43,12 @@ public class UniqueSlugAndName implements ConstraintValidator<ValidateCategorySl
         ReflectionUtils.makeAccessible(idField);
         ReflectionUtils.makeAccessible(nameField);
         ReflectionUtils.makeAccessible(slugField);
+
         try {
             Integer id = (Integer) idField.get(value);
             String name = (String) nameField.get(value);
             String slug = (String) slugField.get(value);
-            return this.productCategoriesSerVice.checkNameAndSlugUnique(id, name, slug, nameField, slugField,context);
+            return this.productCategoriesSerVice.checkNameAndSlugUnique(id, name.trim(), slug.trim(), nameField, slugField,context);
         } catch (IllegalAccessException | ProductCategoryException e) {
             throw new RuntimeException(e);
         }

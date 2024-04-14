@@ -1,22 +1,15 @@
 package com.example.sm.minh.eshop.requests;
 
-import com.example.sm.minh.eshop.validators.annotations.ValidateCategorySlugAndName;
-import com.example.sm.minh.eshop.validators.annotations.ValidateSkuAndName;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.example.sm.minh.eshop.validators.annotations.SlugAndNameUnique;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.executable.ExecutableValidator;
-import jakarta.validation.metadata.BeanDescriptor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.Set;
-
 @Getter
 @Setter
-@ValidateCategorySlugAndName(idField = "id",SlugField ="slug", nameField = "name")
+@SlugAndNameUnique(idField = "id",SlugField ="slug", nameField = "name")
 public class CategoryRequest  {
     private Integer id;
 

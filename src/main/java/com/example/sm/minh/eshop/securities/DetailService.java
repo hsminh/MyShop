@@ -13,20 +13,17 @@ public class DetailService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("come this");
-        System.out.println(username);
-
         User user=this.userService.findUserByUserName(username);
-        System.out.println(user);
+
         if(user==null)
         {
             throw new UsernameNotFoundException("Cannot Find User With UserName "+username);
         }else {
             System.out.println(user);
             return new ShopMeUserDetail(user);
-        }}
+        }
+    }
 
 }

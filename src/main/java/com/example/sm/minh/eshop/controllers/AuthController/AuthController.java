@@ -52,15 +52,18 @@ public class AuthController {
     @PostMapping("/auth/validator-token")
     public String checkValidToken(@RequestParam("token") String token, @RequestParam("email") String email, Model model) throws TokenException {
         User verifiedUser = this.userService.findUserByUserName(email);
-        Token verificationToken = this.tokenService.findTokenByUser(verifiedUser);
+        Token verificationToken = this.tokenService.getTokenByUser(verifiedUser);
+
         // Check token is valid
-        if (!(this.tokenService.isValidToken(verificationToken) && verificationToken.getToken().equals(token) && verificationToken.getUser().equals(verifiedUser))) {
+        if (!(this.tokenService.isValidToken(verificationToken) &&
+                verificationToken.getToken().equals(token) &&
+                verificationToken.getUser().equals(verifiedUser))) {
             model.addAttribute("pageTitle", "Verification Code");
             model.addAttribute("email", email);
             model.addAttribute("errMessage", "Your code is invalid");
             return "authenticated/verification-code-form";
         }
-        //Token is Valid Come to update password form
+
         model.addAttribute("pageTitle", "Change Password");
         model.addAttribute("email", email);
         model.addAttribute("token", token);
@@ -69,8 +72,7 @@ public class AuthController {
 
     @PostMapping("/auth/save-update-password")
     public String updatePassword(
-            @RequestParam("email") String email,
-            @RequestParam("password") String newPassword,
+            @RequestParam("email") String email, @RequestParam("password") String newPassword,
             RedirectAttributes redirectAttributes
     ) {
         User savedUser = this.userService.findUserByUserName(email);
@@ -79,7 +81,6 @@ public class AuthController {
             this.tokenService.deleteToken(savedUser);
             this.userService.save(savedUser);
             redirectAttributes.addFlashAttribute("Message", "Change Password Successfully");
-
             return "redirect:/login-form";
         }
         return "redirect:/auth/forgot";

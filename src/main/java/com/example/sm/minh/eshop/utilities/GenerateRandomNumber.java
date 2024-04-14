@@ -7,9 +7,11 @@ public class GenerateRandomNumber {
     public static String generateRandomNumberString() {
         Random rand = new Random();
         StringBuilder sb = new StringBuilder(LENGTH_TOKEN);
+
         for (int i = 0; i < LENGTH_TOKEN; i++) {
             sb.append(rand.nextInt(10));
         }
+
         return sb.toString();
     }
 }

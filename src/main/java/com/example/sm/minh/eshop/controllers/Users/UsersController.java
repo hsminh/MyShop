@@ -25,7 +25,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/users/register")
     public String viewRegisterForm(Model model) {
         model.addAttribute("pageTitle", "Sign Up");
@@ -35,7 +34,6 @@ public class UsersController {
         return "user/register-form";
     }
 
-
     @GetMapping("/users/update_information")
     public String viewUpdateInformation(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
@@ -43,14 +41,19 @@ public class UsersController {
         if (userDetails != null) {
             userLoggin = userService.findUserByUserName(userDetails.getUsername());
         }
-        UserProfile userProfile = this.userService.getUserProfileByUsersId(userLoggin.getId());
 
+        UserProfile userProfile = this.userService.getUserProfileByUsersId(userLoggin.getId());
         this.userService.setUpToUpdateForm(model,userProfile);
         return "user/update-information-user";
     }
 
     @PostMapping("/users/update_information/save")
-    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("userProfileRequest") UserProfileRequest userProfileRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String updateInformation(@AuthenticationPrincipal UserDetails userDetails,
+                                    @Valid @ModelAttribute("userProfileRequest") UserProfileRequest userProfileRequest,
+                                    BindingResult bindingResult,
+                                    Model model,
+                                    RedirectAttributes redirectAttributes) {
+
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle", "Update User");
@@ -82,15 +85,12 @@ public class UsersController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(@RequestParam(value = "editPassword", required = false) String editPassword, @Valid  UserRequest createUserRequest, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws UserException {
+    public String saveUser(@Valid  UserRequest createUserRequest,
+                           BindingResult bindingResult,
+                           Model model,
+                           RedirectAttributes redirectAttributes) throws UserException {
 
         if (bindingResult.hasErrors()) {
-
-            for(FieldError fieldError: bindingResult.getFieldErrors())
-            {
-                System.out.println("hihi"+fieldError.getDefaultMessage());
-            }
-                System.out.println("haha"+createUserRequest.getId());
             if (createUserRequest.getId() != null) {
                 this.userService.prepareFormModel(model, "Edit User", false);
             } else {
@@ -98,16 +98,18 @@ public class UsersController {
             }
             return "user/register-form";
         }
+
         User userToSave=null;
         User users = UserMapper.toUser(createUserRequest);
-        if (createUserRequest.getId() != null && createUserRequest.getId() != 0) {
-            userToSave = this.userService.updateUser(editPassword, users);
-            redirectAttributes.addFlashAttribute("Message", "Update Information Successfully");
 
+        if (createUserRequest.getId() != null && createUserRequest.getId() != 0) {
+            userToSave = this.userService.updateUser( users);
+            redirectAttributes.addFlashAttribute("Message", "Update Information Successfully");
         } else {
             userToSave = this.userService.createNewUser(users);
             redirectAttributes.addFlashAttribute("Message", "Register Account Successfully");
         }
+
         this.userService.save(userToSave);
         return "redirect:/login-form";
     }

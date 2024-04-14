@@ -31,6 +31,7 @@ public class ProductController {
         {
             isHide=true;
         }
+
         if(isHide==true)
         {
             model.addAttribute("hideAndShowButton", "Show Deleted Product");
@@ -80,6 +81,7 @@ public class ProductController {
         }
         return "redirect:/products";
     }
+
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
@@ -93,7 +95,6 @@ public class ProductController {
             return "redirect:/products";
         }
     }
-
 
     @Transactional
     @PostMapping("/products/save")

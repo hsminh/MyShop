@@ -21,27 +21,32 @@ import java.util.*;
 @Service
 public class ProductService {
     private static final Integer INT_PAGE_SIZE = 8;
+
     @Autowired
     private ProductRepository producsRepository;
+
     @Autowired
     private CartLineItemRepositoty cartLineItemRepositoty;
 
     @Autowired
     private CartReposttory cartReposttory;
+
     @Autowired
     private OrderLineItemRepository orderLineItemRepository;
+
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
     public List<Product> findAll(Integer id, String search, Boolean isHide) {
+
         if (id != null && search != null) {
             return this.producsRepository.findAll(id, search, isHide);
         } else if (id != null) {
             return this.producsRepository.findAll(id, isHide);
         } else if (search != null && !search.trim().isEmpty()) {
             return this.producsRepository.findAll(search, isHide);
-
         }
+
         return this.producsRepository.findAll(isHide);
     }
 
@@ -64,8 +69,10 @@ public class ProductService {
 
     public void delete(Integer id) throws ProductException {
         Product deleteProduct = this.findById(id);
+
         // unlink Product from Product
         deleteCartLineItemsByProduct(deleteProduct);
+
         // Mark the product as deleted and inactive
         deleteProduct.setDeletedAt(new Date());
         deleteProduct.setIsActive(false);
@@ -75,8 +82,10 @@ public class ProductService {
 
     // Method to delete cart items related to a product
     private void deleteCartLineItemsByProduct(Product product) {
+
         for (CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product)) {
             Cart cart = cartLineItem.getCartId();
+
             // Update cart information
             updateCartInfo(cart, cartLineItem);
 
@@ -99,23 +108,27 @@ public class ProductService {
     }
 
     public void restoreProduct(Integer id) throws ProductException {
-        Optional<Product> productOption = this.producsRepository.findProductByIsActiveIsFalse(id);
+        Optional<Product> productOption = producsRepository.findProductByIsActiveIsFalse(id);
+
         if (productOption.isPresent()) {
             Product product = productOption.get();
             for (ProductCategory productCategory : product.getListProductCategories()) {
                 if (!productCategory.getIsActive()) {
-                    throw new ProductException("Cannot Restore " + productCategory.getName() + "Because it not exist");
+                    throw new ProductException("Cannot restore " + productCategory.getName() + " because it does not exist");
                 }
             }
-            this.updateCartAndCAndCartLineItem(product);
+
+            updateCartAndCAndCartLineItem(product);
             product.setIsActive(true);
-            this.producsRepository.save(productOption.get());
+            producsRepository.save(product);
         } else {
-            throw new ProductException("Cannot Found Product With Id : " + id);
+            throw new ProductException("Cannot find product with ID: " + id);
         }
     }
 
+
     public void updateCartAndCAndCartLineItem(Product product) {
+
         for (CartLineItem cartLineItem : this.cartLineItemRepositoty.findByProductId(product)) {
             Cart updateCart = cartLineItem.getCartId();
             updateCart.setTaxAmount(updateCart.getTaxAmount() - cartLineItem.getTaxTotalAmount());
@@ -127,6 +140,7 @@ public class ProductService {
             this.cartReposttory.save(updateCart);
             this.cartLineItemRepositoty.delete(cartLineItem);
         }
+
     }
 
     public Product findById(Integer id) throws ProductException {
@@ -148,6 +162,7 @@ public class ProductService {
             productDTOS.add(productDTO);
 
         }
+
         return productDTOS;
     }
 
@@ -166,29 +181,40 @@ public class ProductService {
     }
 
     public Product saveImage(Product product, MultipartFile multipartFile) throws IOException {
+
         if (!multipartFile.isEmpty()) {
             String fileName = multipartFile.getOriginalFilename();
             product.setImage(fileName);
             this.save(product);
-
             String directory = "public/images/products/" + product.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         } else {
             this.save(product);
         }
+
         return product;
     }
 
     public void saveProduct(Product product, MultipartFile multipartFile) throws IOException, ProductException {
+
         if (product.getId() != null) {
             Product productInDb = this.findById(product.getId());
             productInDb = this.setDataProduct(productInDb, product);
             productInDb = this.saveImage(productInDb, multipartFile);
             this.saveImage(productInDb, multipartFile);
         } else {
+            product=trimProduct(product);
             product.setCreatedAt(new Date());
             this.saveImage(product, multipartFile);
         }
+    }
+
+    public Product trimProduct(Product product)
+    {
+        product.setName(product.getName().trim());
+        product.setContent(product.getContent().trim());
+        product.setSku(product.getSku().trim());
+        return product;
     }
 
     public boolean checkNameAndSkuUnique(String name, String sku, Integer id, String nameField, String skuField, ConstraintValidatorContext context) {
@@ -197,10 +223,10 @@ public class ProductService {
 
         if (id == null || id == 0) {
             if (producsRepository.findProductByName(name)!=null) {
-                nameErrorMessage = "Product with name "+nameErrorMessage+" already exists";
+                nameErrorMessage = "Product with name "+name+" already exists";
             }
             if (producsRepository.findProductBySku(sku)!=null) {
-                skuErrorMessage = "Product with SKU "+skuErrorMessage+" already exists";
+                skuErrorMessage = "Product with SKU "+sku+" already exists";
             }
         } else {
             Product existingProduct = producsRepository.findById(id).orElse(null);
@@ -226,6 +252,7 @@ public class ProductService {
                     .addPropertyNode(nameField)
                     .addConstraintViolation();
         }
+
         if (skuErrorMessage != null) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(skuErrorMessage)

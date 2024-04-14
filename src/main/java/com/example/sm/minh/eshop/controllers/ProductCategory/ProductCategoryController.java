@@ -30,6 +30,7 @@ public class ProductCategoryController {
         {
             isHide=true;
         }
+
         if(isHide==true)
         {
             model.addAttribute("hideAndShowButton", "Show Deleted Category");
@@ -49,7 +50,6 @@ public class ProductCategoryController {
         return "category/category";
     }
 
-
     @GetMapping("/category/add")
     public String viewAddCategory(Model model) {
 
@@ -59,7 +59,6 @@ public class ProductCategoryController {
         model.addAttribute("isNewUser", true);
         return "category/add-category-form";
     }
-
 
     @PostMapping("/category/save")
     public String saveCategory(@Valid  @ModelAttribute("categoryRequest")  CategoryRequest categoryRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, Model model, RedirectAttributes redirectAttributes) throws ProductCategoryException, IOException {

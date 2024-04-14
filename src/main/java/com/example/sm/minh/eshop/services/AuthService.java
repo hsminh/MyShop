@@ -22,8 +22,7 @@ public class AuthService {
     public void sendEmail(String email) throws UserException {
         User accountForgot=this.userService.findUserByUserName(email);
         // Password exist
-        if(accountForgot!=null)
-        {
+        if(accountForgot!=null) {
             //Send email
             String token= GenerateRandomNumber.generateRandomNumberString();
             String to = email;
@@ -39,4 +38,5 @@ public class AuthService {
             throw new UserException("Cannot Found User With Email : "+email );
         }
     }
+
 }

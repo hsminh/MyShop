@@ -1,8 +1,7 @@
 package com.example.sm.minh.eshop.validators.constraints;
 
-import com.example.sm.minh.eshop.models.User;
 import com.example.sm.minh.eshop.services.UserService;
-import com.example.sm.minh.eshop.validators.annotations.ValidateIdAndUsername;
+import com.example.sm.minh.eshop.validators.annotations.UserNameUnique;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-public class UniqueEmailConstraintValidator implements ConstraintValidator<ValidateIdAndUsername, Object> {
+public class UniqueEmailConstraint implements ConstraintValidator<UserNameUnique, Object> {
     private String idField;
     private String emailField;
 
@@ -18,7 +17,7 @@ public class UniqueEmailConstraintValidator implements ConstraintValidator<Valid
     private UserService userService;
 
     @Override
-    public void initialize(ValidateIdAndUsername constraintAnnotation) {
+    public void initialize(UserNameUnique constraintAnnotation) {
         this.idField = constraintAnnotation.idField();
         this.emailField = constraintAnnotation.emailField();
     }
@@ -42,8 +41,8 @@ public class UniqueEmailConstraintValidator implements ConstraintValidator<Valid
         try {
             Integer id = (Integer) idField.get(value);
             String email = (String) emailField.get(value);
-            boolean isValid= this.userService.checkUserNameUni(email,id);
-            System.out.println(isValid);
+            boolean isValid= this.userService.checkUserNameUni(email.trim(),id);
+
             if (!isValid) {
                 context.disableDefaultConstraintViolation();
 

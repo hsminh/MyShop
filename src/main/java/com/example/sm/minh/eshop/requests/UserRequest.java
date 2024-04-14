@@ -1,6 +1,6 @@
     package com.example.sm.minh.eshop.requests;
 
-    import com.example.sm.minh.eshop.validators.annotations.ValidateIdAndUsername;
+    import com.example.sm.minh.eshop.validators.annotations.UserNameUnique;
     import jakarta.validation.constraints.Email;
     import jakarta.validation.constraints.NotBlank;
     import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@
 
     @Setter
     @Getter
-    @ValidateIdAndUsername(emailField ="userName",idField = "id")
+    @UserNameUnique(emailField ="userName",idField = "id")
     public class UserRequest {
         private Integer id;
         @NotNull

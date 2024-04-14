@@ -31,12 +31,12 @@
         @Autowired
         private UserService userService;
 
-
         @GetMapping("/order/success")
         public String messageSuccess(RedirectAttributes redirectAttributes) {
             redirectAttributes.addFlashAttribute("Message", "Congratulations on your successful purchase");
             return "redirect:/main-page";
         }
+
         @GetMapping("/order/detail")
         public String viewOrderDetail(@RequestParam("oder-line-item-id")Integer orderLineItemId,Model model, RedirectAttributes redirectAttributes) throws OrderLineItemException {
             try
@@ -50,6 +50,7 @@
                 return "redirect:/order/history/1";
             }
         }
+
         @PostMapping("/order/purchase-in-cart")
         public String purchaseProductFromCart(
                 @AuthenticationPrincipal ShopMeUserDetail customer,
@@ -64,10 +65,10 @@
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
                 return "redirect:/cart/shopping-cart";
             }
-
             redirectAttributes.addFlashAttribute("Message", "Congratulation! You're Buy Successfully");
             return "redirect:/main-page";
         }
+
         @PostMapping("/order/purchase")
         public String purchaseProducts(RedirectAttributes redirectAttributes,
                                        @AuthenticationPrincipal ShopMeUserDetail customer,
@@ -82,6 +83,7 @@
             }
             return "redirect:/main-page";
         }
+
         @GetMapping("/order/history/{pageNum}")
         public String viewPurchaseHistory(@PathVariable("pageNum") Integer pageNum, Model model, @AuthenticationPrincipal ShopMeUserDetail user) throws UserException {
             User customerLogin = this.userService.findUserById(user.getUserId());

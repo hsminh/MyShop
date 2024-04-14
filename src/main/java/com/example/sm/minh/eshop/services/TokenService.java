@@ -34,6 +34,7 @@ public class TokenService {
 
     public void deleteToken(User user) {
         Token token=tokenRepository.findByUser(user);
+
         if(token!=null)
         {
             this.tokenRepository.delete(token);
@@ -41,16 +42,15 @@ public class TokenService {
     }
 
 
-    public Token isTokenExists(String token) {
-        return this.tokenRepository.findByToken(token);
-    }
 
-    public Token findTokenByUser(User verifiedUser) throws TokenException {
-        Token verificationToken=this.tokenRepository.findByUser(verifiedUser);
-        if(verificationToken!=null)
-        {
+    public Token getTokenByUser(User verifiedUser) throws TokenException {
+        Token verificationToken = tokenRepository.findByUser(verifiedUser);
+
+        if (verificationToken != null) {
             return verificationToken;
         }
-        throw new TokenException("Cannot Found Token");
+
+        throw new TokenException("Token not found for user");
     }
+
 }

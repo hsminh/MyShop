@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.color.ProfileDataException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -22,61 +21,73 @@ import java.util.Optional;
 
 @Service
 public class ProductCategoryService {
+
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
+
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private ProductService productService;
 
     public List<ProductCategory> findAll(String searchValue,Boolean isHide) {
+
         if(searchValue != null && !searchValue.trim().isEmpty()) {
             return productCategoryRepository.findByNameContaining(searchValue,isHide);
         }
+
         return productCategoryRepository.findAll(isHide);
     }
 
     public ProductCategory saveImage(ProductCategory productCategory, MultipartFile multipartFile) throws IOException {
-        if(multipartFile!=null&&!multipartFile.isEmpty())
-        {
-            if (!multipartFile.isEmpty()) {
-                String fileName = multipartFile.getOriginalFilename();
-                productCategory.setImage(fileName);
-                this.productCategoryRepository.save(productCategory);
-                String directory = "public/images/categories/" + productCategory.getId();
-                FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
-            }else
-            {
-                this.productCategoryRepository.save(productCategory);
-            }
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String fileName = multipartFile.getOriginalFilename();
+            productCategory.setImage(fileName);
+            this.productCategoryRepository.save(productCategory);
+            String directory = "public/images/categories/" + productCategory.getId();
+            FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         }
+
         return productCategory;
     }
-    public void saveCategory(ProductCategory productCategory, MultipartFile multipartFile) throws IOException {
 
-        if(productCategory.getId()==null||productCategory.getId().equals(0))
-        {
+    public void saveCategory(ProductCategory productCategory, MultipartFile multipartFile) throws IOException, ProductCategoryException {
+
+        if (productCategory.getId() == null || productCategory.getId().equals(0)) {
+            productCategory = trimCategory(productCategory);
             productCategory.setCreatedAt(new Date());
-            this.saveImage(productCategory,multipartFile);
-        }else
-        {
-            Optional<ProductCategory> productCategoryOptional=this.productCategoryRepository.findById(productCategory.getId());
-            ProductCategory loadProducts=productCategoryOptional.orElseThrow(()->new ProfileDataException("Cannot Find ProductCategory With Id "+productCategory.getId()));
-            loadProducts=this.setDataForProductCategory(loadProducts,productCategory);
-            loadProducts=this.saveImage(loadProducts,multipartFile);
-            this.saveImage(loadProducts,multipartFile);
+            this.saveImage(productCategory, multipartFile);
+        } else {
+            ProductCategory existingCategory = this.productCategoryRepository.findById(productCategory.getId())
+                    .orElseThrow(() -> new ProductCategoryException("Category not found."));
+
+            existingCategory = this.setDataForProductCategory(existingCategory, productCategory);
+            this.saveImage(existingCategory, multipartFile);
         }
+
     }
+
+    public ProductCategory trimCategory(ProductCategory productCategory) {
+        productCategory.setName(productCategory.getName().trim());
+        productCategory.setDescription(productCategory.getDescription().trim());
+        productCategory.setSlug(productCategory.getSlug().trim());
+        return productCategory;
+    }
+
     @Transactional
     public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
         Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
         ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
         //unlink category from product
         List< Product>listProducts =this.productRepository.findAll(categoryId,true);
+
         for(Product product: listProducts)
         {
             productService.delete(product.getId());
         }
+
         deleteCategory.setDeletedAt(new Date());
         deleteCategory.setIsActive(false);
         this.productCategoryRepository.save(deleteCategory);
@@ -84,6 +95,7 @@ public class ProductCategoryService {
 
     public ProductCategory findById(Integer id, Boolean isHide) throws ProductCategoryException {
         Optional<ProductCategory> categoryOptional=null;
+
         //check if category is deleted or no
         if(isHide==null)
         {
@@ -93,8 +105,7 @@ public class ProductCategoryService {
             categoryOptional = this.productCategoryRepository.findById(id,isHide);
         }
 
-        ProductCategory targetProduct=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + id + " not found"));
-        return targetProduct;
+        return categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + id + " not found"));
     }
 
 
@@ -105,10 +116,10 @@ public class ProductCategoryService {
         // Check if the category already exists in the database
         if (id == null || id == 0) {
             if (this.productCategoryRepository.findByName(name) != null) {
-                nameErrorMessage = "Product category already exists with the provided name or slug";
+                nameErrorMessage = "Category already exists with the provided name";
             }else if (this.productCategoryRepository.findBySlug(slug) != null)
             {
-                slugErrorMessage = "Product category already exists with the provided name or slug";
+                slugErrorMessage = "Category already exists with the provided slug";
             }
         } else {
             // If the id exists, check if the name or slug already exists in the database (excluding the current category)
@@ -123,12 +134,12 @@ public class ProductCategoryService {
 
             // Check if the name already exists
             if (existingCategoryByName != null && !existingCategoryByName.getId().equals(id)) {
-                nameErrorMessage = "Product category already exists with the provided name";
+                nameErrorMessage = "Category Name conflicts with existing products";
             }
 
             // Check if the slug already exists
             if (existingCategoryBySlug != null && !existingCategoryBySlug.getId().equals(id)) {
-                slugErrorMessage = "Product category already exists with the provided slug";
+                slugErrorMessage = "Category Slug conflicts with existing products";
             }
         }
 
@@ -139,6 +150,7 @@ public class ProductCategoryService {
                     .addPropertyNode(nameField.getName())
                     .addConstraintViolation();
         }
+
         if (slugErrorMessage != null) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(slugErrorMessage)

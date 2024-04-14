@@ -32,6 +32,7 @@ public class UserService {
 
     public boolean checkUserNameUni(String userName, Integer id) {
         User user = this.userRepository.findUsersByUserName(userName);
+
         if (id==null||id == 0 ) {
             if (user != null) {
                 return false;
@@ -41,6 +42,7 @@ public class UserService {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -114,25 +116,23 @@ public class UserService {
         return newUser;
     }
 
-    public User updateUser(String editPassword, User editedUser) throws UserException {
-        User user = this.findUserById(editedUser.getId());
-        user.setActive(editedUser.getActive());
+    public User updateUser(User editUser) throws UserException {
+        User user = this.findUserById(editUser.getId());
+        user.setActive(editUser.getActive());
         user.setUpdatedAt(new Date());
-        user.setFirstName(editedUser.getFirstName());
-        user.setLastName(editedUser.getLastName());
-        if (editPassword != null && !editPassword.isEmpty()) {
-            user.setPassword(this.bCryptPasswordEncoder.encode(editPassword));
-        } else {
-            user.setPassword(user.getPassword());
-        }
+        user.setFirstName(editUser.getFirstName());
+        user.setLastName(editUser.getLastName());
+        user.setPassword(this.bCryptPasswordEncoder.encode(editUser.getPassword()));
         return user;
     }
 
     public void updateProfile(UserProfile userProfile, UserDetails userDetails) {
+
         if (userProfile.getUsers() == null) {
             User loggedInUser = this.findUserByUserName(userDetails.getUsername());
             userProfile.setUsers(loggedInUser);
         }
+
         if (userProfile.getId() == null || userProfile.getId() == 0) {
             userProfile.setCreatedAt(new Date());
             this.saveUserProfile(userProfile);
@@ -160,6 +160,7 @@ public class UserService {
     {
         model.addAttribute("pageTitle", "Update User");
         model.addAttribute("titleForm", "Update User Profile");
+
         if (userProfile == null) {
             model.addAttribute("isCheckGenderChoose", false);
             model.addAttribute("userProfileRequest",new UserProfileRequest());

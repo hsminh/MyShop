@@ -15,11 +15,7 @@
     @AllArgsConstructor
     public class ShopMeUserDetail implements UserDetails {
         private User users;
-        private static final long serialVersionUID = 8434638013158790457L; // Cập nhật serialVersionUID
-
-//        public ShopMeUserDetail(Users users) {
-//            this.users = users;
-//        }
+        private static final long serialVersionUID = 8434638013158790457L;
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -31,7 +27,6 @@
             }
             return authorities;
         }
-        // Thêm method để truy cập ID của Users
         public Integer getUserId() {
             return this.users.getId();
         }

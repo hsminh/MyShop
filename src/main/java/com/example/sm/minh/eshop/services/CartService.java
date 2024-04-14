@@ -23,23 +23,25 @@ import java.util.Optional;
 public class CartService {
     @Autowired
     private CartReposttory cartReposttory;
+
     @Autowired
     private ProductRepository productsRepository;
+
     @Autowired
     private CartLineItemRepositoty cartLineItemRepositoty;
+
     @Autowired
     private UserRepository userRepository;
+
     public Product getProductById(Integer id) throws ProductException {
         Optional<Product> productOptional = productsRepository.findById(id);
         return productOptional.orElseThrow(() -> new ProductException("Cannot find product with ID: " + id));
     }
 
-
     public User findUserById(Integer id) throws UserException {
         Optional<User> userOptional = userRepository.findById(id);
         return userOptional.orElseThrow(() -> new UserException("Cannot find user with ID: " + id));
     }
-
 
     public List<CartLineItem> getListCartItemByCart(Cart cart) throws ProductException {
         return this.cartLineItemRepositoty.findByCartId(cart);
@@ -56,6 +58,7 @@ public class CartService {
 
     private Cart getOrCreateCart(User customer) {
         Cart cart = this.cartReposttory.findByUserId(customer);
+
         if (cart == null) {
             cart = new Cart();
             cart.setUserId(customer);
@@ -63,6 +66,7 @@ public class CartService {
         } else {
             cart.setUpdatedAt(new Date());
         }
+
         return cart;
     }
 
@@ -73,23 +77,28 @@ public class CartService {
 
     private CartLineItem getOrCreateCartLineItem(Cart cart, Product selectProduct) {
         CartLineItem cartLineItem = this.cartLineItemRepositoty.findByCartIdAndProductId(cart, selectProduct);
+
         if (cartLineItem == null) {
             cartLineItem = new CartLineItem();
             cartLineItem.setCreatedAt(new Date());
         } else {
             cartLineItem.setUpdatedAt(new Date());
         }
+
         return cartLineItem;
     }
 
     private void updateCartAndCartItem(Cart cart, CartLineItem cartLineItem, Product buyProduct, Integer quantity) {
+        //calculator data
         Float taxAmount = calculateTaxAmount(buyProduct, quantity);
         Float priceBeforeTax = buyProduct.getDiscountPrice() * quantity;
 
+        //update data for cart
         cart.setCountItem(cart.getCountItem() + quantity);
         cart.setTaxAmount(cart.getTaxAmount() + taxAmount);
         cart.setTotalAmount(cart.getTotalAmount() + taxAmount + priceBeforeTax);
 
+        //update data for cartLineItem
         cartLineItem.setQuantity(cartLineItem.getQuantity() + quantity);
         cartLineItem.setSubTotalAmount(cartLineItem.getSubTotalAmount() + priceBeforeTax);
         cartLineItem.setTaxTotalAmount(cartLineItem.getTaxTotalAmount() + taxAmount);
@@ -133,6 +142,7 @@ public class CartService {
     public void clearCard(User Customer)
     {
         Cart cartClear=this.cartReposttory.findByUserId(Customer);
+
         if(cartClear!=null)
         {
             List<CartLineItem>cartLineItemList=this.cartLineItemRepositoty.findByCartId(cartClear);
@@ -148,6 +158,7 @@ public class CartService {
             this.cartReposttory.save(cartClear);
             this.cartReposttory.delete(cartClear);
         }
+
     }
 
 

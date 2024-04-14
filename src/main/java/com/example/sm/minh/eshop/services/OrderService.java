@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Service
 public class OrderService {
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -111,9 +112,11 @@ public class OrderService {
         updateCart.setTotalAmount(updateCart.getTotalAmount() - cartLineItemPayment.getTotalAmount());
         updateCart.setTaxAmount(updateCart.getTaxAmount() - cartLineItemPayment.getTaxTotalAmount());
         updateCart.setCountItem(updateCart.getCountItem() - cartLineItemPayment.getQuantity());
+
         if (updateCart.getCountItem() == 0) {
             updateCart.setDeletedAt(new Date());
         }
+
         return updateCart;
     }
     public Order setDataForOrderToSave(Order order, Float totalAmount, Float taxAmount) {
@@ -140,15 +143,18 @@ public class OrderService {
     // This method is used when the user wants to purchase a specific product directly without going through the shopping cart.
     public void purchaseProductDirect(Integer productId, Integer quantity, User customer) throws CartLineItemException, ProductException {
         Optional<Product> selectProduct=this.productsRepository.findById(productId);
+
         if(selectProduct.isPresent())
         {
             Product productSelect=selectProduct.get();
             Order order = this.orderRepository.findByUserId(customer);
+
             if (order == null) {
                 order = new Order();
                 order.setUserId(customer);
                 order.setCountItem(0);
             }
+
             order.setCountItem(order.getCountItem() + quantity);
             Float taxPerProduct=(productSelect.getDiscountPrice()/100)*productSelect.getTax();
             Float totalAmount = (productSelect.getDiscountPrice() * quantity) + (taxPerProduct * quantity);
@@ -156,21 +162,27 @@ public class OrderService {
             OrderLineItem orderLineItem=this.setDataForOderLineItemToSave(order,productSelect,quantity,taxAmount,totalAmount);
             order = setDataForOrderToSave(order, totalAmount, taxAmount);
             this.orderLineItemRepository.save(orderLineItem);
+
         }else
         {
             throw new ProductException("Cannot Found Product With Id "+productId);
         }
+
     }
 
     public void checkOutCart(User customer, List<String> productIds, List<String> quantities) throws ProductException, CartLineItemException {
         int index=0;
+
+        //User Loop to delete all cart and checkout all
         for(String s : productIds)
         {
             Integer quantity=Integer.parseInt(quantities.get(index++).replace(".0",""));
             this.purchaseProductDirect(Integer.parseInt(s), quantity,customer);
             this.cartService.clearCard(customer);
         }
+
     }
+
     public Page<OrderLineItem> findByOrderId(Order order, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         return this.orderLineItemRepository.findByOrderId(order,pageable);
@@ -178,6 +190,7 @@ public class OrderService {
 
     public OrderLineItem findOrderLineItemById(Integer oderLineItemId) throws OrderLineItemException {
         Optional<OrderLineItem>OderLineItem=this.orderLineItemRepository.findById(oderLineItemId);
+
         if(OderLineItem.isPresent())
         {
             return OderLineItem.get();
@@ -185,5 +198,6 @@ public class OrderService {
         {
             throw new OrderLineItemException("Cannot Found Oder Line Item With Id "+oderLineItemId);
         }
+
     }
 }

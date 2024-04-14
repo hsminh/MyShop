@@ -1,7 +1,7 @@
 package com.example.sm.minh.eshop.requests;
 
 import com.example.sm.minh.eshop.models.ProductCategory;
-import com.example.sm.minh.eshop.validators.annotations.ValidateSkuAndName;
+import com.example.sm.minh.eshop.validators.annotations.SkuAndNameUnique;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ValidateSkuAndName(idField = "id",skuField ="sku", nameField = "name")
+@SkuAndNameUnique(idField = "id",skuField ="sku", nameField = "name")
 public class ProductRequest {
     private Integer id;
 
@@ -25,14 +25,14 @@ public class ProductRequest {
 
     @NotNull
     @NotBlank(message = "SKU Is Required")
-    @Length(min = 2, message = "Username must be at least 2 characters")
-    @Length(max = 15, message = "Username must not exceed 15 characters")
+    @Length(min = 2, message = "SKU must be at least 2 characters")
+    @Length(max = 15, message = "SKU must not exceed 15 characters")
     private String sku ;
 
     @NotNull
     @NotBlank(message = "Content Is Required")
-    @Length(min = 2, message = "Username must be at least 2 characters")
-    @Length(max = 100, message = "Username must not exceed 100 characters")
+    @Length(min = 2, message = "Content must be at least 2 characters")
+    @Length(max = 100, message = "Content must not exceed 100 characters")
     private String content ;
 
     private String image;
