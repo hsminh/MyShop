@@ -43,16 +43,13 @@
         </div>
     </div>
 
-
-
-
     <div class="bg-white container mx-auto flex items-center flex-wrap pt-4" th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
         <div class="ml-14 flex justify-center">
             <p class="px-4 h-16 flex items-center uppercase text-stone-500">Best-selling products</p>
         </div>
         <div class="mt-8 w-full">
             <div class="pagination-buttons flex justify-between items-center">
-                <button class="bg-zinc-50 p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                <button class="bg-zinc-50    p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
                 <div class="grid grid-cols-5 gap-4 p-4">
                     <div th:each="product, iterStat : ${productsOrderedMost}" class="hover:border-blue-500 product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
                         <a th:href="@{cart (productId=${product.getProduct().id})}">
@@ -82,8 +79,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class="mt-8 container mx-auto bg-white pb-8">
         <div th:if="${isChoiceCategory != null}" style="text-align: center;" class="flex justify-center items-center">
@@ -132,24 +127,8 @@
             </div>
         </div>
     </div>
-
 </section>
-
-
-<section class="bg-white py-8">
-    <div class="container py-8 px-6 mx-auto">
-        <h2 class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8">Thank You for Visiting</h2>
-
-        <p class="mt-8 mb-8">
-            We extend our heartfelt thanks to you for taking the time to visit our store. SDN is committed to providing the finest quality technology products along with attentive and professional customer service.
-        </p>
-
-        <p class="mb-8">
-            Here at SDN, we specialize in offering a wide range of cutting-edge technological products to meet your needs. Our goal is to enhance your digital experience and make technology more accessible to everyone.
-        </p>
-    </div>
-</section>
-
+<div th:replace="component/fragmen::thank_you_message"></div>
 <footer th:replace="component/fragmen::footer"></footer>
 </body>
 

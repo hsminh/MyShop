@@ -6,14 +6,13 @@
 <body>
 <div th:replace="component/fragmen ::Navbar"></div>
 
-
-<div th:if="${listOrderLineItem.size()==0}" class="mt-20">
+<div th:if="${listOrderLineItem.size()==0}" >
     <h3 class="text-center mt-5 text-lg font-bold text-red-500 mb-4 animate-pulse">Your Order History is Empty Click Here to Come to Shop <b><a th:href="@{/main-page}">Click Here</a></b></h3>
     <div class="flex justify-center items-center">
         <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/images/cute.png}">
     </div>
 </div>
-<div th:if="${listOrderLineItem.size()!=0}" class="mt-24">
+<div th:if="${listOrderLineItem.size()!=0}" >
     <div class="mt-16">
         <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Order History</b></h1>
     </div>
@@ -38,35 +37,37 @@
                             </thead>
                             <tbody>
                             <th:block th:each="OrderLineItem : ${listOrderLineItem}" >
-                                <input type="hidden" name="productIds" th:value="${OrderLineItem.getProductId().getId()}" />
-                                <tr th:onclick="'window.location.href=\'/order/detail?oder-line-item-id=' + ${OrderLineItem.getId()} + '\''">
-                                    <td class="py-4">
-                                        <div class="flex items-center">
-                                            <img class="h-16 w-16 mr-4" th:src="${OrderLineItem.getProductId().loadImages()}" alt="Product image">
-                                            <span class="font-semibold" >[[${OrderLineItem.getProductId().getName()}]]</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discountPrice}]]</span>
-                                    </td>
-                                    <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100}]]</span>
-                                    </td>
-                                    <td class="py-4">
-                                        <div class="flex items-center">
-                                            <label>
-                                                <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td class="py-4">
-                                        <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discountPrice)*OrderLineItem.quantity}]]</span>
-                                    </td>
-                                </tr>
+                               <div class=" ">
+                                   <input type="hidden" name="productIds" th:value="${OrderLineItem.getProductId().getId()}" />
+                                   <tr th:onclick="'window.location.href=\'/order/detail?oder-line-item-id=' + ${OrderLineItem.getId()} + '\''"  class="border-b border-blue-200 hover:bg-blue-100" >
+                                       <td class="py-4">
+                                           <div class="flex items-center">
+                                               <img class="h-16 w-16 mr-4" th:src="${OrderLineItem.getProductId().loadImages()}" alt="Product image">
+                                               <span class="font-semibold" >[[${OrderLineItem.getProductId().getName()}]]</span>
+                                           </div>
+                                       </td>
+                                       <td class="py-4">
+                                           <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discountPrice}]]</span>
+                                       </td>
+                                       <td class="py-4">
+                                           <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100}]]</span>
+                                       </td>
+                                       <td class="py-4">
+                                           <div class="flex items-center">
+                                               <label>
+                                                   <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
+                                               </label>
+                                           </div>
+                                       </td>
+                                       <td class="py-4">
+                                           <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discountPrice)*OrderLineItem.quantity}]]</span>
+                                       </td>
+                                   </tr>
+                               </div>
                             </th:block>
                             </tbody>
                         </table>
-                        <div class="text-gray-700 body-font overflow-hidden bg-white">
+                        <div class="text-gray-700 body-font overflow-hidden bg-white mt-4">
                             <nav aria-label="Page navigation example" class="text-center">
                                 <ul class="inline-flex -space-x-px text-base h-10">
                                     <li><a th:href="@{'/order/history/1'}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">First</a></li>
@@ -109,43 +110,7 @@
         </div>
     </div>
 </form>
-<footer th:replace="component/fragmen::footer"></footer>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var pages = document.querySelectorAll(".page-item");
-        var currentPageIndex = 3; // Giả sử trang hiện tại là trang thứ 3 (ví dụ)
+<footer th:replace="component/fragmen::footer" class="mt-10"></footer>
 
-        function showPages() {
-            for (var i = 0; i < pages.length; i++) {
-                if (i < currentPageIndex - 3 || i > currentPageIndex + 3) {
-                    pages[i].style.display = "none";
-                } else {
-                    pages[i].style.display = "inline-flex";
-                }
-            }
-        }
-
-        showPages();
-
-        // Cập nhật vị trí trang hiện tại và hiển thị lại các trang khi cần thiết
-        function updateCurrentPageIndex(newIndex) {
-            currentPageIndex = newIndex;
-            showPages();
-        }
-
-        // Gắn sự kiện cho các nút "Previous" và "Next" để cập nhật trang hiện tại
-        var prevButton = document.querySelector(".prev-button");
-        var nextButton = document.querySelector(".next-button");
-
-        prevButton.addEventListener("click", function() {
-            updateCurrentPageIndex(currentPageIndex - 1);
-        });
-
-        nextButton.addEventListener("click", function() {
-            updateCurrentPageIndex(currentPageIndex + 1);
-        });
-    });
-
-</script>
 </body>
 </html>

@@ -14,7 +14,7 @@
             <img alt="product-image" class="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200" th:src="@{/images/cute.png}">
         </div>
     </div>
-    <div th:if="${listCartLineItem.size()!=0}" class="mt-24">
+    <div th:if="${listCartLineItem.size()!=0}">
         <div class="item-center">
             <div th:replace="component/notification::alertMessage"></div>
             <h1 class="text-7xl text-center mt-5 text-lg font-bold text-red-500 mb-4 "><b>Your Shopping Cart</b></h1>

@@ -19,7 +19,9 @@
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
     import java.util.HashMap;
+    import java.util.List;
     import java.util.Map;
+    import java.util.Set;
 
     @Controller
     public class CartController {
@@ -30,8 +32,10 @@
         public String viewCart(@RequestParam("productId") Integer productId, Model model, RedirectAttributes redirectAttributes) {
             try {
                 Product cartProduct = this.cartService.getProductById(productId);
+                Set<Product> listRelatedProducts=this.cartService.getRelatedProduct(cartProduct);
                 model.addAttribute("pageTitle", "Cart ID |" + productId);
                 model.addAttribute("cartProduct", cartProduct);
+                model.addAttribute("listRelatedProducts", listRelatedProducts);
                 return "cart/cart";
             } catch (ProductException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());

@@ -1,10 +1,7 @@
 package com.example.sm.minh.eshop.services;
 
 import com.example.sm.minh.eshop.exceptions.UserException;
-import com.example.sm.minh.eshop.models.Cart;
-import com.example.sm.minh.eshop.models.CartLineItem;
-import com.example.sm.minh.eshop.models.Product;
-import com.example.sm.minh.eshop.models.User;
+import com.example.sm.minh.eshop.models.*;
 import com.example.sm.minh.eshop.exceptions.CartLineItemException;
 import com.example.sm.minh.eshop.exceptions.ProductException;
 import com.example.sm.minh.eshop.repositories.CartLineItemRepositoty;
@@ -14,10 +11,7 @@ import com.example.sm.minh.eshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CartService {
@@ -162,5 +156,13 @@ public class CartService {
     }
 
 
-
+    public Set<Product> getRelatedProduct(Product cartProduct) {
+        Set<Product> relatedProduct=new HashSet<>();
+        for (ProductCategory productCategory : cartProduct.getListProductCategories())
+        {
+            relatedProduct.addAll( this.productsRepository.getProductsRelated(productCategory));
+        }
+        relatedProduct.remove(cartProduct);
+        return relatedProduct;
+    }
 }

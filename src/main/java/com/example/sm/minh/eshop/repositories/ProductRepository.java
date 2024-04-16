@@ -1,6 +1,7 @@
 package com.example.sm.minh.eshop.repositories;
 
 import com.example.sm.minh.eshop.models.Product;
+import com.example.sm.minh.eshop.models.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,11 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("select p from Product p where p.id =:id and p.isActive=true")
     public Optional<Product>findById(Integer id);
+
+    @Query("SELECT p FROM Product p JOIN p.ListProductCategories pc WHERE pc = :category")
+    public List<Product> getProductsRelated(ProductCategory category);
+
     @Query("select p from Product  p where p.isActive=false and p.id=:id")
     public Optional<Product>findProductByIsActiveIsFalse(Integer id);
     public List<Product> findProductByNameOrSku(String name, String sku);
