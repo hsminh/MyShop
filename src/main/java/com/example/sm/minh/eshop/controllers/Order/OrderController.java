@@ -103,6 +103,7 @@
             model.addAttribute("pageNum", pageNum);
             model.addAttribute("order", order);
             model.addAttribute("totalPage", totalPage);
+
             model.addAttribute("listOrderLineItem", listOrderLineItem.getContent());
 
             return "order/transaction";

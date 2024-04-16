@@ -35,7 +35,10 @@ public class AuthController {
         model.addAttribute("pageTitle", "Forgot Password");
         return "authenticated/forgot";
     }
-
+    @GetMapping("/c")
+    public String viewForgo3tPassword(Model model) {
+        return "c";
+    }
     @PostMapping("/auth/send-email")
     public String sendEmail(Model model, @RequestParam("email") String email, RedirectAttributes redirectAttributes) throws UserException {
         try {

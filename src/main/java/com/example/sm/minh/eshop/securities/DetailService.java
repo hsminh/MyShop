@@ -21,7 +21,6 @@ public class DetailService implements UserDetailsService {
         {
             throw new UsernameNotFoundException("Cannot Find User With UserName "+username);
         }else {
-            System.out.println(user);
             return new ShopMeUserDetail(user);
         }
     }
