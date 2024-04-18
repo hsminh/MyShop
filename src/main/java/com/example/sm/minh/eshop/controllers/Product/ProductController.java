@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Controller
 public class ProductController {
@@ -71,6 +72,18 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    @GetMapping("/products/detail")
+    public String productDetail(@RequestParam("productId")Integer productId, Model model,RedirectAttributes redirectAttributes) {
+        try {
+            Product detailProduct = this.productSerVice.findById(productId);
+            model.addAttribute("pageTitle", "Cart ID |" + productId);
+            model.addAttribute("productDetail", detailProduct);
+            return "product/product-detail";
+        } catch (ProductException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/products";
+        }
+    }
     @GetMapping("/products/restore/{id}")
     public String restoreProduct(@PathVariable("id") Integer restoreProductId, RedirectAttributes redirectAttributes) {
         try {

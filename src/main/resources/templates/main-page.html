@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <div th:replace="component/fragmen::header"></div>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/slide.css">
+<!--    <link rel="stylesheet" href="css/slide.css">-->
     <link rel="stylesheet" href="css/button.css">
     <script th:src="@{/javascripts/mainpage/main-page.js}" type="text/javascript"></script>
 </head>
 
 <input type="hidden" id="categoryId" th:value="${category}" />
-<body class="bg-white text-gray-600 work-sans leading-normal text-base tracking-normal">
+<body >
 <div th:replace="component/fragmen::Navbar"></div>
-<div th:replace="component/slide::slide"></div>
 <div th:replace="component/notification::announcement"></div>
-<section class="bg-white py-8" style="background-color: #F2F2F2">
+<section class="bg-white py-8 mx-auto px-20" >
     <div class="mb-8  max-w-md mx-auto">
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div class="relative">
@@ -27,44 +27,28 @@
         </div>
     </div>
 
-    <div th:if="${listCategory != null and listCategory.size() != 0}" class="pb-8 container mx-auto flex flex-col justify-center items-center my-8 bg-white">
-        <div class="max-w-8xl mx-auto ">
-            <p class="px-4 h-16 flex items-center uppercase text-stone-500">Category</p>
-            <div class="grid grid-cols-10 gap-2 w-50 h-80 divide-stone-200 divide-y-[1px]  border-[1px] border-stone-200">
-                <th:block th:each="ProductCategory : ${listCategory}">
-                    <a th:href="@{/main-page(category=${ProductCategory.id},search=${search}, isChoiceCategory=${ProductCategory})}"
-                       class="hover:border-blue-500 flex flex-col justify-center border border-sky-500 items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110"
-                       th:classappend="${ProductCategory.name.equals(isChoiceCategory)} ? 'border-blue-500' : ''">
-                        <img th:src="${ProductCategory.loadImages()}" alt="" class="h-20">
-                        <p class="text-center p-2 text-sm" th:text="${#strings.length(ProductCategory.name) &gt; 10} ? ${#strings.substring(ProductCategory.name, 0, 10) + '...'} : ${ProductCategory.name}"></p>
-                    </a>
-                </th:block>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white container mx-auto flex items-center flex-wrap pt-4" th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
+    <div class="mt-10 bg-white container mx-auto flex items-center flex-wrap pt-4" th:if="${productsOrderedMost != null and productsOrderedMost.size()!=0}">
         <div class="ml-14 flex justify-center">
-            <p class="px-4 h-16 flex items-center uppercase text-stone-500">Best-selling products</p>
+            <p class="px-4 h-16 flex items-center uppercase text-stone-500 text-blue-700">Best-selling products</p>
         </div>
-        <div class="mt-8 w-full">
+        <div class="w-full">
             <div class="pagination-buttons flex justify-between items-center">
-                <button class="bg-zinc-50    p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
-                <div class="grid grid-cols-5 gap-4 p-4">
-                    <div th:each="product, iterStat : ${productsOrderedMost}" class="hover:border-blue-500 product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
+                <button class="bg-zinc-50  p-1" id="previous-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                <div class="grid grid-cols-5 gap-4 pb-8">
+                    <div th:each="product, iterStat : ${productsOrderedMost}" class="shadow-lg hover:border-blue-500 product-item bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition duration-300 hover:scale-105 w-full mb-4 md:w-auto">
                         <a th:href="@{cart (productId=${product.getProduct().id})}">
-                            <img class="p-8 rounded-t-lg transform transition duration-300 hover:scale-110 " th:src="@{${product.getProduct().loadImages}}" alt="product image" />
+                            <img class="relative p-8 rounded-t-lg transform transition duration-300 hover:scale-110 " th:src="@{${product.getProduct().loadImages}}" alt="product image" />
+                            <div class="absolute top-0 border bg-blue-100 rounded">
+                                <span class="inline-block text-xs"><b>Sold Item:</b>[[${product.quantityProduct}]]</span>
+                            </div>
                             <div class="px-5 pb-5">
-                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}">Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport</h5>
+                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white" th:text="${product.getProduct().name}"></h5>
                                 <div class="flex mt-2.5 mb-5" style="max-height: 60px; overflow: hidden;">
                                     <p><b>Description :</b> [[${product.getProduct().content}]]</p>
                                 </div>
                                 <b>Price :</b>
                                 <del class="text-red-500">[[${product.getProduct().price}]]</del>
                                 <span>[[${product.getProduct().discountPrice}]]</span>
-                                <div>
-                                    <span><b>Sold items:</b>[[${product.quantiryPurchase}]]</span>
-                                </div>
                                 <div class="flex items-center justify-between">
                                     <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
                                         <i class="fas fa-shopping-cart fa-1x"></i>
@@ -80,53 +64,85 @@
         </div>
     </div>
 
-    <div class="mt-8 container mx-auto bg-white pb-8">
-        <div th:if="${isChoiceCategory != null}" style="text-align: center;" class="flex justify-center items-center">
-            <a class="text-4xl px-4 h-16 flex items-center uppercase text-stone-500">
+    <div th:if="${listCategory != null and listCategory.size() != 0}" class="border-b-4 bg-white container mx-auto flex flex-wrap pt-4 py-10 flex-col">
+        <div class="w-1/2 px-4 ml-4">
+            <span class="text-stone-500 text-black-700 font-bold text-3xl">Explore Cutting-Edge Technology</span>
+            <span class="mt-6  text-gray-700 opacity-90 font-thin font-family: 'Brush Script Std' block  block">Discover the latest technological advancements that will redefine your experiences.
+            Immerse yourself in a world of groundbreaking products that embody the pinnacle of innovation.
+            Unleash the boundless possibilities that lie ahead.</span>
+        </div>
+        <div class="w-full px-4 py-5">
+            <div class="grid grid-cols-2 md:grid-cols-10 gap-4 p-4">
+                <th:block th:each="ProductCategory : ${listCategory}">
+                    <div class="image-container">
+                        <input type="hidden" id="search" th:value="${search}">
+                        <input type="hidden" id="isCategory" th:value="${ProductCategory}">
+                        <a th:onclick="choiceCategory([[${ProductCategory.id}]])"
+                           class="px-4 hover:border-amber-500 flex flex-col justify-center items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110"
+                           th:classappend="${ProductCategory.name.equals(isChoiceCategory)} ? 'border-4 border-yellow-500' : ''">
+                            <img th:src="${ProductCategory.loadImages()}" alt="" class="h-20">
+                            <p class="text-center p-2 text-sm" th:text="${#strings.length(ProductCategory.name) &gt; 10} ? ${#strings.substring(ProductCategory.name, 0, 10) + '...'} : ${ProductCategory.name}"></p>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+    <div class="px-3 py-10 container mx-auto bg-white pb-8">
+        <div th:if="${isChoiceCategory != null}" style="text-align: center;" class="flex items-center">
+            <a class="ml-2 text-stone-500 text-black-700 font-bold text-3xl">
                 <span th:text="${#strings.length(isChoiceCategory) > 15 ? #strings.substring(isChoiceCategory, 0, 15) + '...' : isChoiceCategory}"></span>
             </a>
         </div>
 
         <div th:if="${isChoiceCategory==null}" style="text-align: center;" class="flex items-center">
-            <p class="px-4 h-16 flex items-center uppercase text-stone-500">All Product</p>
+            <span class="ml-2 text-stone-500 text-black-700 font-bold text-3xl">All Product</span>
         </div>
-        <div class="mt-6 grid grid-cols-6 gap-2">
-            <div th:each="Product : ${listProduct}">
-                <a th:href="@{cart (productId=${Product.id})}">
-                    <div class="p-2 bg-white rounded shadow-md border border-gray-200 transform transition duration-300 hover:scale-105 hover:border-blue-500">
-                        <div class="relative w-full mb-1 sm:mb-1 h-32 sm:h-32">
-                            <img th:src="@{${Product.loadImages}}" alt="Product Image" class="object-cover w-full h-full rounded">
-                        </div>
-                        <div class="bg-gray-100">
-                            <div class="p-2 sm:p-2">
-                                <h2 class="text-xs sm:text-sm cursor-pointer hover:text-gray-900 product-name">
-                                    <b>Name :</b> [[${Product.name}]]
-                                </h2>
-                                <h2 class="mt-1 text-xs sm:text-xs cursor-pointer hover:text-gray-900 product-name">
-                                    <b>Description :</b> [[${Product.content}]]
-                                </h2>
-                                <h2 class="mt-1 text-xs sm:text-xs cursor-pointer hover:text-gray-900 product-name">
-                                    <b>SKU :</b> [[${Product.sku}]]
-                                </h2>
-                                <div class="mt-1 text-xs font-semibold">
-                                    <b>Price :</b>
-                                    <del class="text-red-500">[[${Product.price}]]</del>
-                                    <span>[[${Product.discountPrice}]]</span>
+
+        <div class=" mt-6 grid grid-cols-4 gap-10" id="all-item">
+                <div th:each="Product : ${listProduct}" id="parent-item">
+                    <div  class="delete-item w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <a href="#">
+                            <img class="h-60 w-70 object-cover" th:src="@{${Product.loadImages}}" alt="product image" />
+                        </a>
+                        <div class="px-5 pb-5">
+                            <a href="#">
+                                <div>
+                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">[[${Product.name}]]</h5>
+
                                 </div>
-                                <form th:action="@{/cart}" method="get">
-                                    <input type="hidden" name="productId" th:value="${Product.id}" />
-                                    <button type="submit" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs sm:text-xs px-4 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                        <i class="fas fa-shopping-cart fa-1x"></i>
-                                        <span class="ml-1">Add to Cart</span>
-                                    </button>
-                                </form>
+                            </a>
+                            <a href="#">
+                                <h5 class="text-sm tracking-tight text-gray-900 dark:text-white">[[${Product.content}]]</h5>
+                            </a>
+                            <div class="flex items-center mt-2.5 mb-5">
+                                <div class="flex items-center space-x-1 rtl:space-x-reverse">
+                                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                </div>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
+                            </div>
+                            <div class="flex items-center justify-start">
+                                <span class="text-xl font-bold  dark:text-white" style="color: #f97316">$[[${Product.discountPrice}]]</span>
                             </div>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
-    </div>
 </section>
 <div th:replace="component/fragmen::thank_you_message"></div>
 <footer th:replace="component/fragmen::footer"></footer>

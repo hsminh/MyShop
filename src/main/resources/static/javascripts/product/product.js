@@ -1,5 +1,25 @@
 $(document).ready(function ()
 {
+    document.addEventListener("DOMContentLoaded", function() {
+        const elements = document.querySelectorAll(".truncate");
+        const maxLength = 10; // Maximum character length
+
+        elements.forEach(function(element) {
+            const text = element.textContent; // Get the text content
+            elements.forEach(function (text)
+            {
+
+                if (text.length > maxLength) {
+                    const truncatedText = text.substring(0, maxLength) + "..."; // Truncate with ellipsis
+                    element.textContent = truncatedText;
+                }
+            })
+
+        });
+    });
+
+
+
     $('#searchButton').on('click',function ()
     {
         var keyword = document.getElementById("valueSearch").value.trim();
@@ -12,4 +32,8 @@ $(document).ready(function ()
 
         }
     })
+
+    const description = document.querySelector('.description')
+    console.log(description)
 })
+

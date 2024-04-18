@@ -46,7 +46,6 @@ public class ProductService {
         } else if (search != null && !search.trim().isEmpty()) {
             return this.producsRepository.findAll(search, isHide);
         }
-
         return this.producsRepository.findAll(isHide);
     }
 

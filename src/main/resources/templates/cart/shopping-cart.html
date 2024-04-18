@@ -44,7 +44,7 @@
                                     <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
                                     <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discountPrice}" />
                                     <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
-                                    <tr>
+                                    <tr class="border-b border-blue-200 ">
                                         <td class="py-4">
                                             <div class="flex items-center">
                                                 <img class="h-16 w-16 mr-4" th:src="${CartLineItems.getProductId().loadImages()}" alt="Product image">
@@ -83,21 +83,21 @@
                     </div>
                     <div class="md:w-1/4">
                         <div class="bg-white rounded-lg shadow-md p-6">
-                            <h2 class="text-lg font-semi-bold mb-4">Summary</h2>
+                            <h2 class="text-center text-lg font-semi-bold mb-4">Summary</h2>
                             <div class="flex justify-between mb-2">
                                 <span>Subtotal</span>
                                 <input type="hidden" id="subTotalHidden" th:value="${shoppingCart.getTotalAmount() - shoppingCart.getTaxAmount()}"></input>
-                                <span id="subTotal" th:text="'$'+${shoppingCart.getTotalAmount() - shoppingCart.getTaxAmount()}"></span>
+                                <span class="text-green-500" id="subTotal" th:text="'$'+${shoppingCart.getTotalAmount() - shoppingCart.getTaxAmount()}"></span>
                             </div>
                             <div class="flex justify-between mb-2">
                                 <span>Taxes</span>
                                 <input type="hidden" id="taxTotalHidden" th:value="${shoppingCart.getTaxAmount()}"></input>
-                                <span id="taxTotal" th:text="'$'+${shoppingCart.getTaxAmount()}"></span>
+                                <span class="text-green-500" id="taxTotal" th:text="'$'+${shoppingCart.getTaxAmount()}"></span>
                             </div>
                             <hr class="my-2">
                             <div class="flex justify-between mb-2">
                                 <span class="font-semi-bold">Total</span>
-                                <span class="font-semi-bold" id="totalAmount" th:text="'$'+${shoppingCart.getTotalAmount()}"></span>
+                                <span  class="text-green-500 font-bold" id="totalAmount" th:text="'$'+${shoppingCart.getTotalAmount()}"></span>
                             </div>
                             <button onclick="checkOut()" type="button" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full" >Checkout</button>
                             <button onclick="clearAll()" type="button"  class="bg-red-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Clear All</button>

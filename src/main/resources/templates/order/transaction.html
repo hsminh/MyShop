@@ -37,33 +37,33 @@
                             </thead>
                             <tbody>
                             <th:block th:each="OrderLineItem : ${listOrderLineItem}" >
-                               <div class=" ">
-                                   <input type="hidden" name="productIds" th:value="${OrderLineItem.getProductId().getId()}" />
-                                   <tr th:onclick="'window.location.href=\'/order/detail?oder-line-item-id=' + ${OrderLineItem.getId()} + '\''"  class="border-b border-blue-200 hover:bg-blue-100" >
-                                       <td class="py-4">
-                                           <div class="flex items-center">
-                                               <img class="h-16 w-16 mr-4" th:src="${OrderLineItem.getProductId().loadImages()}" alt="Product image">
-                                               <span class="font-semibold" >[[${OrderLineItem.getProductId().getName()}]]</span>
-                                           </div>
-                                       </td>
-                                       <td class="py-4">
-                                           <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discountPrice}]]</span>
-                                       </td>
-                                       <td class="py-4">
-                                           <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100}]]</span>
-                                       </td>
-                                       <td class="py-4">
-                                           <div class="flex items-center">
-                                               <label>
-                                                   <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
-                                               </label>
-                                           </div>
-                                       </td>
-                                       <td class="py-4">
-                                           <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discountPrice)*OrderLineItem.quantity}]]</span>
-                                       </td>
-                                   </tr>
-                               </div>
+                                <div class=" ">
+                                    <input type="hidden" name="productIds" th:value="${OrderLineItem.getProductId().getId()}" />
+                                    <tr th:onclick="'window.location.href=\'/order/detail?oder-line-item-id=' + ${OrderLineItem.getId()} + '\''"  class="border-b border-blue-200 hover:bg-blue-100" >
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <img class="h-16 w-16 mr-4" th:src="${OrderLineItem.getProductId().loadImages()}" alt="Product image">
+                                                <span class="font-semibold" >[[${OrderLineItem.getProductId().getName()}]]</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <span  class="block text-lg font-medium text-gray-900">$[[${OrderLineItem.getProductId().discountPrice}]]</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <span  class="block text-lg font-medium text-gray-900">$[[${(OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100}]]</span>
+                                        </td>
+                                        <td class="py-4">
+                                            <div class="flex items-center">
+                                                <label>
+                                                    <input class="text-center w-8"  th:value="${OrderLineItem.quantity}"></input>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="py-4">
+                                            <span  class="block text-lg font-medium text-gray-900">$[[${(((OrderLineItem.getProductId().discountPrice*OrderLineItem.getProductId().getTax)/100)+OrderLineItem.getProductId().discountPrice)*OrderLineItem.quantity}]]</span>
+                                        </td>
+                                    </tr>
+                                </div>
                             </th:block>
                             </tbody>
                         </table>
@@ -72,7 +72,7 @@
                                 <ul class="inline-flex -space-x-px text-base h-10">
                                     <li><a th:href="@{'/order/history/1'}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">First</a></li>
                                     <li><a th:href="@{'/order/history/'+${pageNum-1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a></li>
-                                    <th:block th:if="${pageNum<3}" th:each="pageNumber : ${#numbers.sequence(1, pageNum+4)}">
+                                    <th:block th:if="${pageNum<3}" th:each="pageNumber : ${#numbers.sequence(1, 5)}">
                                         <li><a th:href="@{'/order/history/' + ${pageNumber}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNumber}]]</a></li>
                                     </th:block>
                                     <th:block th:if="${pageNum>totalPage-3}" th:each="pageNumber : ${#numbers.sequence(totalPage-4, totalPage)}">
@@ -90,19 +90,19 @@
                 </div>
                 <div class="md:w-1/4">
                     <div class="bg-white rounded-lg shadow-md p-6">
-                        <h2 class="text-lg font-semi-bold mb-4">Summary</h2>
+                        <h2 class="text-center text-lg font-semi-bold mb-4">Summary</h2>
                         <div class="flex justify-between mb-2">
                             <span>Sub Total</span>
-                            <span id="subTotal" >[[${order.totalAmount-order.taxAmount}]]</span>
+                            <span id="subTotal" class="text-green-600" >[[${order.totalAmount-order.taxAmount}]]</span>
                         </div>
                         <div class="flex justify-between mb-2">
                             <span>Taxes</span>
-                            <span id="taxTotal" >[[${order.taxAmount}]]</span>
+                            <span id="taxTotal" class="text-green-600">[[${order.taxAmount}]]</span>
                         </div>
                         <hr class="my-2">
                         <div class="flex justify-between mb-2">
                             <span class="font-semi-bold">Total</span>
-                            <span class="font-semi-bold" id="totalAmount">[[${order.totalAmount}]]</span>
+                            <span class="font-semi-bold text-green-600" id="totalAmount">[[${order.totalAmount}]]</span>
                         </div>
                     </div>
                 </div>
