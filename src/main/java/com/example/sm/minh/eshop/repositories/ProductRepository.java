@@ -25,17 +25,48 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     public Product findProductByName(String name);
     public Product findProductBySku(String sku);
-    @Query("SELECT p FROM Product p JOIN p.ListProductCategories pc WHERE pc.id = :categoryId and p.isActive=:isHide")
-    List<Product> findAll(Integer categoryId,@Param("isHide") Boolean isHide);
 
-    @Query("SELECT p FROM Product p JOIN p.ListProductCategories pc WHERE (:categoryId IS NULL OR pc.id = :categoryId) AND (:keyword IS NULL OR concat(p.name, p.sku, pc.name) LIKE %:keyword%) and p.isActive= :isHide")
-    List<Product> findAll(@Param("categoryId") Integer categoryId, @Param("keyword") String keyword,@Param("isHide") Boolean isHide);
 
-    @Query("SELECT p FROM Product p where concat(p.name ,p.sku) like %:keyword% and p.isActive=:isHide")
-    List<Product> findAll(String keyword,@Param("isHide") Boolean isHide);
 
-    @Query("SELECT p FROM Product p where p.isActive=:isHide")
-    List<Product> findAll(@Param("isHide") Boolean isHide);
+    @Query("SELECT p, SUM(oli.quantity) AS totalOrdered " +
+            "FROM Product p " +
+            "left JOIN p.ListProductCategories pc " +
+            "left JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE pc.id = :categoryId AND p.isActive = :isHide " +
+            "GROUP BY p.id, p ")
+    List<Object[]> findAllByCategoryId(@Param("categoryId") Integer categoryId, @Param("isHide") Boolean isHide);
+
+
+
+
+
+    @Query("SELECT p, COALESCE(sum (oli.quantity),0) as totalOrdered " +
+            "FROM Product p " +
+            "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE CONCAT(p.name, p.content) LIKE %:keyword% AND p.isActive = :isHide " +
+            "GROUP BY p")
+    List<Object[]> findAll(@Param("keyword") String keyword, @Param("isHide") Boolean isHide);
+
+
+
+    @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS totalOrdered    " +
+            "FROM Product p " +
+            "left JOIN p.ListProductCategories pc " +
+            "left JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE (:categoryId IS NULL OR pc.id = :categoryId) " +
+            "  AND CONCAT(p.name, p.sku, pc.name) LIKE %:keyword% " +
+            "  AND p.isActive = :isHide " +
+            "GROUP BY p.id, p")
+    List<Object[]> findAll(@Param("categoryId") Integer categoryId, @Param("keyword") String keyword, @Param("isHide") Boolean isHide);
+
+
+    @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS total_sold " +
+            "FROM Product p " +
+            "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE p.isActive = :isHide " +
+            "GROUP BY p")
+    List<Object[]> findAllProductsAndTotalSold(@Param("isHide") Boolean isHide);
+
 
 
 }

@@ -37,16 +37,44 @@ public class ProductService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
-    public List<Product> findAll(Integer id, String search, Boolean isHide) {
 
-        if (id != null && search != null) {
-            return this.producsRepository.findAll(id, search, isHide);
-        } else if (id != null) {
-            return this.producsRepository.findAll(id, isHide);
+    public List<ProductDTO> findAll(Integer categoryId, String search, Boolean isHide) {
+        if(search==null||search.trim().isEmpty()) search=null;
+        List<ProductDTO>list=new ArrayList<>();
+        list= toProductDTO(this.producsRepository.findAllProductsAndTotalSold(isHide));
+        if (categoryId != null && search != null) {
+            System.out.println("come 1");
+            list= toProductDTO(this.producsRepository.findAll(categoryId, search, isHide));
+        } else if (categoryId != null) {
+            System.out.println("come 2");
+            list= toProductDTO(this.producsRepository.findAllByCategoryId(categoryId, isHide));
         } else if (search != null && !search.trim().isEmpty()) {
-            return this.producsRepository.findAll(search, isHide);
+            System.out.println("come 3");
+            list= toProductDTO(this.producsRepository.findAll(search, isHide));
         }
-        return this.producsRepository.findAll(isHide);
+
+
+        for(ProductDTO productDTO : list )
+        {
+            System.out.println("có sp");
+            System.out.println(productDTO.getQuantityProduct()+" "+productDTO.getProduct().getId() + " "+productDTO.getProduct().getName()+" "+productDTO.getProduct().getListProductCategories()   );
+        }
+        return list;
+    }
+
+
+    public ArrayList<ProductDTO> toProductDTO(List<Object[]>objectListProductDTO) {
+
+        ArrayList<ProductDTO> productDTOS = new ArrayList<>();
+        for (Object[] obj : objectListProductDTO) {
+            Product product = (Product) obj[0];
+            Long quantityPurchase = (Long) obj[1];
+            ProductDTO productDTO = new ProductDTO(product, quantityPurchase);
+            productDTOS.add(productDTO);
+
+        }
+
+        return productDTOS;
     }
 
     public List<ProductCategory> findAllCategory() {
@@ -262,5 +290,15 @@ public class ProductService {
         return nameErrorMessage == null && skuErrorMessage == null;
     }
 
+    //format sale product
+    public String formatQuantity(long quantity) {
+        if (quantity >= 1000000) {
+            return (quantity / 1000000) + "m";
+        } else if (quantity >= 1000) {
+            return (quantity / 1000) + "k";
+        } else {
+            return String.valueOf(quantity);
+        }
+    }
 
 }

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var categoryId = document.getElementById('categoryId').value;
     searchButton.addEventListener('click', function() {
         var keyword = document.getElementById("default-search").value;
-        window.location.href = "/main-page?category=" + categoryId + "&search=" + encodeURIComponent(keyword);
+        window.location.href = "/main-page?&search=" + encodeURIComponent(keyword);
     });
 
     function saveSearchValue(value) {
@@ -56,62 +56,83 @@ document.addEventListener("DOMContentLoaded", function() {
         previousBtn.style.display = "inline-block";
         nextBtn.style.display = "inline-block";
     }
-
-
 });
 
 function choiceCategory(categoryId) {
-    var keyWord = $('#search').val();
-    var isCategory = $('#isCategory').val();
-
+    var keyWord = $('#default-search').val();
     $.ajax({
         type: "GET",
         url: "/products/load-product",
         data: {
             category: categoryId,
             search: keyWord,
-            isChoiceCategory: isCategory
-        },
-        success: function(response) {
-            var products = response;
-            $('.delete-item').remove();
-            var html = '';
-            products.forEach(function(Product) {
-                html += '<div class="delete-item w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">';
-                html += '<a href="#">';
-                html += '<img class="h-48 w-70 object-cover" src="/images/products/' + Product.id + '/' + Product.image + '" alt="product image" />';
-                html += '</a>';
-                html += '<div class="px-5 pb-5">';
-                html += '<a href="#">';
-                html += '<div>';
-                html += '<h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">' + Product.name + '</h5>';
-                html += '</div>';
-                html += '</a>';
-                html += '<a href="#">';
-                html += '<h5 class="text-sm tracking-tight text-gray-900 dark:text-white">' + Product.content + '</h5>';
-                html += '</a>';
-                html += '<div class="flex items-center mt-2.5 mb-5">';
-                html += '<div class="flex items-center space-x-1 rtl:space-x-reverse">';
-                html += '<svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">';
-                html += '<path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>';
-                html += '</svg>';
-                //Thêm các biểu tượng khác ở đây
-                html += '</div>';
-                html += '<span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>';
-                html += '</div>';
-                html += '<div class="flex items-center justify-start">';
-                html += '<span class="text-xl font-bold  dark:text-white" style="color: #f97316">$' + Product.discountPrice + '</span>';
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-            });
 
-            // Update the product list with the new HTML
-            $('#all-item    ').html(html);
         },
-        error: function() {
-            alert('Yêu cầu AJAX không thành công.');
-        }
-    });
+            success: function(response) {
+                var products = response;
+                $('.delete-item').remove();
+                var html = '';
+                products.forEach(function(ProductDTO) {
+                        var name = ProductDTO.product.name.substring(0, 30);
+                        var content = ProductDTO.product.content.substring(0, 33);
+                        var price=ProductDTO.product.price||0  ;
+                        var discountPrice = ProductDTO.product.discount_price || 0;
+                    html+=' <div class="rounded delete-item">\n' +
+                            '                   <div class="  relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96 hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110 ">\n' +
+                            '                       <div class="relative mx-4 mt-4  text-gray-700 bg-white bg-clip-border rounded-xl h-96 ">\n' +
+                            '                           <img src="/images/products/' + ProductDTO.product.id + '/' + ProductDTO.product.image + '" alt="card-image" class="object-fill h-full w-full" />\n' +
+                            '                           <div if="${Product.discountPrice != 0}" class="absolute top-0 font-bold text-sm text-white rounded-sm  py-1 bg-green-300">\n' +
+                            '                               Sale: <span th:text="${((Product.price - Product.discountPrice) / Product.discountPrice * 100).toString().substring(0, ((Product.price - Product.discountPrice) / Product.discountPrice * 100).toString().indexOf(\'.\') + 3)}"></span><span>%</span>\n' +
+                            '                           </div>\n' +
+                            '                       </div>\n' +
+                            '                   </div>\n' +
+                            '                   <div class="flex items-center justify-center flex-col">\n' +
+                            '                       <div class="py-2">\n' +
+                            '                           <p class="text-center text-3xl font-mono leading-normal text-gray-700 ">\n' +
+                            '                               <span>'+name+'</span>\n' +
+                            '                           </p>\n' +
+                            '                           <p class="text-center text-lg font-mono leading-normal text-gray-700 opacity-70 ">\n' +
+                            '                               <span >'+content+'</span>\n' +
+                            '                           </p>\n' +
+                            '                       </div>\n' +
+                            '                       <div class="font-bold">\n' +
+                            '                        <span class="text-xl line-through opacity-70">\n' +
+                            '                            <span >'+price+'</span>$\n' +
+                            '                        </span>\n' +
+                            '                           <span class="ml-3 text-3xl font-bold text-red-900 dark:text-white">\n' +
+                            '                            <span >'+discountPrice+'</span>$\n' +
+                            '                        </span>\n' +
+                            '                       </div>\n' +
+                            '                   </div>\n' +
+                            '               </div>'
+                });
+
+                // Update the product list with the new HTML
+                $('#all-item').html(html);
+            },
+            error: function() {
+                alert('Yêu cầu AJAX không thành công.');
+            }
+        });
+    }
+
+
+
+function formatNumber(number, divisor) {
+    if (number < divisor) {
+        return number;
+    }
+
+    const suffixes = ["k", "m", "b", "t"];
+    let currentDivisor = divisor;
+    let formattedNumber = "";
+
+    while (number >= currentDivisor) {
+        formattedNumber = `<span class="math-inline">\{Math\.floor\(number / currentDivisor\)\}</span>{suffixes.shift()}${formattedNumber}`;
+        number %= currentDivisor;
+        currentDivisor *= 1000;
+    }
+
+    return formattedNumber;
 }
+

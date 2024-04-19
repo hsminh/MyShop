@@ -1,11 +1,10 @@
 package com.example.sm.minh.eshop.controllers.Product;
 
-import com.example.sm.minh.eshop.models.Product;
+import com.example.sm.minh.eshop.dto.ProductDTO;
 import com.example.sm.minh.eshop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -18,17 +17,17 @@ public class ProductRestController {
 
 
     @GetMapping("/products/load-product")
-    public List<Product> loadingProduct(@RequestParam(value = "category", required = false) Integer id,
-                                        @RequestParam(value = "search", required = false) String search,
-                                        @RequestParam(value = "isChoiceCategory", required = false) String isChoiceCategory ) {
-        List<Product>productContain=new ArrayList<>();
-        List<Product> listProduct = productService.findAll(id, search, true);
-        for (Product product : listProduct)
+    public List<ProductDTO> loadingProduct(@RequestParam(value = "category", required = false) Integer categoryId,
+                                        @RequestParam(value = "search", required = false) String search) {
+        List<ProductDTO>productContain=new ArrayList<>();
+        if(search.isEmpty()||search.trim().isEmpty()) search=null;
+        List<ProductDTO> listProduct = productService.findAll(categoryId, search, true);
+        for (ProductDTO product : listProduct)
         {
-            product.setListProductCategories(null);
+            System.out.println("dcmm"+product.getProduct().getListProductCategories());
+            product.getProduct().setListProductCategories(null);
             productContain.add(product);
         }
-        System.out.println("kajsdfoi"+productContain);
         return productContain;
     }
 }

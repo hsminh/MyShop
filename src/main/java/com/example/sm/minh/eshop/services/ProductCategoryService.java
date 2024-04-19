@@ -76,22 +76,22 @@ public class ProductCategoryService {
         return productCategory;
     }
 
-    @Transactional
-    public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
-        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
-        ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
-        //unlink category from product
-        List< Product>listProducts =this.productRepository.findAll(categoryId,true);
-
-        for(Product product: listProducts)
-        {
-            productService.delete(product.getId());
-        }
-
-        deleteCategory.setDeletedAt(new Date());
-        deleteCategory.setIsActive(false);
-        this.productCategoryRepository.save(deleteCategory);
-    }
+//    @Transactional
+//    public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
+//        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
+//        ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
+//        //unlink category from product
+//        List< Product>listProducts =this.productRepository.findAll(categoryId,true);
+//
+//        for(Product product: listProducts)
+//        {
+//            productService.delete(product.getId());
+//        }
+//
+//        deleteCategory.setDeletedAt(new Date());
+//        deleteCategory.setIsActive(false);
+//        this.productCategoryRepository.save(deleteCategory);
+//    }
 
     public ProductCategory findById(Integer id, Boolean isHide) throws ProductCategoryException {
         Optional<ProductCategory> categoryOptional=null;

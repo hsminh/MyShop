@@ -82,18 +82,18 @@ public class ProductCategoryController {
         return "redirect:/category";
     }
 
-    @GetMapping("/category/delete/{id}")
-    public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        try {
-            this.productCategoriesSerVice.deleteCategory(id);
-            redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
-        } catch (ProductCategoryException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        } catch (ProductException e) {
-            throw new RuntimeException(e);
-        }
-        return "redirect:/category";
-    }
+//    @GetMapping("/category/delete/{id}")
+//    public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+//        try {
+//            this.productCategoriesSerVice.deleteCategory(id);
+//            redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
+//        } catch (ProductCategoryException e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//        } catch (ProductException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return "redirect:/category";
+//    }
     @GetMapping("/category/restore/{id}")
     public String restoreCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {

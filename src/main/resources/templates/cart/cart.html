@@ -5,7 +5,6 @@
     <script th:src="@{/javascripts/cart/cart.js}" type="text/javascript"></script>
 </head>
 <body>
-<div style="background-color: #F2F2F2">
     <div th:replace="component/fragmen ::Navbar"></div>
 
     <div id="confirmationMessage" th:replace="component/notification::alertConfirm"></div>
@@ -19,21 +18,19 @@
             <div class="container px-1 py-12 mx-auto">
                 <div class="lg:w-4/5 mx-auto flex flex-wrap">
                     <div class="w-1/2 float-left">
-                        <img alt="ecommerce" class="w-full h-auto object-cover rounded border border-blue-200" th:src="@{${cartProduct.loadImages()}}">
+                        <img alt="ecommerce" class="w-full h-auto object-cover rounded border border-gray-100" th:src="@{${cartProduct.loadImages()}}">
                     </div>
                     <div class="lg:w-1/2 w-full lg:pl-10 lg:pb-6 mt-6 lg:mt-0">
-                        <div class="container mx-auto max-w-2xl border border-brow-200">
+                        <div class="container mx-auto max-w-2xl">
                            <div class="px-4 py-2">
-                               <p class="inline-block uppercase text-stone-500 text-xs font-semibold">Category</p>
-                               <h2 class="font-bold text-gray-700 ">[[${cartProduct.listProductCategories}]]</h2>
-                               <h1 class="font-bold text-gray-700 py-2"></h1>
-                               <div>
-                                   <span class="font-bold text-gray-700">Produc Name: </span>[[${cartProduct.name}]]
-                               </div>
+                                  <span class="text-6xl font-bold text-gray-700">
+                                    [[${cartProduct.name}]]
+                                  </span>
+
                                <div class="leading-relaxed py-2">
-                                   <div>
-                                       <span class="font-bold text-gray-700">Description: </span>[[${cartProduct.content}]]
-                                   </div>
+                                   <p class="text-lg font-mono leading-normal text-gray-700 opacity-70 ">
+                                       <span th:text="'Description :'+${cartProduct.getContent()}"></span>
+                                   </p>
                                </div>
                                <div class="flex py-2 items-center ">
                                    <div class="flex mr-4">
@@ -47,11 +44,11 @@
                                </div>
                            </div>
                         </div>
-                        <div class="container mx-auto max-w-2xl mt-4">
+                        <div class="container mx-auto max-w-2xl mt-4 border border-gray-200 px-5 py-2">
                             <input type="hidden" id="originalProductPrice" name="originalProductPrice" th:value="${cartProduct.price}" />
                             <input type="hidden" id="originalDiscountProductPrice" name="originalDiscountProductPrice" th:value="${cartProduct.getDiscountPrice()}" />
                             <div class="flex flex-col">
-                                <div class="border border-gray-200 rounded-md p-4">
+                                <div class="     rounded-md p-4">
                                     <h3 class="font-bold text-gray-700">Order Details</h3>
                                     <div class="flex flex-row justify-between py-2">
                                         <div class="text-gray-600">Price</div>
@@ -70,7 +67,7 @@
                                         <div id="taxAmount" class="text-green-500"></div>
                                     </div>
                                 </div>
-                                <div class="border border-gray-200 rounded-md p-4 mt-4">
+                                <div class=" rounded-md p-4 mt-4">
                                     <h3 class="font-bold text-gray-700">Order Total</h3>
                                     <div class="flex flex-row justify-between py-2 font-bold text-lg">
                                         <div>Total</div>
@@ -78,14 +75,14 @@
                                     </div>
                                     <p id="totalLabel" class="text-gray-600 mt-2"></p>
                                 </div>
-                                <div class="flex">
-                                    <button onclick="purchase()" type="button" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 hover:transform hover:scale-110 transition duration-300">
-                                        <i class="fas fa-shopping-cart fa-1x"></i>
+                                <div class="justify-between flex">
+                                    <button onclick="purchase()" type="button" class="py-6 flex-grow text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 hover:transform hover:scale-110 transition duration-300">
+                                        <i class="fas fa-shopping-cart fa-2x"></i>
                                         <span class="ml-2">Buy</span>
                                     </button>
-                                    <button onclick="addCartItem()" id="addToCart" type="button" class="mt-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 hover:transform hover:scale-110 transition duration-300">
-                                        <i class="fas fa-shopping-cart fa-1x"></i>
-                                        <span class="ml-2">Add to Cart</span>
+                                    <button onclick="addCartItem()" id="addToCart" type="button" class="py-6 flex-grow text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 hover:transform hover:scale-110 transition duration-300">
+                                        <i class="fas fa-shopping-cart fa-2x"></i>
+                                        <span class="ml-8">Add to Cart</span>
                                     </button>
                                 </div>
                             </div>
@@ -104,6 +101,5 @@
     <div class="mt-20">
         <footer th:replace="component/fragmen::footer"></footer>
     </div>
-</div>
 </body>
 </html>

@@ -47,43 +47,43 @@
     </thead>
     <tbody>
     <th:block th:each="Product : ${listProduct}">
-        <tr th:onclick="'window.location.href=\'/products/detail?productId=' + ${Product.getId()} + '\''" class="border-b border-blue-200 hover:bg-blue-100">
+        <tr th:onclick="'window.location.href=\'/products/detail?productId=' + ${Product.getProduct().getId()} + '\''" class="border-b border-blue-200 hover:bg-blue-100">
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <img class="text-sm leading-5 text-gray-900" th:src="@{${Product.loadImages}}" ></img>
+                <img class="text-sm leading-5 text-gray-900" th:src="@{${Product.getProduct().loadImages}}" ></img>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.name}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().name}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.Sku}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().Sku}"></span>
             </td>
 
             <td>
-                <th:block th:each="Product_categories : ${Product.getListProductCategories()}">
-                <span class="text-sm leading-5 text-gray-900 " th:text="${Product_categories.name}"></span>
+                <th:block th:each="Product_categories : ${Product.getProduct().getListProductCategories()}">
+                <span class="text-sm leading-5 text-gray-900 " th:text="${Product.getProduct().name}"></span>
             </th:block>
             </td>
 
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.content}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().content}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.price}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().price}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getDiscountPrice}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().getDiscountPrice}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate   " th:text="${Product.isActive}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate   " th:text="${Product.getProduct().isActive}"></span>
             </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <a th:if="${Product.isActive}" th:href="@{/products/edit/{id}(id=${Product.id})}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+            <a th:if="${Product.getProduct().isActive}" th:href="@{/products/edit/{id}(id=${Product.getProduct().id})}" class="text-indigo-600 hover:text-indigo-900 mr-2">
                 <i class="fas fa-edit"></i> <!-- Icon "edit" -->
             </a>
-            <a th:if="${Product.isActive}" th:href="@{/products/delete/{id}(id=${Product.id})}" class="text-red-600 hover:text-red-900">
+            <a th:if="${Product.getProduct().isActive}" th:href="@{/products/delete/{id}(id=${Product.getProduct().id})}" class="text-red-600 hover:text-red-900">
                 <i class="fas fa-trash-alt"></i> <!-- Icon "delete" -->
             </a>
-            <a th:if="${!Product.isActive}" th:href="@{/products/restore/{id}(id=${Product.id})}" class="text-red-600 hover:text-red-900">
+            <a th:if="${!Product.getProduct().isActive}" th:href="@{/products/restore/{id}(id=${Product.getProduct().id})}" class="text-red-600 hover:text-red-900">
                 <i class="far fa-window-restore"></i>
             </a>
             </td>
