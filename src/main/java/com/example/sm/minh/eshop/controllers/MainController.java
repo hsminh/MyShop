@@ -46,7 +46,7 @@ public class MainController {
             Map<Integer,String> saleItemMap=new HashMap<>();
             for(ProductDTO productDTO: listProduct)
             {
-                int percent = (int) ((productDTO.getProduct().getPrice() - productDTO.getProduct().getDiscountPrice()) / productDTO.getProduct().getPrice() * 100);
+                int percent = this.productSerVice.calculateRoundedPercent(productDTO);
                 if(percent>0)
                 salePercentMap.put(productDTO.getProduct().getId(),percent);
                 saleItemMap.put(productDTO.getProduct().getId(),this.productSerVice.formatQuantity(productDTO.getQuantityProduct()));

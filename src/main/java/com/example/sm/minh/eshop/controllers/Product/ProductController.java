@@ -46,6 +46,7 @@ public class ProductController {
         model.addAttribute("isChoice", "Products");
         model.addAttribute("listProduct", productSerVice.findAll(null, keyWord,isHide));
         isHide=(isHide==false)?true:false;
+
         model.addAttribute("isHide", isHide);
 
         return "product/product";
@@ -110,7 +111,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid @ModelAttribute("productRequest") ProductRequest productRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProducts(Model model,@Valid @ModelAttribute("productRequest") ProductRequest productRequest, BindingResult bindingResult, @RequestParam(value = "images" ,required = false) MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute( "pageTitle", "Add Product");

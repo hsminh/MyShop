@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <div th:replace="component/fragmen ::header"></div>
     <script th:src="@{/javascripts/product/add-product-form.js}" type="text/javascript"></script>
 </head>
@@ -63,24 +64,10 @@
                     <label for="image" class="text-sm font-bold text-gray-700">Choose Image:</label>
                     <input
                             type="file"
-                            class="hidden"
                             name="images"
                             id="image"
-                    />
-                    <div class="flex items-center mt-2">
-                        <label
-                                for="image"
-                                class="cursor-pointer flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm leading-5 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm sm:leading-5"
-                        >
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Upload Image
-                        </label>
-                        <div id="thumbnailPreview" class="ml-2"></div>
-                    </div>
+                            th:required="${productRequest.id == null}"
+                        />
                 </div>
                 <div th:if="${#fields.hasAnyErrors()}">
                     <input type="hidden" id="checkError" >
@@ -88,6 +75,7 @@
                 <div class="flex justify-center items-center">
                     <img class="mt-2 w-40 h-40 object-cover rounded-lg" id="thumbnail"  th:src="@{${productRequest.loadImages()}}"/>
                 </div>
+
                 <div class="flex justify-center items-center">
                 </div>
                 <div class="mt-4 mb-5">
@@ -143,6 +131,7 @@
                     <label for="active" class="ml-2">Active</label>
                 </div>
                 <button
+                        onclick="check()"
                         id="check"
                         type="submit"
                         class="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
@@ -163,6 +152,7 @@
         </div>
     </div>
 </div>
+
 </body>
 
 </html>

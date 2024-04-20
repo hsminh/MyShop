@@ -49,12 +49,13 @@ public class ProductRequest {
     }
     public String loadImages()
     {
+        System.out.println(this.id+this.image);
         if(this.image==null||this.image.isEmpty())
         {
-            return "/images/img.png";
+            return "/images/products/img.png";
         }else
         {
-            return "/images/"+this.id+"/"+this.image;
+            return "/images/products/"+this.id+"/"+this.image;
         }
     }
 }

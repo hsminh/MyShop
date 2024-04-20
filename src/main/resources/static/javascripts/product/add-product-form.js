@@ -28,34 +28,4 @@
                 }
             });
 
-
-
-
-        $('#submitForm').on('submit', function (e) {
-            let name = $('#name').val().trim();
-            let sku = $('#sku').val().trim();
-            let id = $('#id').val().trim();
-            let check = false;
-
-            $.ajax({
-                url: "/products/check-sku-name-unique",
-                method: "GET",
-                data: {
-                    id:id,
-                    name:name,
-                    sku:sku
-                },
-                success: function(data) {
-                    if (data !== "ok") {
-                        ShowMessageErrr("Name or Sku!", "Exist Please choose another Name Or SKU.");
-                        check = true;
-                    }
-                },
-                async: false
-            });
-
-            if (check) {
-                e.preventDefault();
-            }
-        });
     });

@@ -31,7 +31,17 @@ public class CategoryRequest  {
     @Length(max = 255, message = "description must not exceed 255 characters")
     private String description;
     private Boolean isActive;
-
+    private String image;
+    public String loadImages()
+    {
+        if(this.image==null||this.image.isEmpty())
+        {
+            return "/images/products/   img.png";
+        }else
+        {
+            return "/images/categories/"+this.id+"/"+this.image;
+        }
+    }
     public CategoryRequest() {
     }
 

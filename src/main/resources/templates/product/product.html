@@ -60,7 +60,7 @@
 
             <td>
                 <th:block th:each="Product_categories : ${Product.getProduct().getListProductCategories()}">
-                <span class="text-sm leading-5 text-gray-900 " th:text="${Product.getProduct().name}"></span>
+                <span class="text-sm leading-5 text-gray-900 " th:text="${Product_categories.name}"></span>
             </th:block>
             </td>
 

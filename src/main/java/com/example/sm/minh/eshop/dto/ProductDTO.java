@@ -8,6 +8,13 @@
         private Product product;
             private Long quantityProduct;
 
+        public Product getProduct() {
+            return product;
+        }
+
+        public Long getQuantityProduct() {
+            return quantityProduct;
+        }
 
         public void setProduct(Product product) {
             this.product = product;

@@ -24,9 +24,11 @@ public class ProductRestController {
         List<ProductDTO> listProduct = productService.findAll(categoryId, search, true);
         for (ProductDTO product : listProduct)
         {
-            System.out.println("dcmm"+product.getProduct().getListProductCategories());
+            System.out.println("cc 12"+ product.getProduct().getDiscountPrice());
+            if(product.getQuantityProduct()==null)  product.setQuantityProduct(0L);
             product.getProduct().setListProductCategories(null);
             productContain.add(product);
+
         }
         return productContain;
     }

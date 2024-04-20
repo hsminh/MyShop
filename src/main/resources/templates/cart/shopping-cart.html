@@ -44,7 +44,7 @@
                                     <input type="hidden" th:id="'originalProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().price}" />
                                     <input type="hidden" th:id="'originalDiscountProductPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().discountPrice}" />
                                     <input type="hidden" th:id="'taxPrice'+${CartLineItems.getId()}" th:value="${CartLineItems.getProductId().tax}" />
-                                    <tr class="border-b border-blue-200 ">
+                                    <tr class="">
                                         <td class="py-4">
                                             <div class="flex items-center">
                                                 <img class="h-16 w-16 mr-4" th:src="${CartLineItems.getProductId().loadImages()}" alt="Product image">

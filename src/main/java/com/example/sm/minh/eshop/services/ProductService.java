@@ -209,8 +209,9 @@ public class ProductService {
 
     public Product saveImage(Product product, MultipartFile multipartFile) throws IOException {
 
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile!=null&&!multipartFile.isEmpty()) {
             String fileName = multipartFile.getOriginalFilename();
+            fileName=fileName.replace(' ','_');
             product.setImage(fileName);
             this.save(product);
             String directory = "public/images/products/" + product.getId();
@@ -293,12 +294,25 @@ public class ProductService {
     //format sale product
     public String formatQuantity(long quantity) {
         if (quantity >= 1000000) {
-            return (quantity / 1000000) + "m";
+            double result = quantity / 1000000.0;
+            return (result % 1 == 0) ? String.format("%.0fm", result) : String.format("%.1fm", result);
         } else if (quantity >= 1000) {
-            return (quantity / 1000) + "k";
+            double result = quantity / 1000.0;
+            return (result % 1 == 0) ? String.format("%.0fk", result) : String.format("%.1fk", result);
         } else {
             return String.valueOf(quantity);
         }
+    }
+
+
+    public int calculateRoundedPercent(ProductDTO productDTO) {
+        double discountPercent = ((productDTO.getProduct().getPrice() - productDTO.getProduct().getDiscountPrice()) / productDTO.getProduct().getPrice()) * 100;
+        int roundedPercent = (int) Math.round(discountPercent);
+        double decimalPart = discountPercent - roundedPercent;
+        if (decimalPart >= 0.5) {
+            roundedPercent++;
+        }
+        return roundedPercent;
     }
 
 }

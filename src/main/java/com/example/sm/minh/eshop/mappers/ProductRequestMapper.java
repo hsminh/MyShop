@@ -22,6 +22,7 @@ public class ProductRequestMapper {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setId(product.getId());
         productRequest.setIsActive(product.getIsActive());
+        productRequest.setImage(product.getImage());
         productRequest.setContent(product.getContent());
         productRequest.setSku(product.getSku());
         productRequest.setName(product.getName());

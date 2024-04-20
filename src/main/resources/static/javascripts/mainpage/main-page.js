@@ -58,81 +58,94 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-function choiceCategory(categoryId) {
-    var keyWord = $('#default-search').val();
-    $.ajax({
-        type: "GET",
-        url: "/products/load-product",
-        data: {
-            category: categoryId,
-            search: keyWord,
+    function choiceCategory(categoryId) {
+        var keyWord = $('#default-search').val();
+        $.ajax({
+            type: "GET",
+            url: "/products/load-product",
+            data: {
+                category: categoryId,
+                search: keyWord,
 
-        },
-            success: function(response) {
-                var products = response;
-                $('.delete-item').remove();
-                var html = '';
-                products.forEach(function(ProductDTO) {
-                        var name = ProductDTO.product.name.substring(0, 30);
-                        var content = ProductDTO.product.content.substring(0, 33);
-                        var price=ProductDTO.product.price||0  ;
-                        var discountPrice = ProductDTO.product.discount_price || 0;
-                    html+=' <div class="rounded delete-item">\n' +
-                            '                   <div class="  relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96 hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-110 ">\n' +
-                            '                       <div class="relative mx-4 mt-4  text-gray-700 bg-white bg-clip-border rounded-xl h-96 ">\n' +
-                            '                           <img src="/images/products/' + ProductDTO.product.id + '/' + ProductDTO.product.image + '" alt="card-image" class="object-fill h-full w-full" />\n' +
-                            '                           <div if="${Product.discountPrice != 0}" class="absolute top-0 font-bold text-sm text-white rounded-sm  py-1 bg-green-300">\n' +
-                            '                               Sale: <span th:text="${((Product.price - Product.discountPrice) / Product.discountPrice * 100).toString().substring(0, ((Product.price - Product.discountPrice) / Product.discountPrice * 100).toString().indexOf(\'.\') + 3)}"></span><span>%</span>\n' +
-                            '                           </div>\n' +
-                            '                       </div>\n' +
-                            '                   </div>\n' +
-                            '                   <div class="flex items-center justify-center flex-col">\n' +
-                            '                       <div class="py-2">\n' +
-                            '                           <p class="text-center text-3xl font-mono leading-normal text-gray-700 ">\n' +
-                            '                               <span>'+name+'</span>\n' +
-                            '                           </p>\n' +
-                            '                           <p class="text-center text-lg font-mono leading-normal text-gray-700 opacity-70 ">\n' +
-                            '                               <span >'+content+'</span>\n' +
-                            '                           </p>\n' +
-                            '                       </div>\n' +
-                            '                       <div class="font-bold">\n' +
-                            '                        <span class="text-xl line-through opacity-70">\n' +
-                            '                            <span >'+price+'</span>$\n' +
-                            '                        </span>\n' +
-                            '                           <span class="ml-3 text-3xl font-bold text-red-900 dark:text-white">\n' +
-                            '                            <span >'+discountPrice+'</span>$\n' +
-                            '                        </span>\n' +
-                            '                       </div>\n' +
-                            '                   </div>\n' +
-                            '               </div>'
-                });
-
-                // Update the product list with the new HTML
-                $('#all-item').html(html);
             },
-            error: function() {
-                alert('Yêu cầu AJAX không thành công.');
-            }
-        });
+                success: function(response) {
+                    $('.delete-item').remove();
+                    var html = '';
+                    response.forEach(function(ProductDTO) {
+                                var name = ProductDTO.product.name.substring(0, 30);
+                                var content = ProductDTO.product.content.substring(0, 33);
+                                var price=ProductDTO.product.price||0  ;
+                                var discountPrice = parseInt(ProductDTO.product.discountPrice) || 0;
+                                var link='cart?productId='+ProductDTO.product.id;
+                                var saleItem = formatNumber(ProductDTO.quantityProduct);
+                                var saleTag = formatDiscount(((1 - (discountPrice / price)) * 100).toFixed(2));
+
+                                if(parseFloat(saleTag)>=0)
+                                {
+                                    saleTag='<div class="absolute top-3 left-0 bg-green-400 py-2 px-4 rounded-md shadow-md flex items-center">\n' +
+                                        '         <span>'+saleTag+'</span>\n' +
+                                        '    </div>';
+                                }else
+                                {
+                                    saleTag='';
+                                }
+                        html+=
+                            ' <div class="rounded bg-gray-100 delete-item  hover:border-amber-500 flex flex-col justify-center items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-105    ">\n' +
+                            '                    <a href="'+link+'">\n' +
+                            '                        <div class="relative flex flex-col text-gray-700  w-96  ">\n' +
+                            '                            <div class=" mx-4 mt-4  text-gray-700   h-96 ">\n' +
+                            '                           <img src="/images/products/' + ProductDTO.product.id + '/' + ProductDTO.product.image + '" alt="card-image"\n' +
+                            '                                     class="object-fill h-full w-full"/> '+saleTag+'\n' +
+
+                            '                            </div>\n' +
+                            '                            <div class="flex items-center  flex-col relative">\n' +
+                            '                                <div class="py-2">\n' +
+                            '                                    <p class="text-center text-3xl font-mono leading-normal text-gray-700 ">\n' +
+                            '                                        <span >'+name+'</span>\n' +
+                            '                                    </p>\n' +
+                            '                                    <p class="text-center text-lg font-mono leading-normal text-gray-700 opacity-70 ">\n' +
+                            '                                        <span>'+content+'</span>\n' +
+                            '                                    </p>\n' +
+                            '                                </div>\n' +
+                            '                                <div class="justify-between">\n' +
+                            '                                    <span class="justify-left  text-xl line-through opacity-70"\n' +
+                            '                                         >'+price+'$</span>\n' +
+                            '                                    <span class="ml-3 text-3xl font-bold text-red-900 dark:text-white"\n' +
+                            '                                          >'+discountPrice+'$</span></span>\n' +
+                            '                                </div>\n' +
+                            '                            </div>\n' +
+                            '                            <span th:if="${saleItemMap.get(Product.getProduct().getId())!=0}"\n' +
+                            '                                  class="justify-right text-m opacity-70 ml-3 font-bold">\n' +
+                            '                       Sold Items:'+saleItem+'</span>\n' +
+                            '                        </div>\n' +
+                            '                    </a>\n' +
+                            '                </div>'
+                    });
+
+                    // Update the product list with the new HTML
+                    $('#all-item').html(html);
+                },
+                error: function() {
+                    alert('Yêu cầu AJAX không thành công.');
+                }
+            });
+        }
+
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'm';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    } else {
+        return num.toString();
     }
-
-
-
-function formatNumber(number, divisor) {
-    if (number < divisor) {
-        return number;
-    }
-
-    const suffixes = ["k", "m", "b", "t"];
-    let currentDivisor = divisor;
-    let formattedNumber = "";
-
-    while (number >= currentDivisor) {
-        formattedNumber = `<span class="math-inline">\{Math\.floor\(number / currentDivisor\)\}</span>{suffixes.shift()}${formattedNumber}`;
-        number %= currentDivisor;
-        currentDivisor *= 1000;
-    }
-
-    return formattedNumber;
 }
 
+function formatDiscount(discount) {
+    var roundedDiscount = Math.round(discount);
+    if (discount - roundedDiscount >= 0.5) {
+        return (roundedDiscount + 1) + '%';
+    } else {
+        return roundedDiscount + '%';
+    }
+}

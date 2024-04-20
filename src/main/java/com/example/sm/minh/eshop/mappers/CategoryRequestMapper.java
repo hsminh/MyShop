@@ -19,6 +19,7 @@ public class CategoryRequestMapper {
         categoryRequest.setId(productCategory.getId());
         categoryRequest.setIsActive(productCategory.getIsActive());
         categoryRequest.setDescription(productCategory.getDescription());
+        categoryRequest.setImage(productCategory.getImage());
         categoryRequest.setSlug(productCategory.getSlug());
         categoryRequest.setName(productCategory.getName());
         return categoryRequest;

@@ -79,7 +79,7 @@ public class Product {
     {
         if(this.image==null||this.image.isEmpty())
         {
-            return "/images/img.png";
+            return "/images/products/img.png";
         }else
         {
             return "/images/products/"+this.id+"/"+this.image;
