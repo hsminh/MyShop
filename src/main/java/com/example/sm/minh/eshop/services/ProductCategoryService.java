@@ -49,7 +49,6 @@ public class ProductCategoryService {
             String directory = "public/images/categories/" + productCategory.getId();
             FileUploadUltil.saveFile(directory, fileName, multipartFile, null);
         }
-
         return productCategory;
     }
 
@@ -58,15 +57,15 @@ public class ProductCategoryService {
         if (productCategory.getId() == null || productCategory.getId().equals(0)) {
             productCategory = trimCategory(productCategory);
             productCategory.setCreatedAt(new Date());
-            this.saveImage(productCategory, multipartFile);
+            productCategory=this.saveImage(productCategory, multipartFile);
         } else {
             ProductCategory existingCategory = this.productCategoryRepository.findById(productCategory.getId())
                     .orElseThrow(() -> new ProductCategoryException("Category not found."));
 
             existingCategory = this.setDataForProductCategory(existingCategory, productCategory);
-            this.saveImage(existingCategory, multipartFile);
+            productCategory=this.saveImage(existingCategory, multipartFile);
         }
-
+        this.productCategoryRepository.save(productCategory);
     }
 
     public ProductCategory trimCategory(ProductCategory productCategory) {
@@ -76,22 +75,22 @@ public class ProductCategoryService {
         return productCategory;
     }
 
-//    @Transactional
-//    public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
-//        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
-//        ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
-//        //unlink category from product
-//        List< Product>listProducts =this.productRepository.findAll(categoryId,true);
-//
-//        for(Product product: listProducts)
-//        {
-//            productService.delete(product.getId());
-//        }
-//
-//        deleteCategory.setDeletedAt(new Date());
-//        deleteCategory.setIsActive(false);
-//        this.productCategoryRepository.save(deleteCategory);
-//    }
+    @Transactional
+    public void deleteCategory(Integer categoryId) throws ProductCategoryException, ProductException {
+        Optional<ProductCategory> categoryOptional = this.productCategoryRepository.findById(categoryId);
+        ProductCategory deleteCategory=categoryOptional.orElseThrow(()->new ProductCategoryException("Category with ID " + categoryId + " not found"));
+        //unlink category from product
+        List<Product>listProducts =this.productRepository.findAll(categoryId,true);
+
+        for(Product product: listProducts)
+        {
+            productService.delete(product.getId());
+        }
+
+        deleteCategory.setDeletedAt(new Date());
+        deleteCategory.setIsActive(false);
+        this.productCategoryRepository.save(deleteCategory);
+    }
 
     public ProductCategory findById(Integer id, Boolean isHide) throws ProductCategoryException {
         Optional<ProductCategory> categoryOptional=null;
@@ -122,13 +121,14 @@ public class ProductCategoryService {
                 slugErrorMessage = "Category already exists with the provided slug";
             }
         } else {
+
             // If the id exists, check if the name or slug already exists in the database (excluding the current category)
             ProductCategory existingCategoryByName = this.productCategoryRepository.findByName(name);
             ProductCategory existingCategoryBySlug = this.productCategoryRepository.findBySlug(slug);
-            ProductCategory currentCategory = this.findById(id, false);
+            Optional<ProductCategory> currentCategory = this.productCategoryRepository.findById(id);
 
             // If the current category is not found
-            if (currentCategory == null) {
+            if (currentCategory.isEmpty()) {
                 throw new ProductCategoryException("Product category with ID " + id + " not found");
             }
 
@@ -175,6 +175,7 @@ public class ProductCategoryService {
 
     public ProductCategory setDataForProductCategory(ProductCategory productCategories, ProductCategory EditCategory)
     {
+        System.out.println("ckdsnmvkl" +EditCategory.getName()+ EditCategory.getSlug());
         productCategories.setName(EditCategory.getName());
         productCategories.setSlug(EditCategory.getSlug());
         productCategories.setDescription(EditCategory.getDescription());

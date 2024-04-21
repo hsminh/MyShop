@@ -58,78 +58,76 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-    function choiceCategory(categoryId) {
-        var keyWord = $('#default-search').val();
-        $.ajax({
-            type: "GET",
-            url: "/products/load-product",
-            data: {
-                category: categoryId,
-                search: keyWord,
+function handleSuccess(response) {
+    $('.delete-item').remove();
+    var html = '';
+    response.forEach(function(ProductDTO) {
+        var name = ProductDTO.product.name.substring(0, 30);
+        var content = ProductDTO.product.content.substring(0, 33);
+        var price = ProductDTO.product.price || 0;
+        var discountPrice = parseInt(ProductDTO.product.discountPrice) || 0;
+        var link = 'cart?productId=' + ProductDTO.product.id;
+        var saleItem = formatNumber(ProductDTO.quantityProduct);
+        var saleTag = formatDiscount(((1 - (discountPrice / price)) * 100).toFixed(2));
 
-            },
-                success: function(response) {
-                    $('.delete-item').remove();
-                    var html = '';
-                    response.forEach(function(ProductDTO) {
-                                var name = ProductDTO.product.name.substring(0, 30);
-                                var content = ProductDTO.product.content.substring(0, 33);
-                                var price=ProductDTO.product.price||0  ;
-                                var discountPrice = parseInt(ProductDTO.product.discountPrice) || 0;
-                                var link='cart?productId='+ProductDTO.product.id;
-                                var saleItem = formatNumber(ProductDTO.quantityProduct);
-                                var saleTag = formatDiscount(((1 - (discountPrice / price)) * 100).toFixed(2));
-
-                                if(parseFloat(saleTag)>=0)
-                                {
-                                    saleTag='<div class="absolute top-3 left-0 bg-green-400 py-2 px-4 rounded-md shadow-md flex items-center">\n' +
-                                        '         <span>'+saleTag+'</span>\n' +
-                                        '    </div>';
-                                }else
-                                {
-                                    saleTag='';
-                                }
-                        html+=
-                            ' <div class="rounded bg-gray-100 delete-item  hover:border-amber-500 flex flex-col justify-center items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-105    ">\n' +
-                            '                    <a href="'+link+'">\n' +
-                            '                        <div class="relative flex flex-col text-gray-700  w-96  ">\n' +
-                            '                            <div class=" mx-4 mt-4  text-gray-700   h-96 ">\n' +
-                            '                           <img src="/images/products/' + ProductDTO.product.id + '/' + ProductDTO.product.image + '" alt="card-image"\n' +
-                            '                                     class="object-fill h-full w-full"/> '+saleTag+'\n' +
-
-                            '                            </div>\n' +
-                            '                            <div class="flex items-center  flex-col relative">\n' +
-                            '                                <div class="py-2">\n' +
-                            '                                    <p class="text-center text-3xl font-mono leading-normal text-gray-700 ">\n' +
-                            '                                        <span >'+name+'</span>\n' +
-                            '                                    </p>\n' +
-                            '                                    <p class="text-center text-lg font-mono leading-normal text-gray-700 opacity-70 ">\n' +
-                            '                                        <span>'+content+'</span>\n' +
-                            '                                    </p>\n' +
-                            '                                </div>\n' +
-                            '                                <div class="justify-between">\n' +
-                            '                                    <span class="justify-left  text-xl line-through opacity-70"\n' +
-                            '                                         >'+price+'$</span>\n' +
-                            '                                    <span class="ml-3 text-3xl font-bold text-red-900 dark:text-white"\n' +
-                            '                                          >'+discountPrice+'$</span></span>\n' +
-                            '                                </div>\n' +
-                            '                            </div>\n' +
-                            '                            <span th:if="${saleItemMap.get(Product.getProduct().getId())!=0}"\n' +
-                            '                                  class="justify-right text-m opacity-70 ml-3 font-bold">\n' +
-                            '                       Sold Items:'+saleItem+'</span>\n' +
-                            '                        </div>\n' +
-                            '                    </a>\n' +
-                            '                </div>'
-                    });
-
-                    // Update the product list with the new HTML
-                    $('#all-item').html(html);
-                },
-                error: function() {
-                    alert('Yêu cầu AJAX không thành công.');
-                }
-            });
+        if (parseFloat(saleTag) >= 0) {
+            saleTag = '<div class="absolute top-2 left-0 bg-green-400 py-2 px-4 rounded-md shadow-md flex items-center">\n' +
+                '         <span>' + saleTag + '</span>\n' +
+                '    </div>';
+        } else {
+            saleTag = '';
         }
+
+        html +=
+            '            <div  class="delete-item  overflow-hidden hover:border-amber-500 flex flex-col justify-center items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-105" id="parent-item">\n' +
+            '                <div class="py-5 w-full bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl relative">\n' +
+            '                    <a href="' + link + '">\n' +
+            '                        <img src="/images/products/' + ProductDTO.product.id + '/' + ProductDTO.product.image + '"\n' +
+            '                             alt="Product" class="h-80 w-72 object-cover rounded-t-xl" /> ' + saleTag + '\n' +
+
+            '                        <div class="flex items-center  flex-col relative">\n' +
+            '\n' +
+            '                            <div class="py-2">\n' +
+            '                                <p class="text-center text-xl font-bold font-mono leading-normal text-gray-700 ">\n' +
+            '                                    <span >' + name + '</span>\n' +
+            '                                     </p>\n' +
+            '                                <p class="text-center text-lg font-mono leading-normal text-gray-700 opacity-70 ">\n' +
+            '                                    <span>' + content + '</span>\n' +
+            '                                </p>\n' +
+            '                            </div>\n' +
+            '                            <div class="px-2 py-4   ">\n' +
+            '                            <span class="  text-sm line-through opacity-70"\n' +
+            '                                 >' + price + '$</span>\n' +
+            '                                <span class="ml-3 text-xl font-bold text-red-900 dark:text-white"\n' +
+            '                                    >' + discountPrice + '$</span></span>\n' +
+            '                            </div>\n' +
+            '                        </div>\n' +
+            '                        <span class="absolute  bottom-2 right-1 block text-sm font-bold text-gray-700" >Sell Item:' + saleItem + '</span>\n' +
+            '                    </a>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </section>'
+    });
+    // Update the product list with the new HTML
+    $('#all-item').html(html);
+}
+
+function choiceCategory(categoryId) {
+    var keyWord = $('#default-search').val();
+    $.ajax({
+        type: "GET",
+        url: "/products/load-product",
+        data: {
+            category: categoryId,
+            search: keyWord,
+        },
+        success: handleSuccess,
+        error: function() {
+            alert('Yêu cầu AJAX không thành công.');
+        }
+    });
+}
+
 
 function formatNumber(num) {
     if (num >= 1000000) {
@@ -148,4 +146,86 @@ function formatDiscount(discount) {
     } else {
         return roundedDiscount + '%';
     }
+}
+function handleCheckbox(checkbox,dropdownId) {
+    var saleRange;
+    var priceRange;
+    if(dropdownId==='dropdownHoverButton')
+    {
+        var checkboxPercent = document.getElementsByName('saleRange');
+        saleRange=checkbox.value;
+        checkboxPercent.forEach((item) => {
+            if (item !== checkbox) {
+                item.checked = false;
+            }
+        })
+        var checkBoxPriceRange = document.getElementsByName('price-range');
+        checkBoxPriceRange.forEach((item) => {
+            if (item.checked) {
+                priceRange=item.value;
+            }
+        })
+    }else if(dropdownId==='dropdownHoverButtonRanger')
+    {
+        priceRange=checkbox.value;
+        var checkPriceRange = document.getElementsByName('price-range');
+        checkPriceRange.forEach((item) => {
+            if (item !== checkbox) {
+                item.checked = false;
+            }
+        })
+        var checkPercent = document.getElementsByName('saleRange');
+        checkPercent.forEach((item) => {
+            if (item.checked) {
+                saleRange=item.value;
+            }
+        })
+    }else if(dropdownId==='clearAll')
+    {
+        var clearAllPriceRange = document.getElementsByName('price-range');
+        var clearAllSaleRange = document.getElementsByName('saleRange');
+        clearAllPriceRange.forEach((item)=>{
+            if(item.checked)
+            {
+                item.checked=false;
+            }
+        })
+        clearAllSaleRange.forEach((item)=>{
+            if(item.checked)
+            {
+                item.checked=false;
+            }
+        })
+        $.ajax({
+            type: "GET",
+            url: "/products/load-product",
+            data: {
+                category:'',
+                search:''
+            },
+            success: handleSuccess,
+            error: function() {
+                alert('Yêu cầu AJAX không thành công.');
+            }
+        });
+    }
+
+    if (typeof priceRange === 'undefined') {
+        priceRange = '';
+    }
+    if (typeof saleRange === 'undefined') {
+        saleRange = '';
+    }
+    $.ajax({
+        type: "GET",
+            url: "/products/load-product-by-price",
+        data: {
+            rangePrice:priceRange,
+            rangeSalePercent:saleRange
+        },
+        success: handleSuccess,
+        error: function() {
+            alert('Yêu cầu AJAX không thành công.');
+        }
+    });
 }

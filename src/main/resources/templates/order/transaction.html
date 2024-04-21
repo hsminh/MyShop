@@ -71,21 +71,67 @@
                             <nav aria-label="Page navigation example" class="text-center">
                                 <ul class="inline-flex -space-x-px text-base h-10">
                                     <li><a th:href="@{'/order/history/1'}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">First</a></li>
-                                    <li><a th:href="@{'/order/history/'+${pageNum-1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a></li>
-                                    <th:block th:if="${pageNum<3}" th:each="pageNumber : ${#numbers.sequence(1, 5)}">
-                                        <li><a th:href="@{'/order/history/' + ${pageNumber}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNumber}]]</a></li>
+                                    <li><a th:href="@{'/order/history/' + ${pageNum - 1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a></li>
+
+                                    <th:block th:if="${totalPage < 5}">
+                                        <th:block th:each="pageNumber : ${#numbers.sequence(1, totalPage)}">
+                                            <li>
+                                                <a th:href="@{'/order/history/' + ${pageNumber}}"
+                                                   class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                                   th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">
+                                                    [[${pageNumber}]]
+                                                </a>
+                                            </li>
+                                        </th:block>
                                     </th:block>
-                                    <th:block th:if="${pageNum>totalPage-3}" th:each="pageNumber : ${#numbers.sequence(totalPage-4, totalPage)}">
-                                        <li><a th:href="@{'/order/history/' + ${pageNumber}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNumber}]]</a></li>
+
+                                    <th:block th:if="${totalPage >= 5}">
+                                        <th:block th:if="${pageNum < 3}">
+                                            <th:block th:each="pageNumber : ${#numbers.sequence(1, 5)}">
+                                                <li>
+                                                    <a th:href="@{'/order/history/' + ${pageNumber}}"
+                                                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                                       th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">
+                                                        [[${pageNumber}]]
+                                                    </a>
+                                                </li>
+                                            </th:block>
+                                        </th:block>
+
+                                        <th:block th:if="${pageNum >= 3}">
+                                            <th:block th:if="${pageNum <= totalPage - 2}">
+                                                <th:block th:each="pageNumber : ${#numbers.sequence(pageNum - 2, pageNum + 2)}">
+                                                    <li>
+                                                        <a th:href="@{'/order/history/' + ${pageNumber}}"
+                                                           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                                           th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">
+                                                            [[${pageNumber}]]
+                                                        </a>
+                                                    </li>
+                                                </th:block>
+                                            </th:block>
+
+                                            <th:block th:if="${pageNum > totalPage - 2}">
+                                                <th:block th:each="pageNumber : ${#numbers.sequence(totalPage - 4, totalPage)}">
+                                                    <li>
+                                                        <a th:href="@{'/order/history/' + ${pageNumber}}"
+                                                           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                                           th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">
+                                                            [[${pageNumber}]]
+                                                        </a>
+                                                    </li>
+                                                </th:block>
+                                            </th:block>
+                                        </th:block>
                                     </th:block>
-                                    <th:block th:if="${pageNum>=3&&pageNum<=totalPage-3}" th:each="pageNumber : ${#numbers.sequence(pageNum-2, pageNum+2)}">
-                                        <li><a th:href="@{'/order/history/' + ${pageNumber}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNumber == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNumber}]]</a></li>
-                                    </th:block>
-                                    <li><a th:href="@{'/order/history/'+${pageNum+1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a></li>
-                                    <li><a th:href="@{'/order/history/'+${totalPage}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Last</a></li>
+
+                                    <li><a th:href="@{'/order/history/' + ${pageNum + 1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a></li>
+                                    <li><a th:href="@{'/order/history/' + ${totalPage}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Last</a></li>
                                 </ul>
                             </nav>
+
                         </div>
+
                     </div>
                 </div>
                 <div class="md:w-1/4">

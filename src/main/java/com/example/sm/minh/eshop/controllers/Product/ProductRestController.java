@@ -24,7 +24,6 @@ public class ProductRestController {
         List<ProductDTO> listProduct = productService.findAll(categoryId, search, true);
         for (ProductDTO product : listProduct)
         {
-            System.out.println("cc 12"+ product.getProduct().getDiscountPrice());
             if(product.getQuantityProduct()==null)  product.setQuantityProduct(0L);
             product.getProduct().setListProductCategories(null);
             productContain.add(product);
@@ -32,4 +31,26 @@ public class ProductRestController {
         }
         return productContain;
     }
+
+        @GetMapping("/products/load-product-by-price")
+        public List<ProductDTO> loadingProductByPrice(@RequestParam(value = "rangePrice" ,required = false)String rangePrice,
+                                                      @RequestParam(value = "rangeSalePercent" ,required = false)String rangeSalePercent) {
+
+
+            if (rangePrice == null || rangePrice.trim().isEmpty()) {
+                rangePrice = null;
+            }
+            if (rangeSalePercent == null || rangeSalePercent.trim().isEmpty()) {
+                rangeSalePercent = null;
+            }
+            List<ProductDTO> listProduct=productService.findByPrice(rangePrice,rangeSalePercent);
+            List<ProductDTO>productContain=new ArrayList<>();
+            for (ProductDTO product : listProduct)
+            {
+                if(product.getQuantityProduct()==null)  product.setQuantityProduct(0L);
+                product.getProduct().setListProductCategories(null);
+                productContain.add(product);
+            }
+           return productContain;
+        }
 }

@@ -41,41 +41,18 @@ public class ProductService {
     public List<ProductDTO> findAll(Integer categoryId, String search, Boolean isHide) {
         if(search==null||search.trim().isEmpty()) search=null;
         List<ProductDTO>list=new ArrayList<>();
-        list= toProductDTO(this.producsRepository.findAllProductsAndTotalSold(isHide));
         if (categoryId != null && search != null) {
-            System.out.println("come 1");
-            list= toProductDTO(this.producsRepository.findAll(categoryId, search, isHide));
+            return toProductDTO(this.producsRepository.findAll(categoryId, search, isHide));
         } else if (categoryId != null) {
-            System.out.println("come 2");
-            list= toProductDTO(this.producsRepository.findAllByCategoryId(categoryId, isHide));
+            return toProductDTO(this.producsRepository.findAllByCategoryId(categoryId, isHide));
         } else if (search != null && !search.trim().isEmpty()) {
-            System.out.println("come 3");
-            list= toProductDTO(this.producsRepository.findAll(search, isHide));
+            return toProductDTO(this.producsRepository.findAll(search, isHide));
         }
-
-
-        for(ProductDTO productDTO : list )
-        {
-            System.out.println("có sp");
-            System.out.println(productDTO.getQuantityProduct()+" "+productDTO.getProduct().getId() + " "+productDTO.getProduct().getName()+" "+productDTO.getProduct().getListProductCategories()   );
-        }
-        return list;
+        return toProductDTO(this.producsRepository.findAllProductsAndTotalSold(isHide));
     }
 
 
-    public ArrayList<ProductDTO> toProductDTO(List<Object[]>objectListProductDTO) {
 
-        ArrayList<ProductDTO> productDTOS = new ArrayList<>();
-        for (Object[] obj : objectListProductDTO) {
-            Product product = (Product) obj[0];
-            Long quantityPurchase = (Long) obj[1];
-            ProductDTO productDTO = new ProductDTO(product, quantityPurchase);
-            productDTOS.add(productDTO);
-
-        }
-
-        return productDTOS;
-    }
 
     public List<ProductCategory> findAllCategory() {
         return this.productCategoryRepository.findAll(true);
@@ -314,5 +291,104 @@ public class ProductService {
         }
         return roundedPercent;
     }
+    public ArrayList<ProductDTO> toProductDTO(List<Object[]>objectListProductDTO) {
+
+        ArrayList<ProductDTO> productDTOS = new ArrayList<>();
+        for (Object[] obj : objectListProductDTO) {
+            Product product = (Product) obj[0];
+            Long quantityPurchase = (Long) obj[1];
+            ProductDTO productDTO = new ProductDTO(product, quantityPurchase);
+            productDTOS.add(productDTO);
+
+        }
+
+        return productDTOS;
+    }
+
+        public int[] getRangePrice(String rangePrice)
+        {
+            int[] pair = new int[2];
+
+            if(rangePrice.equals("0-1k"))
+            {
+                pair[0] = 0;
+                pair[1] = 1000;
+
+            }else if(rangePrice.equals("1k-2k"))
+            {
+                pair[0] = 1000;
+                pair[1] = 2000;
+            }else if(rangePrice.equals("2k-3k"))
+            {
+                pair[0] = 2000;
+                pair[1] = 3000;
+            }else if(rangePrice.equals("3k-4k"))
+            {
+                pair[0] = 3000;
+                pair[1] = 4000;
+            }else
+            {
+                pair[0] = 4000;
+                pair[1] = 500000;
+            }
+
+            return pair;
+        }
+
+        public int[] getRangePercent(String rangeSalePercent)
+        {
+            int[] pair = new int[2];
+
+            if(rangeSalePercent.equals("0%-20%"))
+            {
+                pair[0] = 0;
+                pair[1] = 20;
+
+            }else if(rangeSalePercent.equals("20%-40%"))
+            {
+                pair[0] = 20;
+                pair[1] = 40;
+            }else if(rangeSalePercent.equals("40%-60%"))
+            {
+                pair[0] = 40;
+                pair[1] = 60;
+            }else if(rangeSalePercent.equals("60%-80%"))
+            {
+                pair[0] = 60;
+                pair[1] = 80;
+            }else
+            {
+                pair[0] = 80;
+                pair[1] = 100;
+            }
+
+            return pair;
+        }
+    public List<ProductDTO> findByPrice(String rangePrice, String rangeSalePercent) {
+        System.out.println("kvcjoids");
+        List<ProductDTO> productDTOArrayList = new ArrayList<>();
+        int[] priceRange = null;
+        int[] saleRange = null;
+        if (rangeSalePercent != null && rangePrice != null) {
+            saleRange=getRangePercent(rangeSalePercent);
+            priceRange=getRangePrice(rangePrice);
+            productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(priceRange[0], priceRange[1], saleRange[0], saleRange[1]));
+        } else if (rangeSalePercent != null || rangePrice != null) {
+            System.out.println("come hi 1   ");
+
+            if (rangeSalePercent != null) {
+                saleRange=getRangePercent(rangeSalePercent);
+                productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(null, null, saleRange[0], saleRange[1]));
+            }
+            if (rangePrice != null) {
+                priceRange=getRangePrice(rangePrice);
+                productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(priceRange[0], priceRange[1], null,null));
+            }
+        }
+        return productDTOArrayList;
+    }
+
+
+
 
 }

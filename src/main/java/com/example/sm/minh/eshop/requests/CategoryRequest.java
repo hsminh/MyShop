@@ -36,7 +36,7 @@ public class CategoryRequest  {
     {
         if(this.image==null||this.image.isEmpty())
         {
-            return "/images/products/   img.png";
+            return "/images/products/img.png";
         }else
         {
             return "/images/categories/"+this.id+"/"+this.image;

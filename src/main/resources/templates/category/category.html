@@ -44,9 +44,9 @@ Add Category
     </thead>
     <tbody>
     <th:block th:each="Product_categories : ${listCate}">
-        <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <img class="text-sm leading-5 text-gray-900" th:src="${Product_categories.loadImages()}"></img>
+        <tr class="">
+            <td class="h-50 px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <img class="text-sm leading-5 text-gray-900 w-1/5 h-full object-cover" th:src="@{${Product_categories.loadImages}}" />
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900" th:text="${Product_categories.name}"></span>
@@ -56,7 +56,7 @@ Add Category
             </td>
 
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate"  th:text="${Product_categories.description}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product_categories.description.length() > 40 ? (Product_categories.description.length() > 40? Product_categories.description.substring(0, 40) + '...' : Product_categories.description) : Product_categories.description}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900" th:text="${Product_categories.isActive}"></span>

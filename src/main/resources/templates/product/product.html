@@ -35,9 +35,7 @@
     <tr>
         <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Image</th>
         <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Name</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Sku</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Category</th>
-        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Content</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Sku</th><th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Content</th>
         <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Price</th>
         <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Discount Price</th>
         <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Active</th>
@@ -48,8 +46,8 @@
     <tbody>
     <th:block th:each="Product : ${listProduct}">
         <tr th:onclick="'window.location.href=\'/products/detail?productId=' + ${Product.getProduct().getId()} + '\''" class="border-b border-blue-200 hover:bg-blue-100">
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <img class="text-sm leading-5 text-gray-900" th:src="@{${Product.getProduct().loadImages}}" ></img>
+            <td class="h-50 px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <img class="text-sm leading-5 text-gray-900 w-1/5 h-full object-cover" th:src="@{${Product.getProduct().loadImages}}" />
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().name}"></span>
@@ -57,15 +55,8 @@
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().Sku}"></span>
             </td>
-
-            <td>
-                <th:block th:each="Product_categories : ${Product.getProduct().getListProductCategories()}">
-                <span class="text-sm leading-5 text-gray-900 " th:text="${Product_categories.name}"></span>
-            </th:block>
-            </td>
-
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().content}"></span>
+                <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct.getContent().length() > 40 ? (Product.getProduct.getContent().length() > 40? Product.getProduct.getContent().substring(0, 40) + '...' : Product.getProduct.getContent()) : Product.getProduct.getContent()}"></span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="text-sm leading-5 text-gray-900 truncate" th:text="${Product.getProduct().price}"></span>

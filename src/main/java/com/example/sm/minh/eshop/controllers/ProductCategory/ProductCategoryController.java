@@ -61,8 +61,7 @@ public class ProductCategoryController {
     }
 
     @PostMapping("/category/save")
-    public String saveCategory(@Valid  @ModelAttribute("categoryRequest")  CategoryRequest categoryRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, Model model, RedirectAttributes redirectAttributes) throws ProductCategoryException, IOException {
-        System.out.println(multipartFile.getOriginalFilename());
+    public String saveCategory(@Valid  @ModelAttribute("categoryRequest")CategoryRequest categoryRequest, BindingResult bindingResult, @RequestParam("images") MultipartFile multipartFile, Model model, RedirectAttributes redirectAttributes) throws ProductCategoryException, IOException {
         if(bindingResult.hasErrors())
         {
             model.addAttribute("pageTitle","Category");
@@ -82,18 +81,18 @@ public class ProductCategoryController {
         return "redirect:/category";
     }
 
-//    @GetMapping("/category/delete/{id}")
-//    public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            this.productCategoriesSerVice.deleteCategory(id);
-//            redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
-//        } catch (ProductCategoryException e) {
-//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-//        } catch (ProductException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return "redirect:/category";
-//    }
+    @GetMapping("/category/delete/{id}")
+    public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            this.productCategoriesSerVice.deleteCategory(id);
+            redirectAttributes.addFlashAttribute("Message", "Delete Successfully Category With Id " + id);
+        } catch (ProductCategoryException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (ProductException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/category";
+    }
     @GetMapping("/category/restore/{id}")
     public String restoreCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {

@@ -85,8 +85,6 @@
                                                 </svg>
                                             </button>
 
-
-
                                     <!-- Dropdown menu -->
                                     <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dropdown-menu hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                                         <!-- Active: "bg-gray-100", Not Active: "" -->
@@ -102,13 +100,13 @@
                             </div>
                         </div>
                     </div>
-
+                    </nav>
                 <script th:src="@{/javascripts/fragment/navigation.js}" type="text/javascript"></script>
         </div>
 
         <div th:fragment="relateProduct">
             <div th:if="${listRelatedProducts.size()!=0}">
-                <div class="mt-20 container mx-auto bg-white pb-8">
+                <div class="border-t-4 border-gray-200 mt-20 container mx-auto bg-white pb-8">
                     <div  class="flex items-center">
                         <p class="px-4 h-16 flex items-center uppercase text-stone-500">Related Product</p>
                     </div>
@@ -150,36 +148,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-        <div th:fragment="pagination(pageNum, totalPage,link)" class="text-gray-700 body-font overflow-hidden bg-white mt-4">
-            <nav aria-label="Page navigation example" class="text-center">
-                <ul class="inline-flex -space-x-px text-base h-10">
-                    <li><a th:href="@{link}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">First</a></li>
-                    <li><a th:href="@{${link+pageNum-1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a></li>
-                    <th:block th:if="${totalPage < 5}">
-                        <li th:each="pageNum : ${#numbers.sequence(1, totalPage)}">
-                            <a th:href="@{${link+pageNum}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNum == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNum}]]</a>
-                        </li>
-                    </th:block>
-                    <th:block th:if="${totalPage > 4}">
-                        <th:block th:if="${pageNum<3}" th:each="pageNum : ${#numbers.sequence(1, 5)}">
-                            <li><a th:href="@{${link+pageNum}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNum == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNum}]]</a></li>
-                        </th:block>
-                        <th:block th:if="${pageNum>totalPage-3}" th:each="pageNum : ${#numbers.sequence(totalPage-4, totalPage)}">
-                            <li><a th:href="@{link + ${pageNum}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNum == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNum}]]</a></li>
-                        </th:block>
-                        <th:block th:if="${pageNum>=3&&pageNum<=totalPage-3}" th:each="pageNum : ${#numbers.sequence(pageNum-2, pageNum+2)}">
-                            <li><a th:href="@{ ${link+pageNum}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" th:classappend="${pageNum == pageNum ? 'bg-blue-500 text-white' : ''}">[[${pageNum}]]</a></li>
-                        </th:block>
-                    </th:block>
-
-                    <li><a th:href="@{${link+pageNum+1}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a></li>
-                    <li><a th:href="@{${link+totalPage}}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Last</a></li>
-                </ul>
-            </nav>
         </div>
 
 

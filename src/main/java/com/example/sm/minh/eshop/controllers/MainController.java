@@ -44,6 +44,7 @@ public class MainController {
             List<ProductDTO>listProduct=productSerVice.findAll(categoryId, search,true);
             Map<Integer,Integer> salePercentMap=new HashMap<>();
             Map<Integer,String> saleItemMap=new HashMap<>();
+
             for(ProductDTO productDTO: listProduct)
             {
                 int percent = this.productSerVice.calculateRoundedPercent(productDTO);

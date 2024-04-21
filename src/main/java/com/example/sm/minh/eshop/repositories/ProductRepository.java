@@ -36,7 +36,12 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
             "GROUP BY p.id, p ")
     List<Object[]> findAllByCategoryId(@Param("categoryId") Integer categoryId, @Param("isHide") Boolean isHide);
 
-
+    @Query("SELECT p" +
+            " FROM Product p " +
+            " left JOIN p.ListProductCategories pc " +
+            " left JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            " WHERE pc.id = :categoryId AND p.isActive = :isHide ")
+    List<Product> findAll(@Param("categoryId") Integer categoryId, @Param("isHide") Boolean isHide);
 
 
 
@@ -67,6 +72,18 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
             "GROUP BY p")
     List<Object[]> findAllProductsAndTotalSold(@Param("isHide") Boolean isHide);
 
+    @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS total_sold " +
+            "FROM Product p " +
+            "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE p.isActive = true AND " +
+            "(:minPrice IS NULL OR :maxPrice IS NULL OR (p.discountPrice >= :minPrice AND p.discountPrice <= :maxPrice)) " +
+            "AND " +
+            "(:minRangePercent IS NULL OR :maxRangePercent IS NULL OR ((p.price - p.discountPrice) / p.price * 100 >= :minRangePercent AND (p.price - p.discountPrice) / p.price * 100 <= :maxRangePercent)) " +
+            "GROUP BY p")
+    List<Object[]> findByPrice(@Param("minPrice") Integer minPrice,
+                               @Param("maxPrice") Integer maxPrice,
+                               @Param("minRangePercent") Integer minRangePercent,
+                               @Param("maxRangePercent") Integer maxRangePercent);
 
 
 }

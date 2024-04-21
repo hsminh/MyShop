@@ -20,7 +20,7 @@ public class ProductRequest {
     @NotNull
     @NotBlank(message = "Name Is Required")
     @Length(min = 2, message = "Username must be at least 6 characters")
-    @Length(max = 18, message = "Username must not exceed 18 characters")
+    @Length(max = 30, message = "Username must not exceed 30 characters")
     private String name ;
 
     @NotNull
@@ -32,7 +32,7 @@ public class ProductRequest {
     @NotNull
     @NotBlank(message = "Content Is Required")
     @Length(min = 2, message = "Content must be at least 2 characters")
-    @Length(max = 100, message = "Content must not exceed 100 characters")
+    @Length(max = 150, message = "Content must not exceed 150 characters")
     private String content ;
 
     private String image;
