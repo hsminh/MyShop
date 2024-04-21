@@ -171,13 +171,13 @@ function handleCheckbox(checkbox,dropdownId) {
         var checkPriceRangeIn = document.getElementsByName('price-range');
         checkPriceRangeIn.forEach((item) => {
             if (item.checked) {
-                priceRange=item;
+                priceRange=item.value;
             }
         })
         var checkPercent12 = document.getElementsByName('saleRange');
         checkPercent12.forEach((item) => {
             if (item.checked) {
-                saleRange=item;
+                saleRange=item.value;
             }
         })
     }else if(dropdownId==='clearAll')
