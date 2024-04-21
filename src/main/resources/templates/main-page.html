@@ -114,103 +114,9 @@
 
 
 
-        <div th:if="${isChoiceCategory==null}" style="text-align: center;" class="flex items-center">
-            <span class="ml-2 text-stone-500 text-black-700 font-bold text-3xl">All Product</span>
-
-            <button id="dropdownHoverButtonRanger" data-dropdown-toggle="dropdownHover12" data-dropdown-trigger="hover" class="ml-5 px-9 bg-transparent hover:bg-blue-500 text-blue-700 font-bold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" type="button">Price search<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-            </button>
-            <!-- Dropdown menu -->
-            <div id="dropdownHover12" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                    <li>
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-12" name="price-range" type="checkbox" value="0-1k" onclick="handleCheckbox(this,'dropdownHoverButtonRanger')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="checkbox-item-12" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">ranges from 0k-1k$</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-13" name="price-range" type="checkbox" value="1k-2k" onclick="handleCheckbox(this,'dropdownHoverButtonRanger')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="checkbox-item-13" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">ranges from 1k-2k$</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-14" name="price-range" type="checkbox" value="2k-3k" onclick="handleCheckbox(this,'dropdownHoverButtonRanger')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="checkbox-item-14" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">ranges from 2k-3k$</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-15" name="price-range" type="checkbox" value="3k-4k" onclick="handleCheckbox(this,'dropdownHoverButtonRanger')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="checkbox-item-15" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">ranges from 3k-4k$</label>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-8" name="price-range" type="checkbox" value="over4k" onclick="handleCheckbox(this,'dropdownHoverButtonRanger')" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="checkbox-item-8" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">ranges from over 4k$</label>
-                        </div>
-                    </li>
-                </ul>
-            </div>
 
 
-            <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="ml-5 bg-transparent hover:bg-blue-500 text-blue-700 font-bold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" type="button">Discount search<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-            </button>
-            <!-- Dropdown menu -->
-            <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                    <li >
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="dashboard-checkbox" name="saleRange" onclick="handleCheckbox(this,'dropdownHoverButton')" value="0%-20%" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="dashboard-checkbox" class="font-bold ml-2">Discount 0%-20%</label>
-                        </div>
-                    </li>
-                    <li >
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="settings-checkbox" name="saleRange" onclick="handleCheckbox(this,'dropdownHoverButton')" value="20%-40%" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="settings-checkbox" class="font-bold ml-2">Discount 20%-40%</label>
-                        </div>
-                    </li>
-                    <li >
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="earnings-checkbox" name="saleRange" onclick="handleCheckbox(this,'dropdownHoverButton')" value="40%-60%" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="earnings-checkbox" class="font-bold ml-2">Discount 40%-60%</label>
-                        </div>
-                    </li>
-                    <li >
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                              <input id="signout-checkbox" name="saleRange" onclick="handleCheckbox(this,'dropdownHoverButton')" value="60%-80%" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                              <label for="signout-checkbox" class="font-bold ml-2">Discount 60%-80%</label>
-                        </div>
-                    </li>
-                    <li >
-                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="signout-checkbox3" name="saleRange" onclick="handleCheckbox(this,'dropdownHoverButton')" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label for="signout-checkbox3" value="80%-100%" class="font-bold ml-2">Discount 80%-100%</label>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <button onclick="handleCheckbox(this,'clearAll')"  class="ml-3 relative inline-flex items-center justify-center p-0.5  me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                <span class="inline-flex items-center justify-center relative px-2 py-4 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                    <span class="ml-2">Clear Filter</span>
-                </span>
-            </button>
-
-
-        </div>
-
-
+        <div th:replace="/component/fragmen::filter"></div>
         <section id="all-item"
                  class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-5 gap-x-10 mt-10 mb-5">
             <div th:each="Product : ${listProduct}" class="delete-item  overflow-hidden hover:border-amber-500 flex flex-col justify-center items-center hover:shadow-md transition-all duration-500 border-r-[1px] border-stone-200 hover: transform transition duration-300 hover:scale-105" id="parent-item">
@@ -234,7 +140,7 @@
                             </div>
                             <div class="px-2 py-4   ">
                             <span class="  text-sm line-through opacity-70"
-                                  th:text="${Product.getProduct().price + '$'}"></span>
+                                    th:text="${Product.getProduct().price + '$'}"></span>
                                 <span class="ml-3 text-xl font-bold text-red-900 dark:text-white"
                                       th:text="${Product.getProduct().discountPrice + '$'}"></span></span>
                             </div>

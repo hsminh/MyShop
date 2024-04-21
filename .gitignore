@@ -34,5 +34,5 @@ build/
 /node_modules/
 /.mvn/
 
-public/images
-src/main/resources/local.env
+/public/images
+/src/main/resources/local.env
