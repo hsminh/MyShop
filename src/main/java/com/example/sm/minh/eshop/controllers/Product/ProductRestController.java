@@ -15,42 +15,33 @@ public class ProductRestController {
     @Autowired
     private ProductService productService;
 
-
-    @GetMapping("/products/load-product")
-    public List<ProductDTO> loadingProduct(@RequestParam(value = "category", required = false) Integer categoryId,
-                                        @RequestParam(value = "search", required = false) String search) {
-        List<ProductDTO>productContain=new ArrayList<>();
-        if(search.isEmpty()||search.trim().isEmpty()) search=null;
-        List<ProductDTO> listProduct = productService.findAll(categoryId, search, true);
-        for (ProductDTO product : listProduct)
-        {
-            if(product.getQuantityProduct()==null)  product.setQuantityProduct(0L);
-            product.getProduct().setListProductCategories(null);
-            productContain.add(product);
-
-        }
-        return productContain;
-    }
-
         @GetMapping("/products/load-product-by-price")
-        public List<ProductDTO> loadingProductByPrice(@RequestParam(value = "rangePrice" ,required = false)String rangePrice,
-                                                      @RequestParam(value = "rangeSalePercent" ,required = false)String rangeSalePercent) {
-
+        public List<ProductDTO> loadingProductFilter(@RequestParam(value = "rangePrice" ,required = false)String rangePrice,
+                                                      @RequestParam(value = "rangeSalePercent" ,required = false)String rangeSalePercent,
+                                                      @RequestParam(value = "categoryId" ,required = false) String categoryId) {
 
             if (rangePrice == null || rangePrice.trim().isEmpty()) {
                 rangePrice = null;
             }
+
             if (rangeSalePercent == null || rangeSalePercent.trim().isEmpty()) {
                 rangeSalePercent = null;
             }
-            List<ProductDTO> listProduct=productService.findByPrice(rangePrice,rangeSalePercent);
+
+            if (categoryId == null || categoryId.trim().isEmpty()) {
+                categoryId = null;
+            }
+
+            List<ProductDTO> listProduct=productService.findByPrice(rangePrice,rangeSalePercent,categoryId);
             List<ProductDTO>productContain=new ArrayList<>();
+
             for (ProductDTO product : listProduct)
             {
                 if(product.getQuantityProduct()==null)  product.setQuantityProduct(0L);
                 product.getProduct().setListProductCategories(null);
                 productContain.add(product);
             }
+
            return productContain;
         }
 }

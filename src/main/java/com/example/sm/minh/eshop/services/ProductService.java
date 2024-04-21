@@ -41,6 +41,7 @@ public class ProductService {
     public List<ProductDTO> findAll(Integer categoryId, String search, Boolean isHide) {
         if(search==null||search.trim().isEmpty()) search=null;
         List<ProductDTO>list=new ArrayList<>();
+
         if (categoryId != null && search != null) {
             return toProductDTO(this.producsRepository.findAll(categoryId, search, isHide));
         } else if (categoryId != null) {
@@ -364,27 +365,43 @@ public class ProductService {
 
             return pair;
         }
-    public List<ProductDTO> findByPrice(String rangePrice, String rangeSalePercent) {
-        System.out.println("kvcjoids");
+    public List<ProductDTO> findByPrice(String rangePrice, String rangeSalePercent, String categoryId) {
         List<ProductDTO> productDTOArrayList = new ArrayList<>();
         int[] priceRange = null;
         int[] saleRange = null;
-        if (rangeSalePercent != null && rangePrice != null) {
-            saleRange=getRangePercent(rangeSalePercent);
-            priceRange=getRangePrice(rangePrice);
-            productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(priceRange[0], priceRange[1], saleRange[0], saleRange[1]));
-        } else if (rangeSalePercent != null || rangePrice != null) {
-            System.out.println("come hi 1   ");
+        Integer categorySelected=null;
 
-            if (rangeSalePercent != null) {
-                saleRange=getRangePercent(rangeSalePercent);
-                productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(null, null, saleRange[0], saleRange[1]));
-            }
-            if (rangePrice != null) {
-                priceRange=getRangePrice(rangePrice);
-                productDTOArrayList = toProductDTO(this.producsRepository.findByPrice(priceRange[0], priceRange[1], null,null));
-            }
+        if(categoryId!=null)
+        {
+            categorySelected=Integer.parseInt(categoryId);
         }
+
+        if (rangeSalePercent != null) {
+            saleRange=getRangePercent(rangeSalePercent);
+        }
+
+        if (rangePrice != null) {
+            priceRange=getRangePrice(rangePrice);
+        }
+
+        Integer saleRangeMin=null;
+        Integer saleRangeMax=null;
+
+        if(saleRange != null)
+        {
+            saleRangeMin=saleRange[0];
+            saleRangeMax=saleRange[1];
+        }
+        Integer priceRangeMin=null;
+        Integer priceRangeMax=null;
+
+        if(priceRange != null)
+        {
+            priceRangeMin=priceRange[0];
+            priceRangeMax=priceRange[1];
+        }
+
+        productDTOArrayList = toProductDTO(this.producsRepository.findByPriceSalePercentAndCategory(priceRangeMin, priceRangeMax, saleRangeMin, saleRangeMax,categorySelected));
         return productDTOArrayList;
     }
 

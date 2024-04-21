@@ -86,4 +86,22 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
                                @Param("maxRangePercent") Integer maxRangePercent);
 
 
+    @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS total_sold " +
+            "FROM Product p " +
+            "JOIN p.ListProductCategories pl " +
+            "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
+            "WHERE p.isActive = true AND " +
+            "(:minPrice IS NULL OR :maxPrice IS NULL OR (p.discountPrice >= :minPrice AND p.discountPrice <= :maxPrice)) " +
+            "AND " +
+            "(:minRangePercent IS NULL OR :maxRangePercent IS NULL OR ((p.price - p.discountPrice) / p.price * 100 >= :minRangePercent AND (p.price - p.discountPrice) / p.price * 100 <= :maxRangePercent)) " +
+            "AND " +
+            "(:categoryId IS NULL OR :categoryId = pl.id) " +
+            "GROUP BY p")
+    List<Object[]> findByPriceSalePercentAndCategory(
+            @Param("minPrice") Integer minPrice,
+            @Param("maxPrice") Integer maxPrice,
+            @Param("minRangePercent") Integer minRangePercent,
+            @Param("maxRangePercent") Integer maxRangePercent,
+            @Param("categoryId") Integer categoryId);
+
 }

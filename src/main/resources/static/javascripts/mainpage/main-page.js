@@ -112,21 +112,6 @@ function handleSuccess(response) {
     $('#all-item').html(html);
 }
 
-function choiceCategory(categoryId) {
-    var keyWord = $('#default-search').val();
-    $.ajax({
-        type: "GET",
-        url: "/products/load-product",
-        data: {
-            category: categoryId,
-            search: keyWord,
-        },
-        success: handleSuccess,
-        error: function() {
-            alert('Yêu cầu AJAX không thành công.');
-        }
-    });
-}
 
 
 function formatNumber(num) {
@@ -180,6 +165,21 @@ function handleCheckbox(checkbox,dropdownId) {
                 saleRange=item.value;
             }
         })
+    }else if(dropdownId==='categorySelected')
+    {
+        $('#categoryId').val(checkbox);
+        var checkPriceRangeIn = document.getElementsByName('price-range');
+        checkPriceRangeIn.forEach((item) => {
+            if (item.checked) {
+                priceRange=item;
+            }
+        })
+        var checkPercent12 = document.getElementsByName('saleRange');
+        checkPercent12.forEach((item) => {
+            if (item.checked) {
+                saleRange=item;
+            }
+        })
     }else if(dropdownId==='clearAll')
     {
         var clearAllPriceRange = document.getElementsByName('price-range');
@@ -196,18 +196,7 @@ function handleCheckbox(checkbox,dropdownId) {
                 item.checked=false;
             }
         })
-        $.ajax({
-            type: "GET",
-            url: "/products/load-product",
-            data: {
-                category:'',
-                search:''
-            },
-            success: handleSuccess,
-            error: function() {
-                alert('Yêu cầu AJAX không thành công.');
-            }
-        });
+        $('#categoryId').val('');
     }
 
     if (typeof priceRange === 'undefined') {
@@ -216,12 +205,17 @@ function handleCheckbox(checkbox,dropdownId) {
     if (typeof saleRange === 'undefined') {
         saleRange = '';
     }
+    var categoryId=document.getElementById('categoryId').value;
+    if (typeof categoryId === 'undefined' || categoryId.trim().length===0) {
+        categoryId = '';
+    }
     $.ajax({
         type: "GET",
             url: "/products/load-product-by-price",
         data: {
             rangePrice:priceRange,
-            rangeSalePercent:saleRange
+            rangeSalePercent:saleRange,
+            categoryId:categoryId
         },
         success: handleSuccess,
         error: function() {
