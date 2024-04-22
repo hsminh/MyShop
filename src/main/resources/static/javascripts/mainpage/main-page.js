@@ -135,6 +135,7 @@ function formatDiscount(discount) {
 function handleCheckbox(checkbox,dropdownId) {
     var saleRange;
     var priceRange;
+    // alert("cldmlvmdlkm")
     if(dropdownId==='dropdownHoverButton')
     {
         var checkboxPercent = document.getElementsByName('saleRange');
@@ -198,7 +199,9 @@ function handleCheckbox(checkbox,dropdownId) {
         })
         $('#categoryId').val('');
     }
-
+    // alert(priceRange)
+    // alert(saleRange)
+    // alert(categoryId)
     if (typeof priceRange === 'undefined') {
         priceRange = '';
     }
@@ -209,9 +212,11 @@ function handleCheckbox(checkbox,dropdownId) {
     if (typeof categoryId === 'undefined' || categoryId.trim().length===0) {
         categoryId = '';
     }
+
+
     $.ajax({
         type: "GET",
-            url: "/products/load-product-by-price",
+            url: "/products/load-product",
         data: {
             rangePrice:priceRange,
             rangeSalePercent:saleRange,

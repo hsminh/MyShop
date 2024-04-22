@@ -21,7 +21,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query("select p from Product  p where p.isActive=false and p.id=:id")
     public Optional<Product>findProductByIsActiveIsFalse(Integer id);
-    public List<Product> findProductByNameOrSku(String name, String sku);
 
     public Product findProductByName(String name);
     public Product findProductBySku(String sku);
@@ -71,37 +70,22 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
             "WHERE p.isActive = :isHide " +
             "GROUP BY p")
     List<Object[]> findAllProductsAndTotalSold(@Param("isHide") Boolean isHide);
-
     @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS total_sold " +
             "FROM Product p " +
             "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
-            "WHERE p.isActive = true AND " +
-            "(:minPrice IS NULL OR :maxPrice IS NULL OR (p.discountPrice >= :minPrice AND p.discountPrice <= :maxPrice)) " +
-            "AND " +
-            "(:minRangePercent IS NULL OR :maxRangePercent IS NULL OR ((p.price - p.discountPrice) / p.price * 100 >= :minRangePercent AND (p.price - p.discountPrice) / p.price * 100 <= :maxRangePercent)) " +
-            "GROUP BY p")
-    List<Object[]> findByPrice(@Param("minPrice") Integer minPrice,
-                               @Param("maxPrice") Integer maxPrice,
-                               @Param("minRangePercent") Integer minRangePercent,
-                               @Param("maxRangePercent") Integer maxRangePercent);
+            "WHERE (EXISTS (SELECT 1 FROM p.ListProductCategories pc WHERE pc.id = :categoryId) OR :categoryId IS NULL) " +
+            "AND p.isActive = true " +
+            "AND ((:minPrice IS NULL OR :maxPrice IS NULL) OR (p.discountPrice >= :minPrice AND p.discountPrice <= :maxPrice)) " +
+            "AND ((:minRangePercent IS NULL OR :maxRangePercent IS NULL) OR ((p.price - p.discountPrice) / p.price * 100 >= :minRangePercent AND (p.price - p.discountPrice) / p.price * 100 <= :maxRangePercent)) " +
+            "GROUP BY p.id")
 
-
-    @Query("SELECT p, COALESCE(SUM(oli.quantity), 0) AS total_sold " +
-            "FROM Product p " +
-            "JOIN p.ListProductCategories pl " +
-            "LEFT JOIN OrderLineItem oli ON p.id = oli.productId.id " +
-            "WHERE p.isActive = true AND " +
-            "(:minPrice IS NULL OR :maxPrice IS NULL OR (p.discountPrice >= :minPrice AND p.discountPrice <= :maxPrice)) " +
-            "AND " +
-            "(:minRangePercent IS NULL OR :maxRangePercent IS NULL OR ((p.price - p.discountPrice) / p.price * 100 >= :minRangePercent AND (p.price - p.discountPrice) / p.price * 100 <= :maxRangePercent)) " +
-            "AND " +
-            "(:categoryId IS NULL OR :categoryId = pl.id) " +
-            "GROUP BY p")
     List<Object[]> findByPriceSalePercentAndCategory(
             @Param("minPrice") Integer minPrice,
             @Param("maxPrice") Integer maxPrice,
             @Param("minRangePercent") Integer minRangePercent,
             @Param("maxRangePercent") Integer maxRangePercent,
             @Param("categoryId") Integer categoryId);
+
+
 
 }

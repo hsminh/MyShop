@@ -38,7 +38,7 @@ public class UserSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security
                 .authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/products/load-product-by-price","/products/load-product","/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/**").permitAll()
+                        .requestMatchers("/products/load-product","/login","/main-page","/users/save","/users/check-username-unique","/users/register","/auth/**").permitAll()
                         .requestMatchers("/cart").permitAll()
                         .requestMatchers("cart/**").authenticated()
                         .requestMatchers("/users/**").hasAnyAuthority("Admin","User")

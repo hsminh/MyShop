@@ -13,16 +13,14 @@ import java.util.List;
 // Service class to handle token-related operations
 @Service
 public class TokenService {
-
     @Autowired
     private TokenRepository tokenRepository;
 
     public void createToken(User user, String code) {
-        String tokenValue = code;
         LocalDateTime expirationDateTime = LocalDateTime.now().plusMinutes(5);
         Token token = new Token();
         token.setCreatedAt(LocalDateTime.now());
-        token.setToken(tokenValue);
+        token.setToken(code);
         token.setUser(user);
         token.setExpiresAt(expirationDateTime);
         tokenRepository.save(token);

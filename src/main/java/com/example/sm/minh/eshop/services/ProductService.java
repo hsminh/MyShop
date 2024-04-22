@@ -41,19 +41,22 @@ public class ProductService {
     public List<ProductDTO> findAll(Integer categoryId, String search, Boolean isHide) {
         if(search==null||search.trim().isEmpty()) search=null;
         List<ProductDTO>list=new ArrayList<>();
+        System.out.println("come 423fs");
 
         if (categoryId != null && search != null) {
+            System.out.println("come 12131");
+
             return toProductDTO(this.producsRepository.findAll(categoryId, search, isHide));
         } else if (categoryId != null) {
+            System.out.println("come hrre");
             return toProductDTO(this.producsRepository.findAllByCategoryId(categoryId, isHide));
         } else if (search != null && !search.trim().isEmpty()) {
+            System.out.println("come 24e3");
+
             return toProductDTO(this.producsRepository.findAll(search, isHide));
         }
         return toProductDTO(this.producsRepository.findAllProductsAndTotalSold(isHide));
     }
-
-
-
 
     public List<ProductCategory> findAllCategory() {
         return this.productCategoryRepository.findAll(true);
@@ -392,6 +395,7 @@ public class ProductService {
             saleRangeMin=saleRange[0];
             saleRangeMax=saleRange[1];
         }
+
         Integer priceRangeMin=null;
         Integer priceRangeMax=null;
 
@@ -401,7 +405,12 @@ public class ProductService {
             priceRangeMax=priceRange[1];
         }
 
+        System.out.println("cldkvsjmlkfd + "+priceRangeMin +priceRangeMax+" "+saleRangeMin+" "+ saleRangeMax+" "+categorySelected);
         productDTOArrayList = toProductDTO(this.producsRepository.findByPriceSalePercentAndCategory(priceRangeMin, priceRangeMax, saleRangeMin, saleRangeMax,categorySelected));
+        for(ProductDTO productDTO : productDTOArrayList)
+        {
+            System.out.println(productDTO.getProduct().getName()+ "   "+productDTO.getQuantityProduct());
+        }
         return productDTOArrayList;
     }
 

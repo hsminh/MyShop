@@ -15,8 +15,8 @@ public class ProductRestController {
     @Autowired
     private ProductService productService;
 
-        @GetMapping("/products/load-product-by-price")
-        public List<ProductDTO> loadingProductFilter(@RequestParam(value = "rangePrice" ,required = false)String rangePrice,
+        @GetMapping("/products/load-product")
+        public List<ProductDTO> loadingProduct(@RequestParam(value = "rangePrice" ,required = false)String rangePrice,
                                                       @RequestParam(value = "rangeSalePercent" ,required = false)String rangeSalePercent,
                                                       @RequestParam(value = "categoryId" ,required = false) String categoryId) {
 

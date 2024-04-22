@@ -96,8 +96,8 @@ public class OrderService {
 
     private void updateOrderAndCart(User customer, Order order, CartLineItem cartLineItemPayment, Float totalAmount, Float taxAmount, OrderLineItem orderLineItem) {
         order.setCountItem(order.getCountItem() + cartLineItemPayment.getQuantity());
-        setDataForOrderToSave(order, totalAmount, taxAmount);
-        Cart updateCart = setDataForCartToSave(customer, cartLineItemPayment);
+        setDataForOrder(order, totalAmount, taxAmount);
+        Cart updateCart = setDataForCart(customer, cartLineItemPayment);
         cartLineItemPayment.setCartId(null);
         this.cartLineItemRepositoty.save(cartLineItemPayment);
         this.cartReposttory.save(updateCart);
@@ -106,9 +106,9 @@ public class OrderService {
     }
 
 
-    public Cart setDataForCartToSave(User customer,CartLineItem cartLineItemPayment)
+    public Cart setDataForCart(User customer, CartLineItem cartLineItemPayment)
     {
-        Cart updateCart = this.cartReposttory.findByUserId(customer);
+        Cart updateCart = this.cartReposttory.findByUserId(customer.getId());
         updateCart.setTotalAmount(updateCart.getTotalAmount() - cartLineItemPayment.getTotalAmount());
         updateCart.setTaxAmount(updateCart.getTaxAmount() - cartLineItemPayment.getTaxTotalAmount());
         updateCart.setCountItem(updateCart.getCountItem() - cartLineItemPayment.getQuantity());
@@ -119,16 +119,17 @@ public class OrderService {
 
         return updateCart;
     }
-    public Order setDataForOrderToSave(Order order, Float totalAmount, Float taxAmount) {
+    public Order setDataForOrder(Order order, Float totalAmount, Float taxAmount) {
         // update infor order
         order.setTotalAmount(order.getTotalAmount() + totalAmount);
         order.setTaxAmount(order.getTaxAmount() + taxAmount);
         order.setUpdatedAt(new Date());
         order.setStatus(true);
+        System.out.println("cmkasmc"+order);
         return this.orderRepository.save(order);
     }
 
-    public OrderLineItem setDataForOderLineItemToSave(Order order, Product product, int quantity, Float taxAmount, Float totalAmount)
+    public OrderLineItem setDataForOderLineItem(Order order, Product product, int quantity, Float taxAmount, Float totalAmount)
     {
         OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setOrderId(order);
@@ -159,8 +160,8 @@ public class OrderService {
             Float taxPerProduct=(productSelect.getDiscountPrice()/100)*productSelect.getTax();
             Float totalAmount = (productSelect.getDiscountPrice() * quantity) + (taxPerProduct * quantity);
             Float taxAmount = taxPerProduct * quantity;
-            OrderLineItem orderLineItem=this.setDataForOderLineItemToSave(order,productSelect,quantity,taxAmount,totalAmount);
-            order = setDataForOrderToSave(order, totalAmount, taxAmount);
+            OrderLineItem orderLineItem=this.setDataForOderLineItem(order,productSelect,quantity,taxAmount,totalAmount);
+            order = setDataForOrder(order, totalAmount, taxAmount);
             this.orderLineItemRepository.save(orderLineItem);
 
         }else

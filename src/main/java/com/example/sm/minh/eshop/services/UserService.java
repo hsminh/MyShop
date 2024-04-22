@@ -87,9 +87,9 @@ public class UserService {
 
 
 
-    public UserProfile saveUserProfile(UserProfile userProfile)
+    public void saveUserProfile(UserProfile userProfile)
     {
-        return this.userProfileRepository.save(userProfile);
+        this.userProfileRepository.save(userProfile);
     }
 
     public User findUserById(int id) throws UserException {
@@ -102,8 +102,7 @@ public class UserService {
     }
 
     public UserProfile getUserProfileByUsersId(Integer id) {
-        UserProfile userProfile=this.userProfileRepository.getUserProfileByUsersId(id);
-        return userProfile;
+        return this.userProfileRepository.getUserProfileByUsersId(id);
     }
 
     public Optional<UserProfile> getUserProfileById(Integer id) {
@@ -147,6 +146,7 @@ public class UserService {
                 this.saveUserProfile(userProfileInData);
             }
         }
+
     }
 
     public void prepareFormModel(Model model, String pageTitle, boolean isNewUser) {

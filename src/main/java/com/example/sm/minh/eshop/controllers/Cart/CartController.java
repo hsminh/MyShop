@@ -60,18 +60,21 @@
         @GetMapping("/cart/shopping-cart")
         public String viewShoppingCart(@AuthenticationPrincipal ShopMeUserDetail customer,
                                        Model model, RedirectAttributes redirectAttributes) {
+            System.out.println("cccc");
             try {
                 User user = this.cartService.findUserById(customer.getUserId());
+                System.out.println("cccc2");
+
                 model.addAttribute("pageTitle", "Cart");
                 Cart shoppingCart = this.cartService.getCartByCustomer(user);
+                System.out.println("ccc3c");
+
                 model.addAttribute("shoppingCart", shoppingCart);
                 model.addAttribute("listCartLineItem", cartService.getListCartItemByCart(shoppingCart));
                 return "/cart/shopping-cart";
-            } catch (ProductException ex) {
+            } catch (ProductException | UserException ex) {
                 redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
                 return "redirect:/main-page";
-            } catch (UserException e) {
-                throw new RuntimeException(e);
             }
         }
         @PostMapping("/cart/update-cart")

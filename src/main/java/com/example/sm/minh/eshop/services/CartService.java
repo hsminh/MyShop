@@ -42,7 +42,7 @@ public class CartService {
     }
 
     public Cart getCartByCustomer(User customer) throws ProductException {
-        return this.cartReposttory.findByUserId(customer);
+        return this.cartReposttory.findByUserId(customer.getId());
     }
 
     public void addProductToCart(User customer, Product selectProduct, Integer quantity) throws ProductException {
@@ -51,11 +51,11 @@ public class CartService {
     }
 
     private Cart getOrCreateCart(User customer) {
-        Cart cart = this.cartReposttory.findByUserId(customer);
+        Cart cart = this.cartReposttory.findByUserId(customer.getId());
 
         if (cart == null) {
             cart = new Cart();
-            cart.setUserId(customer);
+            cart.setUser(customer);
             cart = this.cartReposttory.save(cart);
         } else {
             cart.setUpdatedAt(new Date());
@@ -117,7 +117,7 @@ public class CartService {
         this.cartLineItemRepositoty.save(cartLineItems);
 
         // Update Cart
-        Cart cart=this.cartReposttory.findByUserId(customer);
+        Cart cart=this.cartReposttory.findByUserId(customer.getId());
         cart.setCountItem(cart.getCountItem()-cartLineItems.getQuantity());
         cart.setTaxAmount(cart.getTaxAmount()-cartLineItems.getTaxTotalAmount());
         cart.setTotalAmount(cart.getTotalAmount()-cartLineItems.getTotalAmount());
@@ -135,7 +135,7 @@ public class CartService {
 
     public void clearCard(User Customer)
     {
-        Cart cartClear=this.cartReposttory.findByUserId(Customer);
+        Cart cartClear=this.cartReposttory.findByUserId(Customer.getId());
 
         if(cartClear!=null)
         {
@@ -148,7 +148,7 @@ public class CartService {
             }
             this.cartLineItemRepositoty.saveAll(deleteCartLineItem);
             this.cartLineItemRepositoty.deleteAll(deleteCartLineItem);
-            cartClear.setUserId(null);
+            cartClear.setUser(null);
             this.cartReposttory.save(cartClear);
             this.cartReposttory.delete(cartClear);
         }

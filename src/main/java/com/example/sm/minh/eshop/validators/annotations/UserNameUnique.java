@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = UniqueEmailConstraint.class)
 @Documented
 public @interface UserNameUnique {
-    String message() default "Email address must be unique";
+    String message() default "";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

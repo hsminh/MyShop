@@ -111,7 +111,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/save")
-    public String saveProducts(Model model,@Valid @ModelAttribute("productRequest") ProductRequest productRequest, BindingResult bindingResult, @RequestParam(value = "images" ,required = false) MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
+    public String saveProduct(Model model,@Valid @ModelAttribute("productRequest") ProductRequest productRequest, BindingResult bindingResult, @RequestParam(value = "images" ,required = false) MultipartFile multipartFile, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors())
         {
             model.addAttribute( "pageTitle", "Add Product");

@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class UserProfileRequest {
-
     private Integer id;
 
     @NotNull

@@ -59,7 +59,4 @@
         public boolean isEnabled() {
             return this.users.getActive();
         }
-        public String getFullName() {
-            return this.users.getLastName()+" "+this.users.getFirstName();
-        }
     }
