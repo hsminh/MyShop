@@ -405,12 +405,7 @@ public class ProductService {
             priceRangeMax=priceRange[1];
         }
 
-        System.out.println("cldkvsjmlkfd + "+priceRangeMin +priceRangeMax+" "+saleRangeMin+" "+ saleRangeMax+" "+categorySelected);
         productDTOArrayList = toProductDTO(this.producsRepository.findByPriceSalePercentAndCategory(priceRangeMin, priceRangeMax, saleRangeMin, saleRangeMax,categorySelected));
-        for(ProductDTO productDTO : productDTOArrayList)
-        {
-            System.out.println(productDTO.getProduct().getName()+ "   "+productDTO.getQuantityProduct());
-        }
         return productDTOArrayList;
     }
 

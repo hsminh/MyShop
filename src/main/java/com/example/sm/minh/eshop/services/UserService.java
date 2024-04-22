@@ -156,17 +156,17 @@ public class UserService {
         model.addAttribute("isNewUser", isNewUser);
     }
 
-    public void setUpToUpdateForm(Model model,UserProfile userProfile)
-    {
-        model.addAttribute("pageTitle", "Update User");
-        model.addAttribute("titleForm", "Update User Profile");
+        public void setUpToUpdateForm(Model model,UserProfile userProfile)
+        {
+            model.addAttribute("pageTitle", "Update User");
+            model.addAttribute("titleForm", "Update User Profile");
 
-        if (userProfile == null) {
-            model.addAttribute("isCheckGenderChoose", false);
-            model.addAttribute("userProfileRequest",new UserProfileRequest());
-        } else {
-            model.addAttribute("isCheckGenderChoose", true);
-            model.addAttribute("userProfileRequest", UserProfileMapper.toUserProfileRequest(userProfile));
+            if (userProfile == null) {
+                model.addAttribute("isCheckGenderChoose", false);
+                model.addAttribute("userProfileRequest",new UserProfileRequest());
+            } else {
+                model.addAttribute("isCheckGenderChoose", true);
+                model.addAttribute("userProfileRequest", UserProfileMapper.toUserProfileRequest(userProfile));
+            }
         }
-    }
 }

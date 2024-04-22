@@ -30,13 +30,12 @@ public class MainController {
         ArrayList<ProductDTO>productDTOS=null;
 
         try {
-
             if (categoryId != null) {
                 ProductCategory productCategory = this.productSerVice.getCategoryById(categoryId);
                 model.addAttribute("selectCategory", productCategory);
             }
 
-            if(categoryId==null&&search==null)
+            if(categoryId == null && search == null)
             {
                 productDTOS=productSerVice.productOrderMost();
             }
@@ -68,7 +67,6 @@ public class MainController {
 
         return "main-page";
     }
-
 
     @GetMapping("/login-form")
     public String LoginForm(Model model, @RequestParam(value = "error", required = false) String error)

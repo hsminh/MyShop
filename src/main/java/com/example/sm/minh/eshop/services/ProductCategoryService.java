@@ -175,7 +175,6 @@ public class ProductCategoryService {
 
     public ProductCategory setDataForProductCategory(ProductCategory productCategories, ProductCategory EditCategory)
     {
-        System.out.println("ckdsnmvkl" +EditCategory.getName()+ EditCategory.getSlug());
         productCategories.setName(EditCategory.getName());
         productCategories.setSlug(EditCategory.getSlug());
         productCategories.setDescription(EditCategory.getDescription());

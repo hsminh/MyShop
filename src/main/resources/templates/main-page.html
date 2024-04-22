@@ -64,7 +64,7 @@
     <div th:if="${listCategory != null and listCategory.size() != 0}">
         <input type="hidden" id="categoryId" th:value="${category}"/>
 
-        class="border-b-4 bg-white container mx-auto flex flex-wrap pt-4 py-10 flex-col">
+        <div class="border-b-4 bg-white container mx-auto flex flex-wrap pt-4 py-10 flex-col">
         <div class="w-1/2 px-4 ml-4">
             <span class="text-stone-500 text-black-700 font-bold text-3xl">Explore Cutting-Edge Technology</span>
             <span class="mt-6  text-gray-700 opacity-90 font-thin font-family: 'Brush Script Std' block  block">Discover the latest technological advancements that will redefine your experiences.
@@ -147,6 +147,7 @@
                 </div>
             </div>
         </section>
+    </div>
     </div>
 </section>
 

@@ -72,7 +72,7 @@ function handleSuccess(response) {
 
         if (parseFloat(saleTag) >= 0) {
             saleTag = '<div class="absolute top-2 left-0 bg-green-400 py-2 px-4 rounded-md shadow-md flex items-center">\n' +
-                '         <span>' + saleTag + '</span>\n' +
+                '         <span>Sale ' + saleTag + '</span>\n' +
                 '    </div>';
         } else {
             saleTag = '';

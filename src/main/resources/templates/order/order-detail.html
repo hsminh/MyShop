@@ -19,16 +19,26 @@
           <div class="px-4 py-2">
             <span class="text-6xl font-bold text-gray-700">[[${viewOderLineItem.getProductId().name}]]</span>
             <div class="leading-relaxed py-2">
-              <p class="text-lg font-mono leading-normal text-gray-700 opacity-70 ">
-                <span th:text="'Description :'+${viewOderLineItem.getProductId().getContent()}"></span>
-              </p>
-              <p class="text-lg font-mono leading-normal text-gray-700 opacity-70 ">
-                <span th:text="'Buy At :'+${viewOderLineItem.createdAt}"></span>
-              </p>
+              <div class="leading-relaxed py-2">
+                <p class="text-sm font-mono leading-normal text-gray-700 opacity-70 py-2">
+                  <span class="font-bold ">Description :</span>
+                  <span th:text="'Description :'+${viewOderLineItem.getProductId().getContent()}"></span>
+                </p>
+              </div>
+              <div class="leading-relaxed">
+                <p class="text-sm font-mono leading-normal text-gray-700 opacity-70 py-2">
+                  <span class="font-bold ">Category :</span>
+                  <span th:text="${viewOderLineItem.getProductId().getListProductCategories()}"></span>
+                </p>
+              </div>
+              <div class="leading-relaxed">
+                <p class="text-sm font-mono leading-normal text-gray-700 opacity-70 py-2">
+                  <span class="font-bold ">Buy At :</span>
+                  <span th:text="'Buy At :'+${viewOderLineItem.createdAt}"></span>
+                </p>
+              </div>
             </div>
           </div>
-
-
           <div class="container mx-auto max-w-2xl">
             <div class="flex flex-col">
               <div class="border border-gray-200 rounded-md p-4">

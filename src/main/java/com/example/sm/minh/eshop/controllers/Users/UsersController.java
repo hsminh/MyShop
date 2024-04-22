@@ -51,6 +51,7 @@ public class UsersController {
     public String updateInformation(@AuthenticationPrincipal UserDetails userDetails,
                                     @Valid @ModelAttribute("userProfileRequest") UserProfileRequest userProfileRequest,
                                     BindingResult bindingResult,
+                                    @RequestParam(value = "checkTick" ,required = false) String checked,
                                     Model model,
                                     RedirectAttributes redirectAttributes) {
 
@@ -58,7 +59,10 @@ public class UsersController {
         {
             model.addAttribute("pageTitle", "Update User");
             model.addAttribute("titleForm", "Update User Profile");
-            model.addAttribute("isCheckGenderChoose", true);
+            if(checked.equals("false"))
+            {
+                model.addAttribute("isCheckGenderChoose", false);
+            }
             return "user/update-information-user";
         }
 
@@ -89,7 +93,6 @@ public class UsersController {
                            BindingResult bindingResult,
                            Model model,
                            RedirectAttributes redirectAttributes) throws UserException {
-
         if (bindingResult.hasErrors()) {
             if (createUserRequest.getId() != null) {
                 this.userService.prepareFormModel(model, "Edit User", false);
@@ -98,7 +101,7 @@ public class UsersController {
             }
             return "user/register-form";
         }
-        System.out.println("come this bỏ");
+
         User userToSave=null;
         User users = UserMapper.toUser(createUserRequest);
 
